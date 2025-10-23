@@ -384,6 +384,41 @@
         }
 
         /* Keep grid layout when filtering; no single-column override */
+        
+        /* ===== Stamping Products Grid: 4 columns + compact images + app chips ===== */
+        .products-section-enhanced .products-grid-enhanced {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+        @media (max-width: 1280px){
+            .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 980px){
+            .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 640px){
+            .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr; gap: 18px; }
+        }
+
+        /* Compact the product card image area for consistency with other categories */
+        .products-section-enhanced .product-image { height: 360px !important; padding: 22px !important; }
+        @media (max-width: 1280px){ .products-section-enhanced .product-image { height: 320px !important; padding: 20px !important; } }
+        @media (max-width: 980px){ .products-section-enhanced .product-image { height: 300px !important; padding: 18px !important; } }
+        @media (max-width: 640px){ .products-section-enhanced .product-image { height: 260px !important; padding: 16px !important; } }
+
+        /* Hide verbose blocks; we will show concise Applications chips via JS */
+        .products-section-enhanced .product-card .product-features { display: none !important; }
+        .products-section-enhanced .product-card .product-info p { display: none !important; }
+        .products-section-enhanced .product-card .product-application { display: none !important; }
+        .products-section-enhanced .product-card .product-info h3 { margin-bottom: 8px !important; }
+        .products-section-enhanced .product-card .product-info { padding-top: 18px !important; }
+
+        /* Applications label + chips styling (scoped to this page) */
+        .products-section-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: var(--primary-color); margin-top: 8px; }
+        .products-section-enhanced .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+        .products-section-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: #eef2f7; color: var(--primary-color); font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+        .products-section-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: var(--secondary-color); }
     </style>
 </head>
 <body>
@@ -783,7 +818,26 @@
     <!-- product filtering and grouping initialized from script.js -->
     <script>
         document.addEventListener('DOMContentLoaded', function(){
-            if(window.initProductCategoryFilter) window.initProductCategoryFilter();
+            if(window.initProductCategoryFilter) {
+                // Disable moving LUBE GUARD to the very top so it can sit beside Grease
+                window.initProductCategoryFilter({ moveLubeGuardHref: '' });
+
+                // After initialization reorders by image type, place LUBE GUARD next to Grease
+                try {
+                    const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+                    const grease = grid && grid.querySelector('a[href="products/grease.html"]');
+                    const lube = grid && grid.querySelector('a[href="products/lube-guard-original.html"]');
+                    if (grid && grease && lube && grease !== lube) {
+                        const afterGrease = grease.nextSibling;
+                        if (afterGrease) {
+                            grid.insertBefore(lube, afterGrease);
+                        } else {
+                            // if grease is last, append lube guard right after
+                            grid.appendChild(lube);
+                        }
+                    }
+                } catch (e) { /* ignore */ }
+            }
         });
     </script>
 </body>

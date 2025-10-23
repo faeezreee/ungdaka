@@ -14,32 +14,15 @@
 </head>
 <body class="product-page">
     <!-- Navigation -->
-    <nav class="navbar product-page-nav" id="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <img src="../public/ungdaka-logo.png" alt="Ungdaka Logo" class="logo-img">
-            </div>
-            <div class="nav-menu" id="nav-menu">
-                <a href="../index.html" class="nav-link">Home</a>
-                <a href="../about.html" class="nav-link">About Us</a>
-                <a href="../products.html" class="nav-link active">Our Products</a>
-                <a href="../industries.html" class="nav-link">Industries</a>
-                <a href="../contact.html" class="nav-link">Contact Us</a>
-            </div>
-            <div class="nav-actions">
-                <a href="tel:+60439999966" class="nav-phone">
-                    <i class="fas fa-phone"></i>
-                    <span>+604-399 9966</span>
-                </a>
-                <button class="nav-quote-btn">Get Quote</button>
-            </div>
-            <div class="nav-toggle" id="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </nav>
+    <div id="header-include"></div>
+    <script>
+        (function(){
+            const path = '/includes/header.html';
+            fetch(path).then(r => r.text()).then(html => {
+                document.getElementById('header-include').innerHTML = html;
+            }).catch(()=>{});
+        })();
+    </script>
 
     <!-- Product Detail Section -->
     <section class="product-detail-section">

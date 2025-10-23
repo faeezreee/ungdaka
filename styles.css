@@ -800,7 +800,7 @@ body {
     opacity: 0;
     visibility: hidden;
     transition: all var(--transition-normal);
-    z-index: 1000;
+    z-index: 2000; /* ensure it overlays product page sticky elements */
     min-width: 700px;
 }
 
@@ -3729,6 +3729,14 @@ section {
     color: var(--gray-600);
     font-size: var(--font-size-sm, 0.95rem);
     line-height: 1.5;
+}
+
+/* Make grouped duplicate-image cards take the full row for readability */
+.products-grid .product-card-grouped,
+.products-grid-enhanced .product-card-grouped,
+.related-products-grid .product-card-grouped,
+.related-products-container .product-card-grouped {
+    grid-column: 1 / -1;
 }
 
 .product-card:hover::before {

@@ -23,6 +23,13 @@
     
     <!-- Page overrides: hide hero liquid/oil effect and industries oil background -->
     <style>
+    /* Hero controls */
+    .hero-controls { position: absolute; top: 50%; left: 0; right: 0; display:flex; justify-content:space-between; padding: 0 12px; transform: translateY(-50%); pointer-events: none; z-index: 6; }
+    .hero-btn { pointer-events: auto; background: rgba(15,23,42,0.72); border: 1px solid rgba(255,255,255,0.06); color: #fff; width:52px; height:52px; display:inline-flex; align-items:center; justify-content:center; border-radius:999px; box-shadow: 0 10px 28px rgba(2,6,23,0.45); cursor:pointer; }
+    .hero-btn i { color: #FFD24D; font-size: 18px; }
+    .hero-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.06); }
+    @media (max-width: 520px) { .hero-btn { width:44px; height:44px; } }
+
         /* Remove the oil/liquid animation in the hero section without touching JS */
         .liquid-fill { display: none !important; }
         /* Remove the oil wave/drip background in the Industries section */
@@ -43,12 +50,13 @@
             object-position: center;
             transition: transform 650ms ease;
             will-change: transform;
+            z-index: 0;
         }
         .hero-modern .hero-bg-image.is-current { transform: translateX(0%); }
         .hero-modern .hero-bg-image.is-next { transform: translateX(100%); }
         .hero-modern .hero-bg-image.is-exit { transform: translateX(-100%); }
         .hero-modern .hero-bg-image.is-enter { transform: translateX(0%); }
-        .hero-modern .hero-overlay { position: absolute; inset: 0; background: linear-gradient(120deg, rgba(17,24,39,0.6), rgba(17,24,39,0.35)); }
+    .hero-modern .hero-overlay { position: absolute; inset: 0; background: linear-gradient(120deg, rgba(17,24,39,0.6), rgba(17,24,39,0.35)); z-index: 1; }
 
         /* Smooth text transitions for hero title/subtitle */
         .hero-title-modern, .hero-subtitle-modern {
@@ -331,7 +339,9 @@
         </div>
         <div class="hero-background">
             <div class="hero-overlay"></div>
-            <img src="public/AI Images/shelf.jpg" alt="Industrial Shelves with Product Drums" class="hero-bg-image">
+            <video class="hero-bg-image" autoplay muted loop playsinline poster="public/AI Images/shelf.jpg">
+                <source src="public/oil2.mp4" type="video/mp4">
+            </video>
         </div>
         
         <div class="container">
@@ -374,6 +384,14 @@
                     </a>
                 </div>
             </div>
+        </div>
+        <div class="hero-controls">
+            <button class="hero-btn hero-prev" id="heroPrev" aria-label="Previous slide">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="hero-btn hero-next" id="heroNext" aria-label="Next slide">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
         <div class="hero-scroll-indicator">
             <span></span>
@@ -876,13 +894,37 @@
 
             const slides = [
                 {
-                    src: 'public/AI Images/shelf.jpg',
+                    src: 'public/oil2.mp4',
                     title: 'Advanced Technology Solutions',
                     highlight: 'To Cleanliness & Lubrications',
                     subtitle: 'Leading supplier of industrial aerosol sprays, specialty lubricants, greases & maintenance chemicals across Malaysia and Thailand'
                 },
                 {
-                    src: 'public/Cutting Coolant.png',
+                    src: 'public/drums shelf.mp4',
+                    title: 'High Quality Industrial Packaging',
+                    highlight: 'Performance & Presentation',
+                    subtitle: 'Premium lubricants engineered for reliability, delivered in high quality packaging that protects and impresses.'
+                },
+                {
+                    src: 'public/plastic injection.mp4',
+                    title: 'Plastic Injection Moulding',
+                    highlight: 'Precision Mould Release & Lubrication',
+                    subtitle: 'Specialized lubricants and mould release agents designed for high-speed plastic injection processes.'
+                },
+                {
+                    src: 'public/Stamping Machine.mp4',
+                    title: 'Stamping Oils',
+                    highlight: 'Reduce Tool Wear & Improve Release',
+                    subtitle: 'Specialized stamping oils and lubricants formulated to reduce die wear, improve release and extend tool life in metal stamping operations.'
+                },
+                {
+                    src: 'public/EDM oil.mp4',
+                    title: 'EDM Synthetic Oils',
+                    highlight: 'Precision Dielectric & Clean Cutting',
+                    subtitle: 'High-purity EDM fluids designed for wire and die-sink EDM to improve surface finish, flushing and electrode life.'
+                },
+                {
+                    src: 'public/Cutting Coolant.mp4',
                     title: 'High-Performance Cutting Coolants',
                     highlight: 'Extend Tool Life. Better Finish.',
                     subtitle: 'Advanced water-soluble and neat coolants engineered for CNC machining, milling, turning, and grinding'
@@ -901,8 +943,11 @@
                 }
             ];
 
-            // Preload images for smooth transitions
-            slides.forEach(s => { const i = new Image(); i.src = s.src; });
+            // Preload images for smooth transitions (skip video sources)
+            slides.forEach(s => {
+                if (typeof s.src === 'string' && s.src.toLowerCase().endsWith('.mp4')) return;
+                const i = new Image(); i.src = s.src;
+            });
 
             let index = 0;
             // Initialize current copy and class
@@ -912,6 +957,15 @@
             }
             currentImg.classList.add('is-current');
             setCopy(slides[0]);
+            // If the initial background is a video, make sure it doesn't loop and advances when finished
+            try {
+                if (currentImg && currentImg.tagName && currentImg.tagName.toLowerCase() === 'video') {
+                    try { currentImg.loop = false; } catch(e){}
+                    // attach ended handler to move to next slide when video finishes
+                    currentImg._onVideoEnded = function(){ try{ nextSlide(); resetTimer(); }catch(e){} };
+                    currentImg.addEventListener('ended', currentImg._onVideoEnded);
+                }
+            } catch(e) {}
 
             let transitioning = false;
 
@@ -921,12 +975,37 @@
                 index = (index + 1) % slides.length;
                 const next = slides[index];
 
-                // Prepare next image element
-                const nextImg = document.createElement('img');
-                nextImg.className = 'hero-bg-image is-next';
-                nextImg.alt = currentImg.alt || 'Hero background';
-                nextImg.src = next.src;
-                heroBg.appendChild(nextImg);
+                // Prepare next background element. Use <video> for .mp4 sources, otherwise <img>
+                let nextEl;
+                const isVideo = typeof next.src === 'string' && next.src.toLowerCase().endsWith('.mp4');
+                if (isVideo) {
+                    nextEl = document.createElement('video');
+                    nextEl.className = 'hero-bg-image is-next';
+                    // Attributes to satisfy autoplay policies and improve reliability
+                    nextEl.muted = true;
+                    nextEl.playsInline = true;
+                    // do not loop: when the video ends we want to advance the hero
+                    nextEl.loop = false;
+                    nextEl.preload = 'auto';
+                    nextEl.autoplay = false; // we'll start playback once it can
+                    // set poster if provided
+                    if (next.poster) nextEl.poster = next.poster;
+                    const srcEl = document.createElement('source');
+                    srcEl.src = next.src;
+                    srcEl.type = 'video/mp4';
+                    nextEl.appendChild(srcEl);
+                    // When enough data is available, ensure playback starts
+                    nextEl.addEventListener('canplay', function onCanPlay(){
+                        try { nextEl.play().catch(()=>{}); } catch(e){}
+                        nextEl.removeEventListener('canplay', onCanPlay);
+                    });
+                } else {
+                    nextEl = document.createElement('img');
+                    nextEl.className = 'hero-bg-image is-next';
+                    nextEl.alt = 'Hero background';
+                    nextEl.src = next.src;
+                }
+                heroBg.appendChild(nextEl);
 
                 // Fade-out text, update, then fade-in
                 titleEl.classList.add('hero-text-hide');
@@ -943,28 +1022,119 @@
 
                 // Force reflow to ensure the browser acknowledges the starting position
                 // eslint-disable-next-line no-unused-expressions
-                nextImg.offsetWidth;
+                try { nextEl.offsetWidth; } catch(e) {}
+
 
                 // Slide: current moves left (exit), next moves to center (enter)
-                currentImg.classList.remove('is-current');
-                currentImg.classList.add('is-exit');
-                nextImg.classList.remove('is-next');
-                nextImg.classList.add('is-enter');
+                if (currentImg) {
+                    currentImg.classList.remove('is-current');
+                    currentImg.classList.add('is-exit');
+                    // if current is a video, remove its ended handler and pause it
+                    try {
+                        if (currentImg.tagName && currentImg.tagName.toLowerCase() === 'video') {
+                            if (currentImg._onVideoEnded) {
+                                try { currentImg.removeEventListener('ended', currentImg._onVideoEnded); } catch(e){}
+                                currentImg._onVideoEnded = null;
+                            }
+                            currentImg.pause();
+                        }
+                    } catch(e){}
+                }
+                    nextEl.classList.remove('is-next');
+                    nextEl.classList.add('is-enter');
 
                 const onDone = () => {
                     // Remove the old one and promote the next to current
                     if (currentImg && currentImg.parentNode) currentImg.remove();
-                    nextImg.classList.remove('is-enter');
-                    nextImg.classList.add('is-current');
-                    currentImg = nextImg;
+                    nextEl.classList.remove('is-enter');
+                    nextEl.classList.add('is-current');
+                    // if next is a video, ensure it plays and attach ended handler to advance slides
+                    try {
+                        if (nextEl.tagName && nextEl.tagName.toLowerCase() === 'video') {
+                            try { nextEl.loop = false; } catch(e){}
+                            nextEl.play().catch(()=>{});
+                            nextEl._onVideoEnded = function(){ try{ nextSlide(); resetTimer(); }catch(e){} };
+                            nextEl.addEventListener('ended', nextEl._onVideoEnded);
+                        }
+                    } catch(e){}
+                    currentImg = nextEl;
                     transitioning = false;
-                    nextImg.removeEventListener('transitionend', onDone);
+                    nextEl.removeEventListener('transitionend', onDone);
                 };
-                nextImg.addEventListener('transitionend', onDone);
+                nextEl.addEventListener('transitionend', onDone);
+                // Fallback: if transitionend doesn't fire (some browsers/videos), clear after interval
+                setTimeout(() => {
+                    if (transitioning) onDone();
+                }, Math.max(900, 650));
+            }
+
+            function prevSlide(){
+                if (transitioning) return;
+                transitioning = true;
+                index = (index - 1 + slides.length) % slides.length;
+                const next = slides[index];
+
+                // prepare previous similarly to nextSlide but reverse enter/exit directions
+                let nextEl;
+                const isVideo = typeof next.src === 'string' && next.src.toLowerCase().endsWith('.mp4');
+                if (isVideo) {
+                    nextEl = document.createElement('video');
+                    nextEl.className = 'hero-bg-image is-next';
+                    nextEl.muted = true; nextEl.playsInline = true; nextEl.loop = false; nextEl.preload = 'auto'; nextEl.autoplay = false;
+                    if (next.poster) nextEl.poster = next.poster;
+                    const srcEl = document.createElement('source'); srcEl.src = next.src; srcEl.type = 'video/mp4'; nextEl.appendChild(srcEl);
+                    nextEl.addEventListener('canplay', function onCanPlay(){ try{ nextEl.play().catch(()=>{});}catch(e){}; nextEl.removeEventListener('canplay', onCanPlay); });
+                } else { nextEl = document.createElement('img'); nextEl.className = 'hero-bg-image is-next'; nextEl.alt = 'Hero background'; nextEl.src = next.src; }
+                heroBg.appendChild(nextEl);
+
+                // update text
+                titleEl.classList.add('hero-text-hide'); subtitleEl.classList.add('hero-text-hide');
+                setTimeout(()=>{ setCopy(next); titleEl.offsetWidth; subtitleEl.offsetWidth; titleEl.classList.remove('hero-text-hide'); subtitleEl.classList.remove('hero-text-hide'); }, 180);
+
+                try{ nextEl.offsetWidth; } catch(e){}
+                if (currentImg) {
+                    currentImg.classList.remove('is-current');
+                    currentImg.classList.add('is-exit');
+                    try{
+                        if (currentImg.tagName && currentImg.tagName.toLowerCase()==='video') {
+                            if (currentImg._onVideoEnded) {
+                                try { currentImg.removeEventListener('ended', currentImg._onVideoEnded); } catch(e){}
+                                currentImg._onVideoEnded = null;
+                            }
+                            currentImg.pause();
+                        }
+                    }catch(e){}
+                }
+                // For prev we want the entering element to slide in from left — so use same classes but CSS transform handles it
+                nextEl.classList.remove('is-next'); nextEl.classList.add('is-enter');
+
+                const onDonePrev = () => {
+                    if (currentImg && currentImg.parentNode) currentImg.remove();
+                    nextEl.classList.remove('is-enter'); nextEl.classList.add('is-current');
+                    try{
+                        if (nextEl.tagName && nextEl.tagName.toLowerCase()==='video') {
+                            try { nextEl.loop = false; } catch(e){}
+                            nextEl.play().catch(()=>{});
+                            nextEl._onVideoEnded = function(){ try{ nextSlide(); resetTimer(); }catch(e){} };
+                            nextEl.addEventListener('ended', nextEl._onVideoEnded);
+                        }
+                    }catch(e){}
+                    currentImg = nextEl; transitioning = false; nextEl.removeEventListener('transitionend', onDonePrev);
+                };
+                nextEl.addEventListener('transitionend', onDonePrev);
+                setTimeout(()=>{ if (transitioning) onDonePrev(); }, Math.max(900,650));
             }
 
             const intervalMs = 6500;
             let timer = setInterval(nextSlide, intervalMs);
+
+            function resetTimer(){ clearInterval(timer); timer = setInterval(nextSlide, intervalMs); }
+
+            // Wire up controls
+            const heroPrevBtn = document.getElementById('heroPrev');
+            const heroNextBtn = document.getElementById('heroNext');
+            heroPrevBtn?.addEventListener('click', ()=>{ prevSlide(); resetTimer(); });
+            heroNextBtn?.addEventListener('click', ()=>{ nextSlide(); resetTimer(); });
 
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {

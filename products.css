@@ -311,3 +311,203 @@
 .category-card[data-category="metalworking"] .category-image {
     padding: 12px;
 }
+
+/* ===== Metal Working: switch to 4 columns with chips ===== */
+.tab-panel#metalworking .products-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: var(--spacing-xl, 24px);
+}
+.tab-panel#metalworking .product-image {
+    padding: 22px !important;
+    height: 360px !important;
+}
+.tab-panel#metalworking .product-image img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 100% !important;
+    object-fit: contain !important;
+}
+@media (max-width: 1280px) {
+    .tab-panel#metalworking .products-grid { grid-template-columns: repeat(3, 1fr) !important; }
+    .tab-panel#metalworking .product-image { height: 320px !important; padding: 20px !important; }
+}
+@media (max-width: 980px) {
+    .tab-panel#metalworking .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .tab-panel#metalworking .product-image { height: 300px !important; padding: 18px !important; }
+}
+@media (max-width: 640px) {
+    .tab-panel#metalworking .products-grid { grid-template-columns: 1fr !important; gap: 18px; }
+    .tab-panel#metalworking .product-image { height: 260px !important; padding: 16px !important; }
+}
+
+/* Hide features/paragraph; show applications chips + title */
+.tab-panel#metalworking .product-features { display: none !important; }
+.tab-panel#metalworking .product-info p { display: none !important; }
+.tab-panel#metalworking .product-info h3 { margin-bottom: 8px !important; }
+.tab-panel#metalworking .product-info { padding-top: 18px !important; }
+.tab-panel#metalworking .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: var(--primary-color); margin-top: 8px; }
+.tab-panel#metalworking .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.tab-panel#metalworking .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: #eef2f7; color: var(--primary-color); font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+.tab-panel#metalworking .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: var(--secondary-color); }
+
+/* ===== Accessories: 4 columns with chips ===== */
+.tab-panel#accessories .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xl, 24px);
+}
+@media (max-width: 1280px) { .tab-panel#accessories .products-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 980px) { .tab-panel#accessories .products-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .tab-panel#accessories .products-grid { grid-template-columns: 1fr; gap: 18px; } }
+
+.tab-panel#accessories .product-image { height: 360px !important; padding: 22px !important; }
+@media (max-width: 1280px){ .tab-panel#accessories .product-image { height: 320px !important; padding: 20px !important; } }
+@media (max-width: 980px){ .tab-panel#accessories .product-image { height: 300px !important; padding: 18px !important; } }
+@media (max-width: 640px){ .tab-panel#accessories .product-image { height: 260px !important; padding: 16px !important; } }
+
+.tab-panel#accessories .product-features { display: none !important; }
+.tab-panel#accessories .product-info p { display: none !important; }
+.tab-panel#accessories .product-info h3 { margin-bottom: 8px !important; }
+.tab-panel#accessories .product-info { padding-top: 18px !important; }
+.tab-panel#accessories .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: var(--primary-color); margin-top: 8px; }
+.tab-panel#accessories .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.tab-panel#accessories .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: #eef2f7; color: var(--primary-color); font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+.tab-panel#accessories .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: var(--secondary-color); }
+
+/* ===== Food-Safe Products: 4 columns with chips ===== */
+.tab-panel#foodgrade .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xl, 24px);
+}
+@media (max-width: 1280px) { .tab-panel#foodgrade .products-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 980px) { .tab-panel#foodgrade .products-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .tab-panel#foodgrade .products-grid { grid-template-columns: 1fr; gap: 18px; } }
+
+.tab-panel#foodgrade .product-image { height: 360px !important; padding: 22px !important; }
+@media (max-width: 1280px){ .tab-panel#foodgrade .product-image { height: 320px !important; padding: 20px !important; } }
+@media (max-width: 980px){ .tab-panel#foodgrade .product-image { height: 300px !important; padding: 18px !important; } }
+@media (max-width: 640px){ .tab-panel#foodgrade .product-image { height: 260px !important; padding: 16px !important; } }
+
+.tab-panel#foodgrade .product-features { display: none !important; }
+.tab-panel#foodgrade .product-info p { display: none !important; }
+.tab-panel#foodgrade .product-info h3 { margin-bottom: 8px !important; }
+.tab-panel#foodgrade .product-info { padding-top: 18px !important; }
+.tab-panel#foodgrade .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: var(--primary-color); margin-top: 8px; }
+.tab-panel#foodgrade .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.tab-panel#foodgrade .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: #eef2f7; color: var(--primary-color); font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+.tab-panel#foodgrade .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: var(--secondary-color); }
+
+/* ===== Aerosol Products: 4 columns with proper spacing ===== */
+/* Enforce 4 cards per row within the Aerosol tab on larger screens,
+   with graceful responsive fallbacks for smaller viewports. */
+.tab-panel#aerosol .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xl, 24px); /* use design token, fallback to 24px */
+}
+
+/* Make aerosol product images less tall for a tighter layout */
+.tab-panel#aerosol .product-image {
+    height: 360px !important;
+    padding: 22px !important;
+}
+
+/* Slightly narrower screens: drop to 3 columns */
+@media (max-width: 1280px) {
+    .tab-panel#aerosol .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .tab-panel#aerosol .product-image {
+        height: 320px !important;
+        padding: 20px !important;
+    }
+}
+
+/* Tablets: 2 columns */
+@media (max-width: 980px) {
+    .tab-panel#aerosol .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .tab-panel#aerosol .product-image {
+        height: 300px !important;
+        padding: 18px !important;
+    }
+}
+
+/* Mobile: 1 column */
+@media (max-width: 640px) {
+    .tab-panel#aerosol .products-grid {
+        grid-template-columns: 1fr;
+        gap: 18px; /* tighten spacing a bit on mobile */
+    }
+    .tab-panel#aerosol .product-image {
+        height: 260px !important;
+        padding: 16px !important;
+    }
+}
+
+/* ===== Maintenance & Repair: 4 columns with chips ===== */
+.tab-panel#maintenance .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xl, 24px);
+}
+@media (max-width: 1280px) { .tab-panel#maintenance .products-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 980px) { .tab-panel#maintenance .products-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .tab-panel#maintenance .products-grid { grid-template-columns: 1fr; gap: 18px; } }
+
+/* Reduce image height on maintenance similar to aerosol for compact cards */
+.tab-panel#maintenance .product-image { height: 360px !important; padding: 22px !important; }
+@media (max-width: 1280px){ .tab-panel#maintenance .product-image { height: 320px !important; padding: 20px !important; } }
+@media (max-width: 980px){ .tab-panel#maintenance .product-image { height: 300px !important; padding: 18px !important; } }
+@media (max-width: 640px){ .tab-panel#maintenance .product-image { height: 260px !important; padding: 16px !important; } }
+
+/* Hide features and description; show apps chips */
+.tab-panel#maintenance .product-features { display: none !important; }
+.tab-panel#maintenance .product-info p { display: none !important; }
+.tab-panel#maintenance .product-info h3 { margin-bottom: 8px !important; }
+.tab-panel#maintenance .product-info { padding-top: 18px !important; }
+.tab-panel#maintenance .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: var(--primary-color); margin-top: 8px; }
+.tab-panel#maintenance .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.tab-panel#maintenance .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: #eef2f7; color: var(--primary-color); font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+.tab-panel#maintenance .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: var(--secondary-color); }
+
+/* Aerosol: show only name + short description; hide feature tags */
+.tab-panel#aerosol .product-features { display: none !important; }
+.tab-panel#aerosol .product-info p { display: none !important; }
+.tab-panel#aerosol .product-info h3 { margin-bottom: 8px !important; }
+.tab-panel#aerosol .product-info { padding-top: 18px !important; }
+
+/* Aerosol: Applications chips (display instead of paragraph) */
+.tab-panel#aerosol .product-apps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+.tab-panel#aerosol .product-apps-title {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-top: 8px;
+}
+.tab-panel#aerosol .product-apps .app-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 9px;
+    border-radius: 16px;
+    background: #eef2f7;
+    color: var(--primary-color);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    white-space: nowrap;
+}
+.tab-panel#aerosol .product-apps .app-chip::before {
+    content: '\2022';
+    margin-right: 6px;
+    color: var(--secondary-color);
+}

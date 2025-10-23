@@ -347,6 +347,29 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 30px;
         }
+        /* ===== Rubber & Latex Products Grid: enforce 4 columns + compact images + app chips ===== */
+        .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(4, 1fr) !important; gap: 24px !important; }
+        @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(3, 1fr) !important; } }
+        @media (max-width: 980px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 640px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr !important; gap: 18px !important; } }
+
+        /* Compact image container */
+        .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 360px !important; padding: 22px !important; }
+        .products-section-enhanced .product-image img, .products-section-enhanced .product-image-container img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        @media (max-width: 1280px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 320px !important; padding: 20px !important; } }
+        @media (max-width: 980px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 300px !important; padding: 18px !important; } }
+        @media (max-width: 640px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 260px !important; padding: 16px !important; } }
+
+        /* Hide verbose blocks; chips styling */
+        .products-section-enhanced .product-card .product-features, .products-section-enhanced .product-card .product-features-enhanced { display: none !important; }
+        .products-section-enhanced .product-card .product-info > p, .products-section-enhanced .product-card .product-content > p { display: none !important; }
+        .products-section-enhanced .product-card .product-application { display: none !important; }
+        .products-section-enhanced .product-card .product-info h3, .products-section-enhanced .product-card .product-content h3 { margin-bottom: 8px !important; }
+        .products-section-enhanced .product-card .product-info, .products-section-enhanced .product-card .product-content { padding-top: 18px !important; }
+        .products-section-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: #b91c1c; margin-top: 8px; }
+        .products-section-enhanced .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .products-section-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: #fef2f2; color: #b91c1c; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+    .products-section-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: #dc2626; }
         /* Category selector (red theme) */
         .product-category-bar { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin: 16px 0 24px; }
         .product-category-bar .category-btn { background: transparent; border: 1px solid #e5e7eb; padding: 8px 14px; margin: 0 6px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #0f172a; }
@@ -1081,7 +1104,7 @@
             <div id="product-category-bar" class="product-category-bar"></div>
 
             <div class="products-grid products-grid-enhanced">
-                <a href="products/protean-chain-gear-oils.html" class="product-card" data-category="accessories">
+                <a href="products/protean-chain-gear-oils.html" class="product-card" data-category="industrial-lubricants">
                     <div class="product-image" style="height: 600px; padding: 40px;">
                         <img src="public/Protean Chain & Gear Oils.png" alt="Protean Chain & Gear Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
                     </div>
@@ -1290,7 +1313,8 @@
                         ['industrial-lubricants', 'Industrial Lubricants'],
                         ['maintenance-repair', 'Maintenance & Repair']
                     ],
-                    moveLubeGuardHref: 'products/lube-guard-original.html',
+                    // Disable promotion so grouped same-photo cards stay pinned to top
+                    moveLubeGuardHref: '',
                     orderAllByCategory: true
                 });
             }

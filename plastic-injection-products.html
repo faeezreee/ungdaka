@@ -380,15 +380,12 @@
         
         .products-grid-enhanced {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* force 3 columns on desktop */
-            gap: 30px;
+            grid-template-columns: repeat(4, 1fr); /* switch to 4 columns */
+            gap: 24px;
         }
-        @media (max-width: 1200px) {
-            .products-grid-enhanced { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 768px) {
-            .products-grid-enhanced { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 1280px) { .products-grid-enhanced { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 980px) { .products-grid-enhanced { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px) { .products-grid-enhanced { grid-template-columns: 1fr; gap: 18px; } }
         
         .product-card-enhanced {
             background: white;
@@ -407,8 +404,8 @@
         .products-grid-enhanced .product-image,
         .products-grid-enhanced .product-image-container {
             position: relative;
-            height: 480px !important; /* override inline 600px */
-            padding: 32px !important; /* override inline 40px */
+            height: 360px !important; /* compact like other pages */
+            padding: 22px !important; /* tighter padding */
             overflow: hidden;
             box-sizing: border-box;
         }
@@ -422,7 +419,7 @@
         }
         @media (max-width: 640px){
             .products-grid-enhanced .product-image,
-            .products-grid-enhanced .product-image-container { height: 360px !important; padding: 20px !important; }
+            .products-grid-enhanced .product-image-container { height: 260px !important; padding: 16px !important; }
         }
         
         .product-badge {
@@ -603,6 +600,21 @@
             .industry-hero-image { height: 180px; }
             .product-category-bar .category-btn { padding: 6px 10px; margin: 4px; }
         }
+
+    /* Hide verbose content; show Applications chips via JS */
+    .products-grid-enhanced .product-card .product-features, 
+    .products-grid-enhanced .product-card .product-features-enhanced { display: none !important; }
+    .products-grid-enhanced .product-card .product-info > p, 
+    .products-grid-enhanced .product-card .product-content > p { display: none !important; }
+    .products-grid-enhanced .product-card .product-application { display: none !important; }
+    .products-grid-enhanced .product-card .product-info h3, 
+    .products-grid-enhanced .product-card .product-content h3 { margin-bottom: 8px !important; }
+
+    /* Applications chips styling (scoped) */
+    .products-grid-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: var(--primary-color); margin-top: 8px; }
+    .products-grid-enhanced .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .products-grid-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: #eef2f7; color: var(--primary-color); font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+    .products-grid-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: var(--secondary-color); }
 
         </style>
 </head>
@@ -1037,22 +1049,7 @@
                     </div>
                 </a>
 
-                <!-- 15) PROTEAN FOOD GRADE GREASE -->
-                <a href="products/protean-white-grease.html" class="product-card" data-category="aerosol-products">
-                    <div class="product-image-container" style="position: relative; height: 600px; padding: 40px; box-sizing: border-box; background: white;">
-                        <img src="public/Protean White Grease.png" alt="PROTEAN FOOD GRADE GREASE" style="width:100%; height:100%; object-fit:contain; display:block;">
-                    </div>
-                    <div class="product-info">
-                        <h3>PROTEAN FOOD GRADE GREASE</h3>
-                        <p>Food-safe grease for food-contact applications</p>
-                        <div class="product-features">
-                            <span class="feature-tag">NSF Approved</span>
-                        </div>
-                        <div class="product-application">
-                            <strong>Application:</strong> Food processing equipment, packaging machinery
-                        </div>
-                    </div>
-                </a>
+                
 
                 <!-- 16) TYGRIS SYNTHETIC -->
                 <div class="product-card" data-category="aerosol-products">
@@ -1131,7 +1128,7 @@
                 <!-- Industrial Greases (mapped under Aerosol Products per request) -->
                 <a href="products/protean-white-grease.html" class="product-card" data-category="aerosol-products">
                     <div class="product-image-container" style="position: relative; height: 600px; padding: 40px; box-sizing: border-box; background: white;">
-                        <img src="public/Protean White Grease.png" alt="Protean White Grease" style="width:100%; height:100%; object-fit:contain; display:block;">
+                        <img src="public/Protean White Grease (Poly Alpha Olefin).png" alt="Protean White Grease" style="width:100%; height:100%; object-fit:contain; display:block;">
                     </div>
                     <div class="product-info">
                         <h3>PROTEAN WHITE GREASE</h3>
@@ -1300,9 +1297,26 @@
                         ['industrial-lubricants', 'Industrial Lubricants'],
                         ['maintenance-repair', 'Maintenance & Repair']
                     ],
-                    orderAllByCategory: true
+                    orderAllByCategory: true,
+                    moveLubeGuardHref: ''
                 });
             }
+
+            // After filter init and global grouping, move grouped duplicate-image cards to the top
+            setTimeout(function(){
+                try{
+                    const grid = document.querySelector('.products-grid-enhanced');
+                    if(!grid) return;
+                    const grouped = Array.from(grid.querySelectorAll('.product-card-grouped'));
+                    if(grouped.length){
+                        // Preserve current order among grouped entries, move them to the top in sequence
+                        const first = grid.firstElementChild;
+                        grouped.forEach(node => {
+                            if(node !== first){ grid.insertBefore(node, grid.firstElementChild); }
+                        });
+                    }
+                }catch(e){ /* ignore */ }
+            }, 60);
         });
     </script>
 </body>

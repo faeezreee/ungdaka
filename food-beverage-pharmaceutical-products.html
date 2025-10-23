@@ -317,7 +317,7 @@
         
         .products-grid-enhanced {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
         }
         
@@ -483,7 +483,7 @@
             background: #10b981;
             color: white;
         }
-        /* Technical specs + CTA styles (match other pages, green palette) */
+    /* Technical specs + CTA styles (match other pages, green palette) */
     .technical-specs-enhanced { padding: 80px 0; background: linear-gradient(135deg, #f8fafc, #eafaf1); }
     .technical-specs-enhanced h2 { text-align: center; font-size: 2.2rem; color: #0f172a; margin-bottom: 24px; }
     .specs-grid-enhanced { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
@@ -816,8 +816,11 @@
                 <p>Professional-grade solutions for your food processing needs</p>
             </div>
             
-            <div class="products-grid">
-                <a href="products/protean-vhvi-hydraulic-oils.html" class="product-card">
+            <!-- Dynamic Category Bar -->
+            <div id="product-category-bar" class="product-category-bar"></div>
+
+            <div class="products-grid products-grid-enhanced">
+                <a href="products/protean-vhvi-hydraulic-oils.html" class="product-card" data-category="industrial-lubricants">
                     <div class="product-image">
                         <img src="public/Protean VHVI Hydraulic Oils.png" alt="Protean VHVI Hydraulic Oils">
                     </div>
@@ -834,7 +837,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-pao.html" class="product-card">
+                <a href="products/protean-pao.html" class="product-card" data-category="industrial-lubricants">
                     <div class="product-image">
                         <img src="public/Protean PAO (Poly Alpha Olefin).png" alt="Protean PAO">
                     </div>
@@ -851,7 +854,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-chain-gear-oils.html" class="product-card">
+                <a href="products/protean-chain-gear-oils.html" class="product-card" data-category="industrial-lubricants">
                     <div class="product-image">
                         <img src="public/Protean Chain & Gear Oils.png" alt="Protean Chain & Gear Oils">
                     </div>
@@ -868,7 +871,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-compressor-oils.html" class="product-card">
+                <a href="products/protean-compressor-oils.html" class="product-card" data-category="industrial-lubricants">
                     <div class="product-image">
                         <img src="public/Protean Compressor Oils.png" alt="Protean Compressor Oils">
                     </div>
@@ -885,7 +888,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-vacuum-pump-oils.html" class="product-card">
+                <a href="products/protean-vacuum-pump-oils.html" class="product-card" data-category="industrial-lubricants">
                     <div class="product-image">
                         <img src="public/Protean Vacuum Pump Oils.png" alt="Protean Vacuum Pump Oils">
                     </div>
@@ -902,7 +905,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-airline-oils.html" class="product-card">
+                <a href="products/protean-airline-oils.html" class="product-card" data-category="industrial-lubricants">
                     <div class="product-image">
                         <img src="public/Protean Airline Oils.png" alt="Protean Airline Oils">
                     </div>
@@ -919,7 +922,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-white-grease.html" class="product-card">
+                <a href="products/protean-white-grease.html" class="product-card" data-category="industrial-grease">
                     <div class="product-image">
                         <img src="public/Protean White Grease (Poly Alpha Olefin).png" alt="Protean White Grease">
                     </div>
@@ -936,7 +939,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-classic-2.html" class="product-card">
+                <a href="products/protean-classic-2.html" class="product-card" data-category="industrial-grease">
                     <div class="product-image">
                         <img src="public/Protean Classic 2 (Poly Alpha Olefin).png" alt="Protean Classic 2">
                     </div>
@@ -953,7 +956,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-3h1-grease.html" class="product-card">
+                <a href="products/protean-3h1-grease.html" class="product-card" data-category="industrial-grease">
                     <div class="product-image">
                         <img src="public/Protean 3H1 Grease.png" alt="Protean 3H1 Grease">
                     </div>
@@ -970,7 +973,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-assembly-grease.html" class="product-card">
+                <a href="products/protean-assembly-grease.html" class="product-card" data-category="industrial-grease">
                     <div class="product-image">
                         <img src="public/Protean Assembly Grease (Poly Alpha Olefin).png" alt="Protean Assembly Grease">
                     </div>
@@ -987,7 +990,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-als-plus.html" class="product-card">
+                <a href="products/protean-als-plus.html" class="product-card" data-category="industrial-lubricants">
                     <div class="product-image">
                         <img src="public/drum and pail.png" alt="Protean ALS+">
                     </div>
@@ -1004,7 +1007,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-multi-lube.html" class="product-card">
+                <a href="products/protean-multi-lube.html" class="product-card" data-category="aerosol-products">
                     <div class="product-image">
                         <img src="public/Protean Multi-Lube.png" alt="Protean Multi-Lube">
                     </div>
@@ -1021,7 +1024,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-wd-anti-rust-agent.html" class="product-card">
+                <a href="products/protean-wd-anti-rust-agent.html" class="product-card" data-category="aerosol-products">
                     <div class="product-image">
                         <img src="public/Protean WD Anti-Rust Agent.png" alt="Protean WD Anti-Rust Agent">
                     </div>
@@ -1038,7 +1041,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-silicone-release.html" class="product-card">
+                <a href="products/protean-silicone-release.html" class="product-card" data-category="aerosol-products">
                     <div class="product-image">
                         <img src="public/Protean Silicone Release.png" alt="Protean Silicone Release">
                     </div>
@@ -1055,7 +1058,7 @@
                     </div>
                 </a>
                 
-                <a href="products/protean-fast-dry-solvent-cleaner.html" class="product-card">
+                <a href="products/protean-fast-dry-solvent-cleaner.html" class="product-card" data-category="aerosol-products">
                     <div class="product-image">
                         <img src="public/Protean Fast Dry Solvent Cleaner.png" alt="Protean Fast Dry Solvent Cleaner">
                     </div>
@@ -1074,7 +1077,7 @@
                 
                 <!-- Protean Atmoshield+ removed per request -->
                 
-                <a href="products/synthetic-ejector-pin-lubricant.html" class="product-card">
+                <a href="products/synthetic-ejector-pin-lubricant.html" class="product-card" data-category="aerosol-products">
                     <div class="product-image">
                         <img src="public/Synthetic Ejector Pin Lubricant.png" alt="Synthetic Ejector Pin Lubricant">
                     </div>
@@ -1091,7 +1094,7 @@
                     </div>
                 </a>
                 
-                <a href="products/waterless-hand-scrubber.html" class="product-card">
+                <a href="products/waterless-hand-scrubber.html" class="product-card" data-category="maintenance-repair">
                     <div class="product-image">
                         <img src="public/superscrub.png" alt="Waterless Hand Scrubber with Grit">
                     </div>
@@ -1221,5 +1224,56 @@
 
     <!-- Scripts -->
     <script src="script.js"></script>
+    <script>
+        // Enforce 4-column grid, compact images, hide verbose blocks and add Applications chips styling
+        (function(){
+            const style = document.createElement('style');
+            style.textContent = `
+            /* 4-column responsive grid */
+            .products-section-enhanced .products-grid-enhanced{grid-template-columns:repeat(4,1fr)!important;gap:24px!important}
+            @media (max-width:1280px){.products-section-enhanced .products-grid-enhanced{grid-template-columns:repeat(3,1fr)!important}}
+            @media (max-width:980px){.products-section-enhanced .products-grid-enhanced{grid-template-columns:repeat(2,1fr)!important}}
+            @media (max-width:640px){.products-section-enhanced .products-grid-enhanced{grid-template-columns:1fr!important;gap:18px!important}}
+            /* Compact images */
+            .products-section-enhanced .product-image,.products-section-enhanced .product-image-container{height:360px!important;padding:22px!important}
+            .products-section-enhanced .product-image img,.products-section-enhanced .product-image-container img{width:100%;height:100%;object-fit:contain;display:block}
+            @media (max-width:1280px){.products-section-enhanced .product-image,.products-section-enhanced .product-image-container{height:320px!important;padding:20px!important}}
+            @media (max-width:980px){.products-section-enhanced .product-image,.products-section-enhanced .product-image-container{height:300px!important;padding:18px!important}}
+            @media (max-width:640px){.products-section-enhanced .product-image,.products-section-enhanced .product-image-container{height:260px!important;padding:16px!important}}
+            /* Hide verbose blocks; concise chips */
+            .products-section-enhanced .product-card .product-features,.products-section-enhanced .product-card .product-features-enhanced{display:none!important}
+            .products-section-enhanced .product-card .product-info>p,.products-section-enhanced .product-card .product-content>p{display:none!important}
+            .products-section-enhanced .product-card .product-application{display:none!important}
+            .products-section-enhanced .product-card .product-info h3,.products-section-enhanced .product-card .product-content h3{margin-bottom:8px!important}
+            .products-section-enhanced .product-card .product-info,.products-section-enhanced .product-card .product-content{padding-top:18px!important}
+            /* Chips styling */
+            .products-section-enhanced .product-apps-title{display:block;font-size:.85rem;font-weight:700;color:#059669;margin-top:8px}
+            .products-section-enhanced .product-apps{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+            .products-section-enhanced .product-apps .app-chip{display:inline-flex;align-items:center;padding:5px 9px;border-radius:16px;background:#ecfdf5;color:#047857;font-size:.8rem;font-weight:600;border:1px solid rgba(0,0,0,.05);box-shadow:0 1px 2px rgba(0,0,0,.04);white-space:nowrap}
+            .products-section-enhanced .product-apps .app-chip::before{content:'\\2022';margin-right:6px;color:#10b981}
+            /* Category bar (green theme) */
+            .product-category-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:16px 0 24px}
+            .product-category-bar .category-btn{background:transparent;border:1px solid #e5e7eb;padding:8px 14px;margin:0 6px;border-radius:8px;font-weight:600;cursor:pointer;color:#0f172a}
+            .product-category-bar .category-btn.active{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border-color:transparent}
+            `;
+            document.head.appendChild(style);
+        })();
+
+        document.addEventListener('DOMContentLoaded', function(){
+            if (window.initProductCategoryFilter) {
+                window.initProductCategoryFilter({
+                    gridSelector: '.products-grid.products-grid-enhanced',
+                    categoryMap: [
+                        ['aerosol-products', 'Aerosol Products'],
+                        ['industrial-lubricants', 'Industrial Lubricants'],
+                        ['industrial-grease', 'Industrial Grease'],
+                        ['maintenance-repair', 'Maintenance & Repair']
+                    ],
+                    moveLubeGuardHref: '',
+                    orderAllByCategory: true
+                });
+            }
+        });
+    </script>
 </body>
 </html>

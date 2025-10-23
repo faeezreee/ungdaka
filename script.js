@@ -93,6 +93,461 @@ ${requirements}`;
         });
     }
 });
+
+// Replace Aerosol tab descriptions with concise application summaries
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const panel = document.querySelector('.tab-panel#aerosol');
+        if(!panel) return;
+
+        // Map product slug (href filename) or keyword to applications (keep 2-3 concise items)
+        const apps = {
+            'lube-guard-original.html': ['General maintenance', 'Loosens rust', 'Moisture displacement'],
+            'lube-guard-lemon.html': ['Fresh-scent lubrication', 'Light protection', 'General use'],
+            's-88-paintable.html': ['Injection mould release', 'Paintable parts', 'Plastic components'],
+            's-88-non-paintable.html': ['High-release moulding', 'Non-paintable parts', 'Plastic moulds'],
+            'ns-77-non-silicone-mould-release.html': ['Silicone-free moulding', 'Post-painting/soldering', 'Food packaging'],
+            's-22-degreaser-mould-cleaner.html': ['Degreasing', 'Mould cleaning', 'Surface prep'],
+            'sc-99-solvent-cleaner.html': ['Solvent cleaning', 'Oil/grease removal', 'Precision parts'],
+            'sr-remover-silicone-residue-cleaner.html': ['Silicone residue removal', 'Mould maintenance'],
+            'pro-cote.html': ['Corrosion protection', 'Storage & transport', 'Metal surfaces'],
+            'pro-cote-white-protective-coating.html': ['Protective coating', 'Corrosion resistance', 'White finish'],
+            'pro-shield-green-anti-corrosion.html': ['Anti-corrosion', 'Inspection marking', 'Short-term protection'],
+            'pro-shield-blue-anti-corrosion.html': ['Mid-term wax coating', 'Rust prevention', 'High temp tolerance'],
+            'ep-lube-ejector-pin-lubricant.html': ['Ejector pin lube', 'Precision moulds', 'Non-drip film'],
+            'sg-18-high-performance-grease.html': ['Multi-purpose grease', 'Bearings', 'Water resistance'],
+            'moly-lube-advanced-lubricant.html': ['Wire ropes & chains', 'Penetrating lube', 'Heavy duty'],
+            'ecc-electro-contact-cleaner.html': ['Electrical contacts', 'Fast dry clean', 'Non-conductive']
+        };
+
+        function slugFromHref(href){
+            try{
+                const url = href.split('?')[0].split('#')[0];
+                const parts = url.split('/');
+                return parts[parts.length-1].toLowerCase();
+            }catch(e){ return ''; }
+        }
+
+        const cards = panel.querySelectorAll('.products-grid .product-card');
+        cards.forEach(card => {
+            const href = card.getAttribute('href') || card.dataset.href || '';
+            const slug = slugFromHref(href);
+            let list = apps[slug];
+
+            if(!list){
+                // Fallback: try by title keywords
+                const title = (card.querySelector('.product-info h3')?.textContent || '').toLowerCase();
+                if(title.includes('lube guard') && title.includes('lemon')) list = apps['lube-guard-lemon.html'];
+                else if(title.includes('lube guard')) list = apps['lube-guard-original.html'];
+                else if(title.includes('paintable') && title.includes('s-88')) list = apps['s-88-paintable.html'];
+                else if(title.includes('non-paintable') && title.includes('s-88')) list = apps['s-88-non-paintable.html'];
+                else if(title.includes('ns-77')) list = apps['ns-77-non-silicone-mould-release.html'];
+                else if(title.includes('s-22')) list = apps['s-22-degreaser-mould-cleaner.html'];
+                else if(title.includes('sc-99')) list = apps['sc-99-solvent-cleaner.html'];
+                else if(title.includes('sr remover')) list = apps['sr-remover-silicone-residue-cleaner.html'];
+                else if(title.includes('pro cote white')) list = apps['pro-cote-white-protective-coating.html'];
+                else if(title.includes('pro cote')) list = apps['pro-cote.html'];
+                else if(title.includes('pro shield') && title.includes('green')) list = apps['pro-shield-green-anti-corrosion.html'];
+                else if(title.includes('pro shield') && title.includes('blue')) list = apps['pro-shield-blue-anti-corrosion.html'];
+                else if(title.includes('ep lube')) list = apps['ep-lube-ejector-pin-lubricant.html'];
+                else if(title.includes('sg-18')) list = apps['sg-18-high-performance-grease.html'];
+                else if(title.includes('moly-lube')) list = apps['moly-lube-advanced-lubricant.html'];
+                else if(title.includes('electro contact cleaner') || title.includes('ecc')) list = apps['ecc-electro-contact-cleaner.html'];
+            }
+
+            // Render application chips below the title; hide original paragraph if present
+            const info = card.querySelector('.product-info');
+            if(!info) return;
+            const existing = info.querySelector('.product-apps');
+            if(existing) existing.remove();
+
+            if(Array.isArray(list) && list.length){
+                // Remove previous label if exists
+                const prevTitle = info.querySelector('.product-apps-title');
+                if(prevTitle) prevTitle.remove();
+
+                // Title label
+                const titleEl = document.createElement('span');
+                titleEl.className = 'product-apps-title';
+                titleEl.textContent = 'Applications';
+
+                // Chips row
+                const wrap = document.createElement('div');
+                wrap.className = 'product-apps';
+                list.slice(0,3).forEach(txt => {
+                    const chip = document.createElement('span');
+                    chip.className = 'app-chip';
+                    chip.textContent = txt;
+                    wrap.appendChild(chip);
+                });
+
+                // insert after title h3
+                const h3 = info.querySelector('h3');
+                if(h3){
+                    if(h3.nextSibling){
+                        h3.parentNode.insertBefore(titleEl, h3.nextSibling);
+                        titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);
+                    } else {
+                        info.appendChild(titleEl);
+                        info.appendChild(wrap);
+                    }
+                } else {
+                    info.appendChild(titleEl);
+                    info.appendChild(wrap);
+                }
+            }
+            // Hide description paragraph if exists (CSS also hides it)
+            const p = info.querySelector('p');
+            if(p){ p.style.display = 'none'; }
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// Replace Food-Safe tab descriptions with concise application chips + title
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const panel = document.querySelector('.tab-panel#foodgrade');
+        if(!panel) return;
+
+        const apps = {
+            'protean-vhvi-hydraulic-oils.html': ['NSF H1 hydraulic systems', 'Food processing lines', 'High VI stability'],
+            'protean-pao.html': ['High-temp bearings', 'Food machinery', 'Long service life'],
+            'protean-chain-gear-oils.html': ['Chains & gears', 'Load carrying', 'Wear protection'],
+            'protean-compressor-oils.html': ['Compressed air systems', 'Low residue', 'Food-safe'],
+            'protean-vacuum-pump-oils.html': ['Vacuum sealing', 'High vacuum', 'Low vapor pressure'],
+            'protean-airline-oils.html': ['Pneumatics', 'Clean air', 'Low mist'],
+            'protean-white-grease.html': ['Bearings & slides', 'White NSF H1', 'General use'],
+            'protean-classic-2.html': ['General purpose', 'Food packaging', 'NSF H1'],
+            'protean-3h1-grease.html': ['Direct food contact', '3H/H1', 'Packaging equipment'],
+            'protean-assembly-grease.html': ['Assembly & maintenance', 'Food-safe'],
+            'protean-fast-dry-solvent-cleaner.html': ['Fast cleaning', 'No residue', 'Maintenance'],
+            'protean-multi-lube.html': ['Multi-purpose lube', 'Food processing'],
+            'protean-silicone-release.html': ['Food molds', 'Release agent'],
+            'protean-wd-anti-rust-agent.html': ['Water displacement', 'Anti-rust', 'Food equipment'],
+            'synthetic-ejector-pin-lubricant.html': ['Ejector pins', 'Food packaging molds', 'Precision']
+        };
+
+        function slugFromHref(href){
+            try{
+                const url = href.split('?')[0].split('#')[0];
+                const parts = url.split('/');
+                return parts[parts.length-1].toLowerCase();
+            }catch(e){ return ''; }
+        }
+
+        const cards = panel.querySelectorAll('.products-grid .product-card');
+        cards.forEach(card => {
+            const href = card.getAttribute('href') || card.dataset.href || '';
+            const slug = slugFromHref(href);
+            let list = apps[slug];
+
+            if(!list){
+                const title = (card.querySelector('.product-info h3')?.textContent || '').toLowerCase();
+                if(title.includes('hydraulic')) list = apps['protean-vhvi-hydraulic-oils.html'];
+                else if(title.includes('pao')) list = apps['protean-pao.html'];
+                else if(title.includes('chain') && title.includes('gear')) list = apps['protean-chain-gear-oils.html'];
+                else if(title.includes('compressor')) list = apps['protean-compressor-oils.html'];
+                else if(title.includes('vacuum')) list = apps['protean-vacuum-pump-oils.html'];
+                else if(title.includes('airline')) list = apps['protean-airline-oils.html'];
+                else if(title.includes('white grease')) list = apps['protean-white-grease.html'];
+                else if(title.includes('classic')) list = apps['protean-classic-2.html'];
+                else if(title.includes('3h1')) list = apps['protean-3h1-grease.html'];
+                else if(title.includes('assembly grease')) list = apps['protean-assembly-grease.html'];
+                else if(title.includes('fast dry')) list = apps['protean-fast-dry-solvent-cleaner.html'];
+                else if(title.includes('multi-lube')) list = apps['protean-multi-lube.html'];
+                else if(title.includes('silicone release')) list = apps['protean-silicone-release.html'];
+                else if(title.includes('wd')) list = apps['protean-wd-anti-rust-agent.html'];
+                else if(title.includes('ejector pin')) list = apps['synthetic-ejector-pin-lubricant.html'];
+            }
+
+            const info = card.querySelector('.product-info');
+            if(!info) return;
+            const existing = info.querySelector('.product-apps');
+            if(existing) existing.remove();
+            const prevTitle = info.querySelector('.product-apps-title');
+            if(prevTitle) prevTitle.remove();
+
+            if(Array.isArray(list) && list.length){
+                const titleEl = document.createElement('span');
+                titleEl.className = 'product-apps-title';
+                titleEl.textContent = 'Applications';
+
+                const wrap = document.createElement('div');
+                wrap.className = 'product-apps';
+                list.slice(0,3).forEach(txt => {
+                    const chip = document.createElement('span');
+                    chip.className = 'app-chip';
+                    chip.textContent = txt;
+                    wrap.appendChild(chip);
+                });
+
+                const h3 = info.querySelector('h3');
+                if(h3){
+                    if(h3.nextSibling){
+                        h3.parentNode.insertBefore(titleEl, h3.nextSibling);
+                        titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);
+                    } else {
+                        info.appendChild(titleEl);
+                        info.appendChild(wrap);
+                    }
+                } else {
+                    info.appendChild(titleEl);
+                    info.appendChild(wrap);
+                }
+            }
+
+            const p = info.querySelector('p');
+            if(p){ p.style.display = 'none'; }
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// Replace Accessories tab descriptions with concise application chips + title
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const panel = document.querySelector('.tab-panel#accessories');
+        if(!panel) return;
+
+        const apps = {
+            'handheld-refractometer.html': ['Coolant concentration', 'Quick field checks', 'Portable measurement'],
+            'handheld-ph-reader.html': ['pH monitoring', 'Coolants & solutions', 'Quality control'],
+            'cnc-os-oil-skimmer.html': ['Tramp oil removal', 'Coolant life extension', 'CNC machines'],
+            'giga-os-oil-skimmer.html': ['High-capacity skimming', 'Industrial sumps', 'Continuous duty']
+        };
+
+        function slugFromHref(href){
+            try{
+                const url = href.split('?')[0].split('#')[0];
+                const parts = url.split('/');
+                return parts[parts.length-1].toLowerCase();
+            }catch(e){ return ''; }
+        }
+
+        const cards = panel.querySelectorAll('.products-grid .product-card');
+        cards.forEach(card => {
+            const href = card.getAttribute('href') || card.dataset.href || '';
+            const slug = slugFromHref(href);
+            let list = apps[slug];
+
+            if(!list){
+                const title = (card.querySelector('.product-info h3')?.textContent || '').toLowerCase();
+                if(title.includes('refractometer')) list = apps['handheld-refractometer.html'];
+                else if(title.includes('ph')) list = apps['handheld-ph-reader.html'];
+                else if(title.includes('cnc-os')) list = apps['cnc-os-oil-skimmer.html'];
+                else if(title.includes('giga-os')) list = apps['giga-os-oil-skimmer.html'];
+            }
+
+            const info = card.querySelector('.product-info');
+            if(!info) return;
+            const existing = info.querySelector('.product-apps');
+            if(existing) existing.remove();
+            const prevTitle = info.querySelector('.product-apps-title');
+            if(prevTitle) prevTitle.remove();
+
+            if(Array.isArray(list) && list.length){
+                const titleEl = document.createElement('span');
+                titleEl.className = 'product-apps-title';
+                titleEl.textContent = 'Applications';
+
+                const wrap = document.createElement('div');
+                wrap.className = 'product-apps';
+                list.slice(0,3).forEach(txt => {
+                    const chip = document.createElement('span');
+                    chip.className = 'app-chip';
+                    chip.textContent = txt;
+                    wrap.appendChild(chip);
+                });
+
+                const h3 = info.querySelector('h3');
+                if(h3){
+                    if(h3.nextSibling){
+                        h3.parentNode.insertBefore(titleEl, h3.nextSibling);
+                        titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);
+                    } else {
+                        info.appendChild(titleEl);
+                        info.appendChild(wrap);
+                    }
+                } else {
+                    info.appendChild(titleEl);
+                    info.appendChild(wrap);
+                }
+            }
+
+            const p = info.querySelector('p');
+            if(p){ p.style.display = 'none'; }
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// Replace Metal Working tab descriptions with concise application chips + title
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const panel = document.querySelector('.tab-panel#metalworking');
+        if(!panel) return;
+
+        const apps = {
+            'neat-cutting-oils.html': ['Severe machining', 'Surface finish', 'Tool life'],
+            'stamping-oils.html': ['Stamping/forming', 'Die protection', 'Clean parts'],
+            'deep-drawing-oils.html': ['Deep drawing', 'Extreme pressure', 'Surface protection'],
+            'edm-synthetic-oils.html': ['EDM dielectric', 'Precision cutting', 'High purity'],
+            'tapping-fluids.html': ['Thread quality', 'Cooling & lubrication', 'Tool life'],
+            'water-soluble-cutting-coolants.html': ['Cooling & lubrication', 'Corrosion protection', 'Versatile machining'],
+            'anti-rust-series.html': ['Long-term protection', 'Multi-metal', 'Storage & transit']
+        };
+
+        function slugFromHref(href){
+            try{
+                const url = href.split('?')[0].split('#')[0];
+                const parts = url.split('/');
+                return parts[parts.length-1].toLowerCase();
+            }catch(e){ return ''; }
+        }
+
+        const cards = panel.querySelectorAll('.products-grid .product-card');
+        cards.forEach(card => {
+            const href = card.getAttribute('href') || card.dataset.href || '';
+            const slug = slugFromHref(href);
+            let list = apps[slug];
+
+            if(!list){
+                const title = (card.querySelector('.product-info h3')?.textContent || '').toLowerCase();
+                if(title.includes('neat cutting')) list = apps['neat-cutting-oils.html'];
+                else if(title.includes('stamping')) list = apps['stamping-oils.html'];
+                else if(title.includes('deep drawing')) list = apps['deep-drawing-oils.html'];
+                else if(title.includes('edm')) list = apps['edm-synthetic-oils.html'];
+                else if(title.includes('tapping')) list = apps['tapping-fluids.html'];
+                else if(title.includes('water soluble')) list = apps['water-soluble-cutting-coolants.html'];
+                else if(title.includes('anti-rust')) list = apps['anti-rust-series.html'];
+            }
+
+            const info = card.querySelector('.product-info');
+            if(!info) return;
+            const existing = info.querySelector('.product-apps');
+            if(existing) existing.remove();
+            const prevTitle = info.querySelector('.product-apps-title');
+            if(prevTitle) prevTitle.remove();
+
+            if(Array.isArray(list) && list.length){
+                const titleEl = document.createElement('span');
+                titleEl.className = 'product-apps-title';
+                titleEl.textContent = 'Applications';
+
+                const wrap = document.createElement('div');
+                wrap.className = 'product-apps';
+                list.slice(0,3).forEach(txt => {
+                    const chip = document.createElement('span');
+                    chip.className = 'app-chip';
+                    chip.textContent = txt;
+                    wrap.appendChild(chip);
+                });
+
+                const h3 = info.querySelector('h3');
+                if(h3){
+                    if(h3.nextSibling){
+                        h3.parentNode.insertBefore(titleEl, h3.nextSibling);
+                        titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);
+                    } else {
+                        info.appendChild(titleEl);
+                        info.appendChild(wrap);
+                    }
+                } else {
+                    info.appendChild(titleEl);
+                    info.appendChild(wrap);
+                }
+            }
+
+            const p = info.querySelector('p');
+            if(p){ p.style.display = 'none'; }
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// Replace Maintenance tab descriptions with concise application chips + title
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const panel = document.querySelector('.tab-panel#maintenance');
+        if(!panel) return;
+
+        const apps = {
+            'cooling-tower-water-treatment.html': ['Scale control', 'Corrosion inhibition', 'Biocide treatment'],
+            'water-base-anti-rust-chemical.html': ['Water-based rust prevention', 'In-process protection'],
+            'rust-remover-chemical.html': ['Rust removal', 'Surface prep'],
+            'industrial-paint-remover.html': ['Coating removal', 'Surface stripping'],
+            'air-con-coil-cleaner.html': ['HVAC coil cleaning', 'Efficiency restore'],
+            'oil-degreaser.html': ['Heavy oil removal', 'Machine cleaning'],
+            'waterless-hand-scrubber.html': ['Hand cleaning', 'Grease & grime removal'],
+            'sanitizer.html': ['Workplace sanitation', 'Hygiene maintenance'],
+            'spray-booth-compound.html': ['Booth protection', 'Easy overspray cleanup']
+        };
+
+        function slugFromHref(href){
+            try{
+                const url = href.split('?')[0].split('#')[0];
+                const parts = url.split('/');
+                return parts[parts.length-1].toLowerCase();
+            }catch(e){ return ''; }
+        }
+
+        const cards = panel.querySelectorAll('.products-grid .product-card');
+        cards.forEach(card => {
+            const href = card.getAttribute('href') || card.dataset.href || '';
+            const slug = slugFromHref(href);
+            let list = apps[slug];
+
+            if(!list){
+                const title = (card.querySelector('.product-info h3')?.textContent || '').toLowerCase();
+                if(title.includes('cooling tower')) list = apps['cooling-tower-water-treatment.html'];
+                else if(title.includes('anti-rust')) list = apps['water-base-anti-rust-chemical.html'];
+                else if(title.includes('rust remover')) list = apps['rust-remover-chemical.html'];
+                else if(title.includes('paint remover')) list = apps['industrial-paint-remover.html'];
+                else if(title.includes('coil cleaner')) list = apps['air-con-coil-cleaner.html'];
+                else if(title.includes('degreaser')) list = apps['oil-degreaser.html'];
+                else if(title.includes('hand scrubber') || title.includes('waterless')) list = apps['waterless-hand-scrubber.html'];
+                else if(title.includes('sanitizer')) list = apps['sanitizer.html'];
+                else if(title.includes('spray booth')) list = apps['spray-booth-compound.html'];
+            }
+
+            const info = card.querySelector('.product-info');
+            if(!info) return;
+            const existing = info.querySelector('.product-apps');
+            if(existing) existing.remove();
+            const prevTitle = info.querySelector('.product-apps-title');
+            if(prevTitle) prevTitle.remove();
+
+            if(Array.isArray(list) && list.length){
+                const titleEl = document.createElement('span');
+                titleEl.className = 'product-apps-title';
+                titleEl.textContent = 'Applications';
+
+                const wrap = document.createElement('div');
+                wrap.className = 'product-apps';
+                list.slice(0,3).forEach(txt => {
+                    const chip = document.createElement('span');
+                    chip.className = 'app-chip';
+                    chip.textContent = txt;
+                    wrap.appendChild(chip);
+                });
+
+                const h3 = info.querySelector('h3');
+                if(h3){
+                    if(h3.nextSibling){
+                        h3.parentNode.insertBefore(titleEl, h3.nextSibling);
+                        titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);
+                    } else {
+                        info.appendChild(titleEl);
+                        info.appendChild(wrap);
+                    }
+                } else {
+                    info.appendChild(titleEl);
+                    info.appendChild(wrap);
+                }
+            }
+
+            const p = info.querySelector('p');
+            if(p){ p.style.display = 'none'; }
+        });
+    }catch(e){ /* ignore */ }
+});
         // Group product cards by identical image within each grid and show one image with a list of product links
         try {
     function groupCardsWithSameImage(grid) {
@@ -105,9 +560,16 @@ ${requirements}`;
                 // group by exact image src
                 const groups = new Map();
                 cards.forEach(card => {
-                    const img = card.querySelector('.product-image img');
-                    const src = (img && img.getAttribute('src')) ? img.getAttribute('src').trim() : '';
+                    // Support both .product-image and .product-image-container wrappers
+                    const img = card.querySelector('.product-image img, .product-image-container img, img');
+                    let src = (img && img.getAttribute('src')) ? img.getAttribute('src').trim() : '';
                     if (!src) return;
+                    // Normalize: drop query/hash, remove leading slashes, trim spaces, lower-case
+                    try {
+                        src = src.split('?')[0].split('#')[0].trim();
+                        src = src.replace(/^\/+/, '');
+                        src = src.toLowerCase();
+                    } catch(e) { /* ignore */ }
                     if (!groups.has(src)) groups.set(src, []);
                     groups.get(src).push(card);
                 });
@@ -135,9 +597,21 @@ ${requirements}`;
                         }
                     } catch (e) { /* ignore */ }
 
-                    // Clone the image section to keep inline sizing
-                    const imgWrap = first.querySelector('.product-image');
-                    grouped.appendChild(imgWrap.cloneNode(true));
+                    // Clone the image section to keep inline sizing (support both wrappers)
+                    const imgWrap = first.querySelector('.product-image, .product-image-container');
+                    if (imgWrap) {
+                        grouped.appendChild(imgWrap.cloneNode(true));
+                    } else {
+                        // fallback: create a simple wrapper from the first image
+                        const fallbackImg = first.querySelector('img');
+                        if (fallbackImg) {
+                            const w = document.createElement('div');
+                            w.className = 'product-image';
+                            const clone = fallbackImg.cloneNode(true);
+                            w.appendChild(clone);
+                            grouped.appendChild(w);
+                        }
+                    }
 
                     // Build the info section with a list of links
                     const info = document.createElement('div');
@@ -168,7 +642,7 @@ ${requirements}`;
 
                         // Description
                         const pd = document.createElement('p');
-                        const descEl = card.querySelector('.product-info p');
+                        const descEl = card.querySelector('.product-info p, .product-content p');
                         const descText = descEl ? descEl.textContent.trim() : '';
                         pd.className = 'product-desc';
                         pd.textContent = descText;
@@ -220,7 +694,18 @@ ${requirements}`;
             }
 
             const groupingGrids = document.querySelectorAll('.products-grid, .products-grid-enhanced');
-            groupingGrids.forEach(groupCardsWithSameImage);
+            groupingGrids.forEach(grid => {
+                groupCardsWithSameImage(grid);
+                // Move grouped items to the top to surface consolidated products
+                try{
+                    const grouped = Array.from(grid.querySelectorAll('.product-card-grouped'));
+                    if(grouped.length){
+                        grouped.reverse().forEach(node => {
+                            grid.insertBefore(node, grid.firstElementChild);
+                        });
+                    }
+                }catch(e){ /* ignore */ }
+            });
 
             // After grouping, mark titles that share the same image within each grid
             function markDuplicateImageTitles(grid){
@@ -229,8 +714,15 @@ ${requirements}`;
                     if (cards.length < 2) return;
                     const bySrc = new Map();
                     cards.forEach(card => {
-                        const img = card.querySelector('.product-image img');
-                        const src = img ? (img.getAttribute('src')||'').trim() : '';
+                        const img = card.querySelector('.product-image img, .product-image-container img, img');
+                        let src = img ? (img.getAttribute('src')||'').trim() : '';
+                        if (src) {
+                            try {
+                                src = src.split('?')[0].split('#')[0].trim();
+                                src = src.replace(/^\/+/, '');
+                                src = src.toLowerCase();
+                            } catch(e) { /* ignore */ }
+                        }
                         if (!src) return;
                         if (!bySrc.has(src)) bySrc.set(src, []);
                         bySrc.get(src).push(card);
@@ -274,6 +766,764 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (e) {
         // ignore
     }
+});
+
+// ===== Stamping page: render Applications chips and compact layout =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        // Run only on stamping-products.html
+        const isStampingPage = /stamping-products\.html(?:$|[?#])/i.test(window.location.pathname) || document.title.toLowerCase().includes('stamping');
+        if(!isStampingPage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        // Helper to insert title + chips under h3
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            // Remove existing
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+
+            const titleEl = document.createElement('span');
+            titleEl.className = 'product-apps-title';
+            titleEl.textContent = 'Applications';
+
+            const wrap = document.createElement('div');
+            wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt => {
+                const chip = document.createElement('span');
+                chip.className = 'app-chip';
+                chip.textContent = txt.trim();
+                wrap.appendChild(chip);
+            });
+
+            const h3 = infoEl.querySelector('h3');
+            if(h3){
+                if(h3.nextSibling){
+                    h3.parentNode.insertBefore(titleEl, h3.nextSibling);
+                    titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);
+                } else {
+                    infoEl.appendChild(titleEl);
+                    infoEl.appendChild(wrap);
+                }
+            } else {
+                infoEl.appendChild(titleEl);
+                infoEl.appendChild(wrap);
+            }
+        }
+
+        // Fallback map if product-application text is missing
+        const fallbackApps = {
+            'hydraulic-awx-series.html': ['Press hydraulics', 'Stable AW performance', 'Wide ISO grades'],
+            'grease.html': ['Bearings & slides', 'General lubrication', 'Shock loads'],
+            'stamping-oils.html': ['Stamping/forming', 'Die protection', 'Clean finish'],
+            'hydrocarbon-solvents.html': ['Die cleaning', 'Degreasing', 'Surface prep'],
+            'industrial-gear-series.html': ['Gearboxes', 'Transmissions', 'High load'],
+            'lube-guard-original.html': ['Quick maintenance', 'Loosen rust', 'Moisture displacement'],
+            'waterless-hand-scrubber.html': ['Hands cleaning', 'Grease & grime', 'Shop use']
+        };
+
+        function slugFromHref(href){
+            try{
+                const url = href.split('?')[0].split('#')[0];
+                const parts = url.split('/');
+                return parts[parts.length-1].toLowerCase();
+            }catch(e){ return ''; }
+        }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info');
+            if(!info) return;
+
+            // Try to parse existing product-application block
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){
+                const txt = appEl.textContent || '';
+                // After 'Application:' split by comma
+                const parts = txt.split(/application\s*:/i);
+                if(parts[1]){
+                    apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean);
+                }
+            }
+
+            if(!apps.length){
+                const href = card.getAttribute('href') || card.dataset.href || '';
+                const slug = slugFromHref(href);
+                apps = fallbackApps[slug] || [];
+            }
+
+            if(apps.length){ insertChips(info, apps); }
+
+            // hide verbose blocks (CSS also hides, but ensure inline for safety)
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// ===== Automotive & Transportation page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isAutoPage = /automotive-transportation-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('automotive'));
+        if(!isAutoPage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            's-88-paintable.html': ['Automotive moulding', 'Clean release', 'Plastic parts'],
+            'lube-guard-original.html': ['General lubrication', 'Maintenance', 'Loosen rust'],
+            'sg-18-high-performance-grease.html': ['Bearings', 'Suspension', 'Moving parts'],
+            'moly-lube-advanced-lubricant.html': ['High load points', 'Chains & cables', 'Extreme conditions'],
+            's-22-degreaser-mould-cleaner.html': ['Parts degreasing', 'Maintenance', 'Residue-free clean'],
+            'belt-dressing-industrial-lubricant.html': ['Drive belts', 'Anti-slip', 'Conditioning'],
+            'waterless-hand-scrubber.html': ['Hands cleaning', 'Grease & grime', 'Shop use']
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-content, .product-info');
+            if(!info) return;
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){
+                const txt = appEl.textContent || '';
+                const parts = txt.split(/application\s*:/i);
+                if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); }
+            }
+            if(!apps.length){ const href = card.getAttribute('href') || card.dataset.href || ''; const slug = slugFromHref(href); apps = fallbackApps[slug] || []; }
+            if(apps.length){ insertChips(info, apps); }
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// ===== Plastic Injection page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isPIPage = /plastic-injection-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('plastic injection'));
+        if(!isPIPage) return;
+
+        const grid = document.querySelector('.products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            's-88-paintable.html': ['Paintable molding', 'Clean release', 'Plastic components'],
+            's-88-non-paintable.html': ['High-release molding', 'Non-paintable parts', 'Plastic molds'],
+            'ns-77-non-silicone-mould-release.html': ['Silicone-free moulding', 'Food/medical packaging', 'Post-processing safe'],
+            'pro-cote-protective-coating.html': ['Mold protection', 'Equipment coating'],
+            'pro-cote-white-protective-coating.html': ['Protective coating', 'Corrosion resistance'],
+            'pro-shield-green-anti-corrosion.html': ['Anti-corrosion', 'High temp tolerance'],
+            'pro-shield-blue-anti-corrosion.html': ['Wax film', 'Rust prevention', 'Storage protection'],
+            's-22-degreaser-mould-cleaner.html': ['Mould cleaning', 'Degreasing'],
+            'sc-99-solvent-cleaner.html': ['Precision cleaning', 'Oil/grease removal'],
+            'ep-lube-ejector-pin-lubricant.html': ['Ejector pins', 'Precision slides'],
+            'sr-remover-silicone-residue-cleaner.html': ['Silicone residue removal', 'Mould maintenance'],
+            'lube-guard-original.html': ['General lubrication', 'Maintenance'],
+            'protean-silicone-release.html': ['Food-contact moulds', 'Release agent'],
+            'protean-fast-dry-solvent-cleaner.html': ['Fast cleaning', 'No residue'],
+            'protean-white-grease.html': ['Food packaging lines', 'Bearings & slides'],
+            'hydraulic-awx-series.html': ['Hydraulic systems', 'Injection machines'],
+            'cooling-tower-water-treatment.html': ['Scale control', 'Corrosion inhibition'],
+            'heat-transfer-oils.html': ['Heat transfer systems', 'Thermal stability']
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info, .product-content');
+            if(!info) return;
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){
+                const txt = appEl.textContent || '';
+                const parts = txt.split(/application\s*:/i);
+                if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); }
+            }
+            if(!apps.length){ const href = card.getAttribute('href') || card.dataset.href || ''; const slug = slugFromHref(href); apps = fallbackApps[slug] || []; }
+            if(apps.length){ insertChips(info, apps); }
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// ===== Machining & Engineering page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isMachiningPage = /machining-engineering-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('machining'));
+        if(!isMachiningPage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            'hydraulic-awx-series.html': ['CNC hydraulics', 'Stable AW performance', 'Multiple ISO grades'],
+            'slideway-oil.html': ['Slideways & guides', 'Stick-slip control', 'Precision motion'],
+            'water-soluble-cutting-coolants.html': ['Cooling & lubrication', 'Machining operations', 'Corrosion protection'],
+            'neat-cutting-oils.html': ['Heavy-duty cutting', 'Threading/turning', 'Tool life'],
+            'anti-rust-series.html': ['Parts protection', 'Inter-process', 'Rust prevention'],
+            'hydrocarbon-solvents.html': ['Precision degreasing', 'Surface prep', 'Fast evaporation'],
+            'edm-synthetic-oils.html': ['EDM dielectric', 'Wire/Die sink', 'High purity'],
+            'sg-18-high-performance-grease.html': ['Loosen seized parts', 'Maintenance'],
+            'supertap-cutting-lubricant.html': ['Tapping/threading', 'Extreme pressure', 'Clean threads'],
+            'tapping-fluids.html': ['Tapping', 'Thread cutting', 'Lubrication'],
+            'rust-remover-chemical.html': ['Rust removal', 'Tool restoration', 'Surface clean'],
+            'spindle-oil.html': ['High-speed spindles', 'Low friction', 'Precision bearings'],
+            'giga-os-oil-skimmer.html': ['Coolant skimming', 'Oil removal', 'System maintenance'],
+            'cnc-os-oil-skimmer.html': ['CNC coolant systems', 'Tramp oil removal', 'Compact install'],
+            'handheld-ph-reader.html': ['Coolant pH', 'Quality control', 'Field checks'],
+            'lube-guard-original.html': ['General lubrication', 'Quick maintenance', 'Loosen rust'],
+            'handheld-refractometer.html': ['Coolant concentration', 'Portable checks', 'QA'],
+            'waterless-hand-scrubber.html': ['Hands cleaning', 'Grease & grime', 'Workshop']
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info, .product-content');
+            if(!info) return;
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){
+                const txt = appEl.textContent || '';
+                const parts = txt.split(/application\s*:/i);
+                if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); }
+            }
+            if(!apps.length){ const href = card.getAttribute('href') || card.dataset.href || ''; const slug = slugFromHref(href); apps = fallbackApps[slug] || []; }
+            if(apps.length){ insertChips(info, apps); }
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// ===== Construction & Cement page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isCCPage = /construction-cement-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('construction & cement'));
+        if(!isCCPage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            'heavy-duty-grease.html': ['High-load bearings', 'Construction machinery', 'Extreme pressure'],
+            'industrial-gear-series.html': ['Gearboxes', 'Transmissions', 'Heavy equipment'],
+            'moly-lube-advanced-lubricant.html': ['Pins & bushings', 'Chains & cables', 'High temp/pressure'],
+            'lube-guard-original.html': ['General lubrication', 'Maintenance'],
+            'waterless-hand-scrubber.html': ['Hands cleaning', 'Grease & grime', 'Workshop'],
+            'tygris-copper.html': ['Threads & bolts', 'Anti-seize', 'High temperature']
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info, .product-content');
+            if(!info) return;
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){
+                const txt = appEl.textContent || '';
+                const parts = txt.split(/application\s*:/i);
+                if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); }
+            }
+            if(!apps.length){ const href = card.getAttribute('href') || card.dataset.href || ''; const slug = slugFromHref(href); apps = fallbackApps[slug] || []; }
+            if(apps.length){ insertChips(info, apps); }
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// ===== Marine & Offshore page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isMarinePage = /marine-offshore-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('marine & offshore'));
+        if(!isMarinePage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            'sg-18-high-performance-grease.html': ['Marine bearings', 'Water resistance', 'General lubrication'],
+            'sc-99-solvent-cleaner.html': ['Solvent cleaning', 'Oil/grease removal', 'Inspection prep'],
+            's-88-silicone-mould-release.html': ['Welding prep', 'Spatter prevention', 'Surface protection'],
+            'moly-lube-advanced-lubricant.html': ['Chains & cables', 'Pins & bushings', 'Extreme conditions'],
+            'lube-guard-original.html': ['General lubrication', 'Maintenance', 'Loosen rust'],
+            'waterless-hand-scrubber.html': ['Hands cleaning', 'Grease & grime', 'Workshop'],
+            'tygris-copper.html': ['Threads/bolts', 'Anti-seize', 'High temperature']
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info, .product-content');
+            if(!info) return;
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){
+                const txt = appEl.textContent || '';
+                const parts = txt.split(/application\s*:/i);
+                if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); }
+            }
+            if(!apps.length){ const href = card.getAttribute('href') || card.dataset.href || ''; const slug = slugFromHref(href); apps = fallbackApps[slug] || []; }
+            if(apps.length){ insertChips(info, apps); }
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// ===== Quarries page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isQuarriesPage = /quarries-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('quarries'));
+        if(!isQuarriesPage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            'hydraulic-awx-series.html': ['Excavators & loaders', 'Crushers hydraulics', 'AW protection'],
+            'heavy-duty-grease.html': ['Bearings & pins', 'EP loads', 'Harsh conditions'],
+            'industrial-gear-series.html': ['Gearboxes', 'Reduction drives', 'Thermal stability'],
+            'moly-lube-advanced-lubricant.html': ['Chains & cables', 'High load', 'Moving parts'],
+            '__title__:open gear grease': ['Open gears', 'Crusher drives', 'Conveyors'],
+            '__title__:tygris moly dry film spray': ['Dry film', 'Dusty conditions', 'Slides & chains'],
+            'waterless-hand-scrubber.html': ['Maintenance cleaning', 'Degreasing', 'Workshop']
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info, .product-content');
+            if(!info) return;
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){ const txt = appEl.textContent || ''; const parts = txt.split(/application\s*:/i); if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); } }
+            if(!apps.length){
+                const href = card.getAttribute('href') || card.dataset.href || '';
+                const slug = href ? slugFromHref(href) : '';
+                if(slug && fallbackApps[slug]){ apps = fallbackApps[slug]; }
+                else {
+                    const title = (info.querySelector('h3')?.textContent || '').toLowerCase().trim();
+                    const key = `__title__:${title}`;
+                    apps = fallbackApps[key] || [];
+                }
+            }
+            if(apps.length){ insertChips(info, apps); }
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// ===== Semiconductor & Disk Drive page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isSemiPage = /semiconductor-disk-drive-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('semiconductor'));
+        if(!isSemiPage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            'ecc-electro-contact-cleaner.html': ['Electronic contacts', 'Precision cleaning', 'Residue-free'],
+            'sc-99-solvent-cleaner.html': ['Precision degreasing', 'Fast evaporation', 'Residue-free'],
+            'lube-guard-original.html': ['General lubrication', 'Non-staining', 'Precision mechanisms'],
+            'waterless-hand-scrubber.html': ['Component cleaning', 'Detailed maintenance'],
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info, .product-content');
+            if(!info) return;
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){ const txt = appEl.textContent || ''; const parts = txt.split(/application\s*:/i); if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); } }
+            if(!apps.length){ const href = card.getAttribute('href') || card.dataset.href || ''; const slug = href ? slugFromHref(href) : ''; apps = fallbackApps[slug] || []; }
+            if(apps.length){ insertChips(info, apps); }
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+// ===== Oil & Gas page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isOilGasPage = /oil-gas-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('oil & gas'));
+        if(!isOilGasPage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            'moly-lube-advanced-lubricant.html': ['Chains & cables', 'Heavy machinery', 'Extreme pressure'],
+            'lube-guard-original.html': ['General lubrication', 'Maintenance', 'Moisture displacement'],
+            'sr-remover-silicone-residue-cleaner.html': ['Hands cleaning', 'Grease & grime', 'Workshop'],
+            // Title-key fallbacks (used when no href/slug)
+            '__title__:tygris moly dry film spray': ['Dry film lubrication', 'High temperature', 'Threaded connections'],
+            '__title__:tygris copper': ['Anti-seize for bolts', 'High temperature', 'Threaded joints']
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info, .product-content');
+            if(!info) return;
+
+            // Prefer explicit Application: text if present
+            let apps = [];
+            const appEl = info.querySelector('.product-application, .product-application-enhanced');
+            if(appEl){
+                const txt = appEl.textContent || '';
+                const parts = txt.split(/application\s*:/i);
+                if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); }
+            }
+
+            if(!apps.length){
+                const href = card.getAttribute('href') || card.dataset.href || '';
+                const slug = href ? slugFromHref(href) : '';
+                if(slug && fallbackApps[slug]){
+                    apps = fallbackApps[slug] || [];
+                } else {
+                    const title = (info.querySelector('h3')?.textContent || '').toLowerCase().trim();
+                    if(title){
+                        const key = `__title__:${title}`;
+                        apps = fallbackApps[key] || [];
+                    }
+                }
+            }
+
+            if(apps.length){ insertChips(info, apps); }
+
+            // Hide verbose blocks (CSS also hides them)
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application, .product-application-enhanced'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// ===== Food, Beverage & Pharmaceutical page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isFoodPage = /food-beverage-pharmaceutical-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('food, beverage'));
+        if(!isFoodPage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            'protean-vhvi-hydraulic-oils.html': ['NSF H1 hydraulics', 'Processing lines', 'High VI stability'],
+            'protean-pao.html': ['High-temp bearings', 'Food machinery', 'Long service life'],
+            'protean-chain-gear-oils.html': ['Chains & gears', 'Load carrying', 'Wear protection'],
+            'protean-compressor-oils.html': ['Air compressors', 'Low residue', 'Food-safe'],
+            'protean-vacuum-pump-oils.html': ['Vacuum sealing', 'High vacuum', 'Low vapor pressure'],
+            'protean-airline-oils.html': ['Pneumatics', 'Clean air', 'Low mist'],
+            'protean-white-grease.html': ['Bearings & slides', 'White NSF H1', 'General use'],
+            'protean-classic-2.html': ['General purpose', 'Food packaging', 'NSF H1'],
+            'protean-3h1-grease.html': ['Direct food contact', '3H/H1', 'Packaging equipment'],
+            'protean-assembly-grease.html': ['Assembly & maintenance', 'Food-safe'],
+            'protean-als-plus.html': ['Auto lube systems', 'Food processing'],
+            'protean-multi-lube.html': ['Multi-purpose lube', 'Food processing'],
+            'protean-wd-anti-rust-agent.html': ['Water displacement', 'Anti-rust', 'Food equipment'],
+            'protean-silicone-release.html': ['Food molds', 'Release agent'],
+            'protean-fast-dry-solvent-cleaner.html': ['Fast cleaning', 'No residue', 'Maintenance'],
+            'synthetic-ejector-pin-lubricant.html': ['Ejector pins', 'Packaging molds', 'Precision']
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info, .product-content');
+            if(!info) return;
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){ const txt = appEl.textContent || ''; const parts = txt.split(/application\s*:/i); if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); } }
+            if(!apps.length){ const href = card.getAttribute('href') || card.dataset.href || ''; const slug = href ? slugFromHref(href) : ''; apps = fallbackApps[slug] || []; }
+            if(apps.length){ insertChips(info, apps); }
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// ===== Rubber & Latex page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isRubberPage = /rubber-latex-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('rubber & latex'));
+        if(!isRubberPage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            'protean-chain-gear-oils.html': ['Conveyors & chains', 'Gearboxes', 'Load carrying'],
+            'hydraulic-awx-series.html': ['Hydraulic presses', 'AW protection', 'Wide ISO grades'],
+            'rubber-latex-remover-chemicals.html': ['Mould cleaning', 'Residue removal', 'Line maintenance'],
+            'hydrocarbon-solvents.html': ['Solvent cleaning', 'Formulation aid', 'Extraction'],
+            'lube-guard-original.html': ['General lubrication', 'Anti-seize', 'Maintenance'],
+            'waterless-hand-scrubber.html': ['Hands cleaning', 'Grease & grime', 'Workshop']
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info, .product-content');
+            if(!info) return;
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){ const txt = appEl.textContent || ''; const parts = txt.split(/application\s*:/i); if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); } }
+            if(!apps.length){ const href = card.getAttribute('href') || card.dataset.href || ''; const slug = href ? slugFromHref(href) : ''; apps = fallbackApps[slug] || []; }
+            if(apps.length){ insertChips(info, apps); }
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// ===== Printing & Paper page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isPrintPage = /printing-paper-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('printing & paper'));
+        if(!isPrintPage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            'hydraulic-awx-series.html': ['Press hydraulics', 'Stable AW performance', 'Multiple ISO grades'],
+            'lubricating-oils.html': ['General lubrication', 'Machinery maintenance'],
+            'industrial-gear-series.html': ['Gearboxes', 'Transmissions', 'High load'],
+            'lube-guard-original.html': ['General lubrication', 'Maintenance'],
+            's-88-paintable.html': ['Paper moulding', 'Release agent'],
+            'ns-77-non-silicone-mould-release.html': ['Non-silicone release', 'Eco-friendly processes'],
+            'waterless-hand-scrubber.html': ['Equipment cleaning', 'Degreasing']
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info, .product-content');
+            if(!info) return;
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){ const txt = appEl.textContent || ''; const parts = txt.split(/application\s*:/i); if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); } }
+            if(!apps.length){ const href = card.getAttribute('href') || card.dataset.href || ''; const slug = href ? slugFromHref(href) : ''; apps = fallbackApps[slug] || []; }
+            if(apps.length){ insertChips(info, apps); }
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
+});
+
+// ===== Workshops (Automotive) page: render Applications chips =====
+document.addEventListener('DOMContentLoaded', function(){
+    try{
+        const isWorkshopsPage = /workshops-automotive-products\.html(?:$|[?#])/i.test(window.location.pathname) || (document.title && document.title.toLowerCase().includes('workshops - automotive'));
+        if(!isWorkshopsPage) return;
+
+        const grid = document.querySelector('.products-section-enhanced .products-grid-enhanced');
+        if(!grid) return;
+
+        function insertChips(infoEl, items){
+            if(!infoEl || !Array.isArray(items) || !items.length) return;
+            const prev = infoEl.querySelector('.product-apps'); if(prev) prev.remove();
+            const prevT = infoEl.querySelector('.product-apps-title'); if(prevT) prevT.remove();
+            const titleEl = document.createElement('span'); titleEl.className = 'product-apps-title'; titleEl.textContent = 'Applications';
+            const wrap = document.createElement('div'); wrap.className = 'product-apps';
+            items.slice(0,3).forEach(txt=>{ const chip=document.createElement('span'); chip.className='app-chip'; chip.textContent=txt.trim(); wrap.appendChild(chip); });
+            const h3 = infoEl.querySelector('h3');
+            if(h3){ if(h3.nextSibling){ h3.parentNode.insertBefore(titleEl, h3.nextSibling); titleEl.parentNode.insertBefore(wrap, titleEl.nextSibling);} else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap);} }
+            else { infoEl.appendChild(titleEl); infoEl.appendChild(wrap); }
+        }
+
+        const fallbackApps = {
+            'sc-99-solvent-cleaner.html': ['Parts cleaning', 'Degreasing', 'Surface prep'],
+            'moly-lube-advanced-lubricant.html': ['High-stress components', 'Chains & cables', 'Extreme pressure'],
+            'lube-guard-original.html': ['General lubrication', 'Workshop maintenance'],
+            'sg-18-high-performance-grease.html': ['Bearings', 'Chains & cables', 'Non-drip'],
+            'waterless-hand-scrubber.html': ['Hands cleaning', 'Grease & grime']
+        };
+
+        function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
+
+        const cards = grid.querySelectorAll('.product-card');
+        cards.forEach(card => {
+            const info = card.querySelector('.product-info, .product-content');
+            if(!info) return;
+            let apps = [];
+            const appEl = info.querySelector('.product-application');
+            if(appEl){ const txt = appEl.textContent || ''; const parts = txt.split(/application\s*:/i); if(parts[1]){ apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean); } }
+            if(!apps.length){ const href = card.getAttribute('href') || card.dataset.href || ''; const slug = href ? slugFromHref(href) : ''; apps = fallbackApps[slug] || []; }
+            if(apps.length){ insertChips(info, apps); }
+            const p = info.querySelector('p'); if(p) p.style.display = 'none';
+            const feat = info.querySelector('.product-features, .product-features-enhanced'); if(feat) feat.style.display = 'none';
+            const appBlock = info.querySelector('.product-application'); if(appBlock) appBlock.style.display = 'none';
+        });
+    }catch(e){ /* ignore */ }
 });
 
 // ===== UTILITY FUNCTIONS =====
@@ -360,6 +1610,18 @@ window.initProductCategoryFilter = function initProductCategoryFilter(options = 
         });
         const bar = document.querySelector(cfg.barSelector);
 
+        // Helper to move grouped cards to the top (keeps current relative order among them)
+        function moveGroupedToTop(){
+            try{
+                const grouped = Array.from(grid.querySelectorAll('.product-card-grouped'));
+                if(grouped.length){
+                    grouped.reverse().forEach(node => {
+                        if(grid.firstElementChild !== node){ grid.insertBefore(node, grid.firstElementChild); }
+                    });
+                }
+            }catch(e){ /* ignore */ }
+        }
+
         // --- image grouping helper (fallbacks to filename heuristics) ---
         function imageGroupKey(card){
             const img = card.querySelector('img'); if(!img) return 'other';
@@ -378,6 +1640,8 @@ window.initProductCategoryFilter = function initProductCategoryFilter(options = 
             const order = [];
             list.forEach(card=>{ const k = imageGroupKey(card); if(!groups[k]) groups[k]=[]; groups[k].push(card); if(!order.includes(k)) order.push(k); });
             order.forEach(k=> groups[k].forEach(card=> grid.appendChild(card)));
+            // After image-type reorder, surface grouped duplicate-image cards to the top
+            moveGroupedToTop();
         })();
 
         // reorder by category using categoryMap order (optional, for 'All' view)
@@ -403,6 +1667,8 @@ window.initProductCategoryFilter = function initProductCategoryFilter(options = 
                 });
                 // append any remaining items
                 others.forEach(card=> grid.appendChild(card));
+                // After category reorder, surface grouped duplicate-image cards to the top
+                moveGroupedToTop();
             }catch(e){ /* ignore */ }
         }
 
@@ -460,6 +1726,8 @@ window.initProductCategoryFilter = function initProductCategoryFilter(options = 
                             if(lg && grid.firstElementChild !== lg){ grid.insertBefore(lg, grid.firstElementChild); }
                         }catch(e){}
                     }
+                    // Regardless of ordering mode, keep grouped duplicate-image cards at the very top
+                    moveGroupedToTop();
                 } else {
                     products.forEach(p=>{
                         const direct = (p.dataset && p.dataset.category) === cat;
@@ -637,31 +1905,31 @@ class NavigationController {
             if (toggle) {
                 // Mobile: use pointer/touch handlers to reliably toggle dropdowns on first tap
                 const handleToggle = (e) => {
-                    // Only treat as mobile-ish toggle
+                    // Treat as mobile-ish toggle on narrower viewports
                     if (window.innerWidth <= 1024) {
-                        try { e.preventDefault(); } catch (err) {}
-                        try { e.stopPropagation(); } catch (err) {}
+                        const isOpen = dropdown.classList.contains('active');
+                        if (!isOpen) {
+                            // First tap: open the dropdown (do not navigate)
+                            try { e.preventDefault(); } catch (err) {}
+                            try { e.stopPropagation(); } catch (err) {}
 
-                        // Close other dropdowns
-                        this.dropdowns.forEach(otherDropdown => {
-                            if (otherDropdown !== dropdown) {
-                                otherDropdown.classList.remove('active');
-                            }
-                        });
+                            // Close other dropdowns
+                            this.dropdowns.forEach(otherDropdown => {
+                                if (otherDropdown !== dropdown) {
+                                    otherDropdown.classList.remove('active');
+                                }
+                            });
 
-                        // Toggle current dropdown
-                        dropdown.classList.toggle('active');
+                            dropdown.classList.add('active');
+                        } else {
+                            // Second tap: allow navigation to the linked page
+                            // Do not prevent default here; leave dropdown open until navigation happens
+                        }
                     }
                 };
 
-                if (window.PointerEvent) {
-                    toggle.addEventListener('pointerdown', handleToggle);
-                } else if ('ontouchstart' in window) {
-                    toggle.addEventListener('touchstart', handleToggle, { passive: false });
-                } else {
-                    // Fallback to click
-                    toggle.addEventListener('click', handleToggle);
-                }
+                // Prefer click for anchors so default navigation works when intended
+                toggle.addEventListener('click', handleToggle, { passive: false });
             }
         });
         
@@ -2140,6 +3408,261 @@ window.addEventListener('error', (e) => {
 // Shared: Collapsible category groups inside all dropdown menus (Products, Industries)
 document.addEventListener('DOMContentLoaded', () => {
     try {
+        // Ensure dropdown menus exist in the header across all pages
+        (function ensureHeaderDropdowns(){
+            try {
+                const navMenu = document.getElementById('nav-menu');
+                if (!navMenu) return;
+
+                const hasProductsDropdown = !!navMenu.querySelector('.nav-dropdown .dropdown-toggle[href$="products.html"], .nav-dropdown .dropdown-toggle[href*="products.html?"]');
+                const hasIndustriesDropdown = !!navMenu.querySelector('.nav-dropdown .dropdown-toggle[href$="industries.html"], .nav-dropdown .dropdown-toggle[href*="industries.html?"]');
+
+                // Determine base path for links based on page depth
+                const isProductDetail = document.body && document.body.classList.contains('product-page');
+                const base = isProductDetail ? '../' : '';
+
+                // Helper to create element from HTML string
+                const createEl = (html) => {
+                    const tmp = document.createElement('div');
+                    tmp.innerHTML = html.trim();
+                    return tmp.firstElementChild;
+                };
+
+                if (!hasProductsDropdown) {
+                    const productsHTML = `
+                        <div class="nav-dropdown">
+                            <a href="${base}products.html" class="nav-link dropdown-toggle${location.pathname.endsWith('products.html') ? ' active' : ''}">
+                                Our Products
+                                <i class="fas fa-chevron-down dropdown-icon"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-column">
+                                        <div class="cat-group">
+                                            <div class="cat-header">
+                                                <a class="cat-link" href="${base}products.html#aerosol">Aerosol Products</a>
+                                                <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-aerosol"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                            <div class="sub-list" id="cat-aerosol">
+                                                <a class="sub-link" href="${base}products/s-88-paintable.html">S-88 Silicone Mould Release</a>
+                                                <a class="sub-link" href="${base}products/ns-77-non-silicone-mould-release.html">NS-77 Non-Silicone Mould Release</a>
+                                                <a class="sub-link" href="${base}products/s-22-degreaser-mould-cleaner.html">S-22 Degreaser & Mould Cleaner</a>
+                                                <a class="sub-link view-all" href="${base}products.html#aerosol">View all →</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="cat-group">
+                                            <div class="cat-header">
+                                                <a class="cat-link" href="${base}products.html#lubricants">Industrial Lubricants</a>
+                                                <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-lubricants"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                            <div class="sub-list" id="cat-lubricants">
+                                                <a class="sub-link" href="${base}products/engine-oils.html">Engine Oils</a>
+                                                <a class="sub-link" href="${base}products/hydraulic-awx-series.html">Hydraulic Oils</a>
+                                                <a class="sub-link" href="${base}products/industrial-gear-series.html">Industrial Gear Oils</a>
+                                                <a class="sub-link view-all" href="${base}products.html#lubricants">View all →</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="cat-group">
+                                            <div class="cat-header">
+                                                <a class="cat-link" href="${base}products.html#grease">Industrial Grease</a>
+                                                <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-grease"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                            <div class="sub-list" id="cat-grease">
+                                                <a class="sub-link" href="${base}products/heavy-duty-grease.html">Heavy Duty Grease</a>
+                                                <a class="sub-link" href="${base}products/lit-888-ep-grease.html">LIT 888 EP Grease</a>
+                                                <a class="sub-link" href="${base}products/hi-lo-grease.html">Hi-Lo Grease</a>
+                                                <a class="sub-link view-all" href="${base}products.html#grease">View all →</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="dropdown-column">
+                                        <div class="cat-group">
+                                            <div class="cat-header">
+                                                <a class="cat-link" href="${base}products.html#maintenance">Maintenance & Repair</a>
+                                                <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-maintenance"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                            <div class="sub-list" id="cat-maintenance">
+                                                <a class="sub-link" href="${base}products/oil-degreaser.html">Oil Degreaser</a>
+                                                <a class="sub-link" href="${base}products/industrial-paint-remover.html">Industrial Paint Remover</a>
+                                                <a class="sub-link" href="${base}products/rust-remover-chemical.html">Rust Remover Chemical</a>
+                                                <a class="sub-link view-all" href="${base}products.html#maintenance">View all →</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="cat-group">
+                                            <div class="cat-header">
+                                                <a class="cat-link" href="${base}products.html#metalworking">Metal Working</a>
+                                                <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-metalworking"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                            <div class="sub-list" id="cat-metalworking">
+                                                <a class="sub-link" href="${base}products/water-soluble-cutting-coolants.html">Water-Soluble Cutting Coolants</a>
+                                                <a class="sub-link" href="${base}products/neat-cutting-oils.html">Neat Cutting Oils</a>
+                                                <a class="sub-link" href="${base}products/tapping-fluids.html">Tapping Fluids</a>
+                                                <a class="sub-link view-all" href="${base}products.html#metalworking">View all →</a>
+                                            </div>
+                                        </div>
+
+                                        <div class="cat-group">
+                                            <div class="cat-header">
+                                                <a class="cat-link" href="${base}products.html#accessories">Accessories</a>
+                                                <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-accessories"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                            <div class="sub-list" id="cat-accessories">
+                                                <a class="sub-link" href="${base}products/handheld-refractometer.html">Handheld Refractometer</a>
+                                                <a class="sub-link" href="${base}products/handheld-ph-reader.html">Handheld pH Reader</a>
+                                                <a class="sub-link" href="${base}products/cnc-os-oil-skimmer.html">CNC OS Oil Skimmer</a>
+                                                <a class="sub-link view-all" href="${base}products.html#accessories">View all →</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="dropdown-column">
+                                        <div class="cat-group">
+                                            <div class="cat-header">
+                                                <a class="cat-link" href="${base}products.html#foodgrade">Food-Safe Products</a>
+                                                <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-foodgrade"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                            <div class="sub-list" id="cat-foodgrade">
+                                                <a class="sub-link" href="${base}products/protean-3h1-grease.html">PROTEAN 3H1 Grease</a>
+                                                <a class="sub-link" href="${base}products/protean-white-grease.html">PROTEAN White Grease</a>
+                                                <a class="sub-link" href="${base}products/protean-airline-oils.html">PROTEAN Airline Oils</a>
+                                                <a class="sub-link" href="${base}products/protean-chain-gear-oils-new.html">PROTEAN Chain & Gear Oils</a>
+                                                <a class="sub-link view-all" href="${base}products.html#foodgrade">View all →</a>
+                                            </div>
+                                        </div>
+                                        <a href="${base}products.html" class="view-all" style="margin-top:10px; display:inline-block;">View All Products →</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+
+                    // Insert after About link (or before Contact link if present)
+                    const aboutLink = navMenu.querySelector('a.nav-link[href$="about.html"], a.nav-link[href*="about.html?"]');
+                    const contactLink = navMenu.querySelector('a.nav-link[href$="contact.html"], a.nav-link[href*="contact.html?"]');
+                    const node = createEl(productsHTML);
+                    if (aboutLink && aboutLink.parentNode === navMenu) {
+                        navMenu.insertBefore(node, aboutLink.nextSibling);
+                    } else if (contactLink) {
+                        navMenu.insertBefore(node, contactLink);
+                    } else {
+                        navMenu.appendChild(node);
+                    }
+
+                    // Bind mobile toggle behavior to the injected dropdown
+                    try {
+                        const toggle = node.querySelector('.dropdown-toggle');
+                        if (toggle) {
+                            toggle.addEventListener('click', (e) => {
+                                if (window.innerWidth <= 1024) {
+                                    const dd = toggle.closest('.nav-dropdown');
+                                    const isOpen = dd && dd.classList.contains('active');
+                                    if (!isOpen) {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        // close siblings
+                                        document.querySelectorAll('.nav-dropdown').forEach(other => {
+                                            if (other !== dd) other.classList.remove('active');
+                                        });
+                                        dd && dd.classList.add('active');
+                                    }
+                                }
+                            }, { passive: false });
+                        }
+                    } catch (e) { /* ignore */ }
+                }
+
+                if (!hasIndustriesDropdown) {
+                    const industriesHTML = `
+                        <div class="nav-dropdown">
+                            <a href="${base}industries.html" class="nav-link dropdown-toggle${location.pathname.endsWith('industries.html') ? ' active' : ''}">
+                                Industries
+                                <i class="fas fa-chevron-down dropdown-icon"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-column">
+                                        <div class="cat-group">
+                                            <div class="cat-header">
+                                                <a class="cat-link" href="${base}industries.html">Manufacturing</a>
+                                                <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-ind-manufacturing"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                            <div class="sub-list" id="cat-ind-manufacturing">
+                                                <a class="sub-link" href="${base}stamping-products.html">Stamping</a>
+                                                <a class="sub-link" href="${base}automotive-transportation-products.html">Automotive & Transportation</a>
+                                                <a class="sub-link" href="${base}plastic-injection-products.html">Plastic Injection</a>
+                                                <a class="sub-link" href="${base}machining-engineering-products.html">Machining & Engineering</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-column">
+                                        <div class="cat-group">
+                                            <div class="cat-header">
+                                                <a class="cat-link" href="${base}industries.html">Heavy Industries</a>
+                                                <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-ind-heavy"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                            <div class="sub-list" id="cat-ind-heavy">
+                                                <a class="sub-link" href="${base}construction-cement-products.html">Construction & Cement</a>
+                                                <a class="sub-link" href="${base}marine-offshore-products.html">Marine & Offshore</a>
+                                                <a class="sub-link" href="${base}oil-gas-products.html">Oil & Gas</a>
+                                                <a class="sub-link" href="${base}quarries-products.html">Quarries</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="dropdown-column">
+                                        <div class="cat-group">
+                                            <div class="cat-header">
+                                                <a class="cat-link" href="${base}industries.html">Specialized</a>
+                                                <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-ind-specialized"><i class="fas fa-chevron-right"></i></button>
+                                            </div>
+                                            <div class="sub-list" id="cat-ind-specialized">
+                                                <a class="sub-link" href="${base}semiconductor-disk-drive-products.html">Semiconductor & Disk Drive</a>
+                                                <a class="sub-link" href="${base}food-beverage-pharmaceutical-products.html">Food & Beverage</a>
+                                                <a class="sub-link" href="${base}rubber-latex-products.html">Rubber & Latex</a>
+                                                <a class="sub-link" href="${base}printing-paper-products.html">Printing & Paper</a>
+                                                <a class="sub-link" href="${base}workshops-automotive-products.html">Workshops</a>
+                                            </div>
+                                        </div>
+                                        <a href="${base}industries.html" class="view-all">View All Industries →</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+
+                    const contactLink = navMenu.querySelector('a.nav-link[href$="contact.html"], a.nav-link[href*="contact.html?"]');
+                    const node = createEl(industriesHTML);
+                    if (contactLink) {
+                        navMenu.insertBefore(node, contactLink);
+                    } else {
+                        navMenu.appendChild(node);
+                    }
+
+                    // Bind mobile toggle behavior to the injected dropdown
+                    try {
+                        const toggle = node.querySelector('.dropdown-toggle');
+                        if (toggle) {
+                            toggle.addEventListener('click', (e) => {
+                                if (window.innerWidth <= 1024) {
+                                    const dd = toggle.closest('.nav-dropdown');
+                                    const isOpen = dd && dd.classList.contains('active');
+                                    if (!isOpen) {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        document.querySelectorAll('.nav-dropdown').forEach(other => {
+                                            if (other !== dd) other.classList.remove('active');
+                                        });
+                                        dd && dd.classList.add('active');
+                                    }
+                                }
+                            }, { passive: false });
+                        }
+                    } catch (e) { /* ignore */ }
+                }
+            } catch (e) { /* ignore */ }
+        })();
+
         // Ensure Products dropdown contains all categories (unify across pages)
         (function unifyProductsDropdown(){
             try {
