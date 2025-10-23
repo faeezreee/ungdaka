@@ -70,6 +70,27 @@
             will-change: opacity, transform;
         }
         .hero-text-hide { opacity: 0; transform: translateY(6px); }
+        
+        /* Play overlay for mobile when autoplay is blocked */
+        .hero-play-overlay {
+            position: absolute;
+            inset: 0;
+            display: none; /* shown only when needed */
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            z-index: 4;
+        }
+        .hero-play-overlay.is-visible { display: flex; }
+        .hero-play-overlay .btn-play {
+            background: rgba(0,0,0,0.5);
+            border: 2px solid rgba(255,255,255,0.12);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+        }
     </style>
     
 
@@ -345,9 +366,13 @@
         </div>
         <div class="hero-background">
             <div class="hero-overlay"></div>
-            <video class="hero-bg-image" autoplay muted loop playsinline poster="public/AI Images/shelf.jpg">
+            <video class="hero-bg-image" autoplay muted loop playsinline webkit-playsinline poster="public/AI Images/shelf.jpg">
                 <source src="public/oil2.mp4" type="video/mp4">
             </video>
+            <!-- Play overlay: appears on mobile when autoplay is blocked -->
+            <div class="hero-play-overlay" id="heroPlayOverlay" aria-hidden="true">
+                <button class="btn-play" id="heroPlayButton" aria-label="Play background video">Play</button>
+            </div>
         </div>
         
         <div class="container">
@@ -970,8 +995,13 @@
                     // start hidden
                     currentImg.style.opacity = '0';
                     const showInit = function(){
-                        try { currentImg.play().catch(()=>{}); } catch(e){}
-                        setTimeout(()=>{ currentImg.style.opacity = '1'; }, 80);
+                        // use attemptPlay to gracefully handle autoplay restrictions on mobile
+                        attemptPlay(currentImg).then(()=>{
+                            setTimeout(()=>{ currentImg.style.opacity = '1'; }, 80);
+                        }).catch(()=>{
+                            // show play overlay so user can manually start playback
+                            showPlayOverlay();
+                        });
                         currentImg.removeEventListener('canplay', showInit);
                         currentImg.removeEventListener('loadeddata', showInit);
                     };
@@ -1002,6 +1032,8 @@
                     // Attributes to satisfy autoplay policies and improve reliability
                     nextEl.muted = true;
                     nextEl.playsInline = true;
+                    // set attribute for iOS Safari
+                    try { nextEl.setAttribute('webkit-playsinline', ''); } catch(e){}
                     // do not loop: when the video ends we want to advance the hero
                     nextEl.loop = false;
                     nextEl.preload = 'auto';
@@ -1014,9 +1046,12 @@
                     nextEl.appendChild(srcEl);
                     // When enough data is available, ensure playback starts and fade in
                     const showVideo = function(){
-                        try { nextEl.play().catch(()=>{}); } catch(e){}
-                        // small timeout to ensure frames are ready
-                        setTimeout(()=>{ nextEl.style.opacity = '1'; }, 80);
+                        attemptPlay(nextEl).then(()=>{
+                            // small timeout to ensure frames are ready
+                            setTimeout(()=>{ nextEl.style.opacity = '1'; }, 80);
+                        }).catch(()=>{
+                            showPlayOverlay();
+                        });
                         nextEl.removeEventListener('canplay', showVideo);
                         nextEl.removeEventListener('loadeddata', showVideo);
                     };
@@ -1076,7 +1111,7 @@
                     try {
                         if (nextEl.tagName && nextEl.tagName.toLowerCase() === 'video') {
                             try { nextEl.loop = false; } catch(e){}
-                            nextEl.play().catch(()=>{});
+                            attemptPlay(nextEl).catch(()=>{ showPlayOverlay(); });
                             nextEl._onVideoEnded = function(){ try{ nextSlide(); resetTimer(); }catch(e){} };
                             nextEl.addEventListener('ended', nextEl._onVideoEnded);
                         }
@@ -1104,10 +1139,10 @@
                 if (isVideo) {
                     nextEl = document.createElement('video');
                     nextEl.className = 'hero-bg-image is-next';
-                    nextEl.muted = true; nextEl.playsInline = true; nextEl.loop = false; nextEl.preload = 'auto'; nextEl.autoplay = false;
+                    nextEl.muted = true; nextEl.playsInline = true; try { nextEl.setAttribute('webkit-playsinline', ''); } catch(e){}; nextEl.loop = false; nextEl.preload = 'auto'; nextEl.autoplay = false;
                     if (next.poster) nextEl.poster = next.poster;
                     const srcEl = document.createElement('source'); srcEl.src = next.src; srcEl.type = 'video/mp4'; nextEl.appendChild(srcEl);
-                    nextEl.addEventListener('canplay', function onCanPlay(){ try{ nextEl.play().catch(()=>{});}catch(e){}; nextEl.removeEventListener('canplay', onCanPlay); });
+                    nextEl.addEventListener('canplay', function onCanPlay(){ attemptPlay(nextEl).catch(()=>{ showPlayOverlay(); }); nextEl.removeEventListener('canplay', onCanPlay); });
                 } else { nextEl = document.createElement('img'); nextEl.className = 'hero-bg-image is-next'; nextEl.alt = 'Hero background'; nextEl.src = next.src; }
                 heroBg.appendChild(nextEl);
 
@@ -1161,6 +1196,35 @@
             const heroNextBtn = document.getElementById('heroNext');
             heroPrevBtn?.addEventListener('click', ()=>{ prevSlide(); resetTimer(); });
             heroNextBtn?.addEventListener('click', ()=>{ nextSlide(); resetTimer(); });
+
+            // Play overlay controls: if autoplay is blocked on mobile, show a play button to allow user to start video playback
+            const heroPlayOverlay = document.getElementById('heroPlayOverlay');
+            const heroPlayButton = document.getElementById('heroPlayButton');
+            function showPlayOverlay(){ if(heroPlayOverlay) heroPlayOverlay.classList.add('is-visible'); }
+            function hidePlayOverlay(){ if(heroPlayOverlay) heroPlayOverlay.classList.remove('is-visible'); }
+            function attemptPlay(el){
+                return new Promise((resolve, reject) => {
+                    if (!el || typeof el.play !== 'function') return reject(new Error('not-playable'));
+                    // Try to play; some browsers return a promise
+                    try{
+                        const p = el.play();
+                        if (p && typeof p.then === 'function') {
+                            p.then(()=>{ hidePlayOverlay(); resolve(); }).catch((err)=>{ reject(err); });
+                        } else {
+                            // play() didn't return a promise — assume it started
+                            hidePlayOverlay(); resolve();
+                        }
+                    }catch(err){ reject(err); }
+                });
+            }
+            heroPlayButton?.addEventListener('click', ()=>{
+                // user-initiated: try to play the current video
+                try{
+                    if (currentImg && currentImg.tagName && currentImg.tagName.toLowerCase() === 'video') {
+                        attemptPlay(currentImg).then(()=>{ hidePlayOverlay(); }).catch(()=>{ /* maybe show message */ });
+                    }
+                }catch(e){}
+            });
 
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
