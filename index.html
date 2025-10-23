@@ -52,6 +52,12 @@
             will-change: transform;
             z-index: 0;
         }
+        /* Improve video rendering: hide until ready to avoid grey frame */
+        .hero-modern .hero-bg-image {
+            background-color: #0f172a; /* fallback background while media loads */
+            transition: transform 650ms ease, opacity 300ms ease;
+            opacity: 1;
+        }
         .hero-modern .hero-bg-image.is-current { transform: translateX(0%); }
         .hero-modern .hero-bg-image.is-next { transform: translateX(100%); }
         .hero-modern .hero-bg-image.is-exit { transform: translateX(-100%); }
@@ -957,10 +963,20 @@
             }
             currentImg.classList.add('is-current');
             setCopy(slides[0]);
-            // If the initial background is a video, make sure it doesn't loop and advances when finished
+            // Improve initial background handling: hide video until it's ready to avoid grey flash
             try {
                 if (currentImg && currentImg.tagName && currentImg.tagName.toLowerCase() === 'video') {
                     try { currentImg.loop = false; } catch(e){}
+                    // start hidden
+                    currentImg.style.opacity = '0';
+                    const showInit = function(){
+                        try { currentImg.play().catch(()=>{}); } catch(e){}
+                        setTimeout(()=>{ currentImg.style.opacity = '1'; }, 80);
+                        currentImg.removeEventListener('canplay', showInit);
+                        currentImg.removeEventListener('loadeddata', showInit);
+                    };
+                    currentImg.addEventListener('canplay', showInit);
+                    currentImg.addEventListener('loadeddata', showInit);
                     // attach ended handler to move to next slide when video finishes
                     currentImg._onVideoEnded = function(){ try{ nextSlide(); resetTimer(); }catch(e){} };
                     currentImg.addEventListener('ended', currentImg._onVideoEnded);
@@ -981,6 +997,8 @@
                 if (isVideo) {
                     nextEl = document.createElement('video');
                     nextEl.className = 'hero-bg-image is-next';
+                    // Start hidden to avoid the grey first-frame flash
+                    nextEl.style.opacity = '0';
                     // Attributes to satisfy autoplay policies and improve reliability
                     nextEl.muted = true;
                     nextEl.playsInline = true;
@@ -994,11 +1012,16 @@
                     srcEl.src = next.src;
                     srcEl.type = 'video/mp4';
                     nextEl.appendChild(srcEl);
-                    // When enough data is available, ensure playback starts
-                    nextEl.addEventListener('canplay', function onCanPlay(){
+                    // When enough data is available, ensure playback starts and fade in
+                    const showVideo = function(){
                         try { nextEl.play().catch(()=>{}); } catch(e){}
-                        nextEl.removeEventListener('canplay', onCanPlay);
-                    });
+                        // small timeout to ensure frames are ready
+                        setTimeout(()=>{ nextEl.style.opacity = '1'; }, 80);
+                        nextEl.removeEventListener('canplay', showVideo);
+                        nextEl.removeEventListener('loadeddata', showVideo);
+                    };
+                    nextEl.addEventListener('canplay', showVideo);
+                    nextEl.addEventListener('loadeddata', showVideo);
                 } else {
                     nextEl = document.createElement('img');
                     nextEl.className = 'hero-bg-image is-next';
@@ -1027,23 +1050,24 @@
 
                 // Slide: current moves left (exit), next moves to center (enter)
                 if (currentImg) {
+                    // keep current visible/playing during the CSS transition to avoid a blank frame
                     currentImg.classList.remove('is-current');
                     currentImg.classList.add('is-exit');
-                    // if current is a video, remove its ended handler and pause it
-                    try {
-                        if (currentImg.tagName && currentImg.tagName.toLowerCase() === 'video') {
-                            if (currentImg._onVideoEnded) {
-                                try { currentImg.removeEventListener('ended', currentImg._onVideoEnded); } catch(e){}
-                                currentImg._onVideoEnded = null;
-                            }
-                            currentImg.pause();
-                        }
-                    } catch(e){}
                 }
                     nextEl.classList.remove('is-next');
                     nextEl.classList.add('is-enter');
 
                 const onDone = () => {
+                    // After the transition completes, safely stop and remove the old background
+                    try {
+                        if (currentImg && currentImg.tagName && currentImg.tagName.toLowerCase() === 'video') {
+                            if (currentImg._onVideoEnded) {
+                                try { currentImg.removeEventListener('ended', currentImg._onVideoEnded); } catch(e){}
+                                currentImg._onVideoEnded = null;
+                            }
+                            try { currentImg.pause(); } catch(e){}
+                        }
+                    } catch(e){}
                     // Remove the old one and promote the next to current
                     if (currentImg && currentImg.parentNode) currentImg.remove();
                     nextEl.classList.remove('is-enter');
@@ -1093,22 +1117,24 @@
 
                 try{ nextEl.offsetWidth; } catch(e){}
                 if (currentImg) {
+                    // keep the current background visible during the transition to avoid a blank frame
                     currentImg.classList.remove('is-current');
                     currentImg.classList.add('is-exit');
-                    try{
-                        if (currentImg.tagName && currentImg.tagName.toLowerCase()==='video') {
-                            if (currentImg._onVideoEnded) {
-                                try { currentImg.removeEventListener('ended', currentImg._onVideoEnded); } catch(e){}
-                                currentImg._onVideoEnded = null;
-                            }
-                            currentImg.pause();
-                        }
-                    }catch(e){}
                 }
                 // For prev we want the entering element to slide in from left — so use same classes but CSS transform handles it
                 nextEl.classList.remove('is-next'); nextEl.classList.add('is-enter');
 
                 const onDonePrev = () => {
+                    // After transition, stop and remove the previous media safely
+                    try{
+                        if (currentImg && currentImg.tagName && currentImg.tagName.toLowerCase()==='video') {
+                            if (currentImg._onVideoEnded) {
+                                try { currentImg.removeEventListener('ended', currentImg._onVideoEnded); } catch(e){}
+                                currentImg._onVideoEnded = null;
+                            }
+                            try { currentImg.pause(); } catch(e){}
+                        }
+                    }catch(e){}
                     if (currentImg && currentImg.parentNode) currentImg.remove();
                     nextEl.classList.remove('is-enter'); nextEl.classList.add('is-current');
                     try{
