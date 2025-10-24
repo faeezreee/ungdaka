@@ -499,6 +499,68 @@ body {
     .about-text-modern p { font-size: 0.95rem; }
 }
 
+/* Mobile improvements for About images: prevent overflow/overlap on smaller screens */
+@media (max-width: 900px) {
+    .about-images-modern {
+        /* let images size naturally and stack vertically */
+        height: auto;
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+    .about-image-main {
+        /* make the main image flow in document order and allow intrinsic height */
+        position: relative;
+        grid-column: auto;
+        height: auto;
+        overflow: hidden;
+        border-radius: 12px;
+    }
+    .about-image-main img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+    .about-image-secondary {
+        /* convert the floating secondary panel into an inline block that stacks underneath */
+        position: relative;
+        bottom: auto;
+        right: auto;
+        width: min(360px, 88%);
+        height: auto;
+        margin: -36px auto 0; /* slightly overlap the main visual for a layered feel without breaking layout */
+        border-radius: 14px;
+        border: 6px solid white;
+        box-shadow: var(--shadow-lg);
+        z-index: 2;
+    }
+    .about-image-secondary img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+    .experience-badge-float {
+        /* move the badge into the flow so it won't overlap dangerously on small screens */
+        position: relative;
+        top: auto;
+        left: auto;
+        margin: 12px auto 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .about-gif { justify-self: center; }
+    .about-text-modern { padding-left: 0; }
+}
+
+@media (max-width: 480px) {
+    .about-image-secondary {
+        width: 94%;
+        margin-top: -28px;
+        border-radius: 12px;
+    }
+    .experience-badge-float .big-number { font-size: 2.4rem; }
+    .experience-badge-float { padding: 10px 14px; }
+}
 .text-center { text-align: center; }
 .text-left { text-align: left; }
 .text-right { text-align: right; }
@@ -1566,32 +1628,32 @@ body {
 @media (max-width: 768px) {
     .rolling-drum-section {
         padding: 80px 0;
-        min-height: 150vh; /* Slightly shorter on tablets */
+        min-height: 180vh; /* Slightly shorter on tablets but increased for bigger visuals */
     }
     
     .drum-container {
-        height: 150vh;
+        height: 180vh;
     }
     
     .drum-wrapper {
-        width: 220px;
-        height: 220px;
+        width: 280px;
+        height: 280px;
     }
 }
 
 @media (max-width: 480px) {
     .rolling-drum-section {
         padding: 60px 0;
-        min-height: 120vh; /* Shorter on phones */
+        min-height: 160vh; /* Increased on phones for a longer rolling effect */
     }
     
     .drum-container {
-        height: 120vh;
+        height: 160vh;
     }
     
     .drum-wrapper {
-        width: 180px;
-        height: 180px;
+        width: 240px;
+        height: 240px;
     }
 }
 
@@ -1836,14 +1898,20 @@ body {
         rgba(26, 54, 93, 0.7) 100%
     );
     z-index: 2;
-    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    /* fade via opacity so hover can reveal the image underneath */
+    opacity: 1;
+    transition: opacity 300ms ease, background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .industry-panel:hover .panel-overlay {
+    /* hide the blue overlay on hover so the background image is revealed */
+    opacity: 0;
+    pointer-events: none;
+    /* keep background change as a fallback for non-opacity supporting UAs */
     background: linear-gradient(
         to bottom,
-        rgba(26, 54, 93, 0.5) 0%,
-        rgba(26, 54, 93, 0.8) 100%
+        rgba(26, 54, 93, 0.0) 0%,
+        rgba(26, 54, 93, 0.0) 100%
     );
 }
 
@@ -7203,4 +7271,104 @@ section {
 .product-card:hover .product-info .duplicate-image-title,
 a.duplicate-image-title:hover {
     color: #1e40af !important;
+}
+
+/* Specific overrides for industries carousel overlay (higher specificity to avoid accidental overrides) */
+.industries-carousel .panel-overlay {
+    /* visible blue overlay by default */
+    background: linear-gradient(
+        to bottom,
+        rgba(26, 54, 93, 0.35) 0%,
+        rgba(26, 54, 93, 0.75) 100%
+    );
+    z-index: 2;
+    opacity: 1;
+    transition: opacity 300ms ease, background 0.6s cubic-bezier(0.4,0,0.2,1);
+    pointer-events: auto;
+}
+
+.industries-carousel .industry-panel:hover .panel-overlay,
+.industries-carousel .industry-panel:focus-within .panel-overlay,
+.industries-carousel .industry-panel:active .panel-overlay {
+    /* fade overlay on hover/focus/active to reveal image */
+    opacity: 0;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(26,54,93,0.0) 0%, rgba(26,54,93,0.0) 100%);
+}
+
+/* Force mobile-friendly stacking/positioning for About images with high specificity
+   to override earlier absolute/fixed-height rules that caused overflow on narrow screens */
+@media (max-width: 900px) {
+    .about-home-modern .about-images-modern {
+        height: auto !important;
+        grid-template-columns: 1fr !important;
+        gap: var(--spacing-md) !important;
+        align-items: start !important;
+    }
+    .about-home-modern .about-image-main {
+        position: relative !important;
+        grid-column: auto !important;
+        height: auto !important;
+        overflow: hidden !important;
+        border-radius: 12px !important;
+    }
+    .about-home-modern .about-image-main img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: cover !important;
+    }
+    .about-home-modern .about-image-secondary {
+        position: relative !important;
+        bottom: auto !important;
+        right: auto !important;
+        width: min(360px, 88%) !important;
+        height: auto !important;
+        margin: -36px auto 0 !important;
+        border-radius: 14px !important;
+        border: 6px solid white !important;
+        box-shadow: var(--shadow-lg) !important;
+        z-index: 2 !important;
+    }
+    .about-home-modern .about-image-secondary img {
+        width: 100% !important;
+        height: auto !important;
+        object-fit: cover !important;
+    }
+    .about-home-modern .experience-badge-float {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        margin: 12px auto 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    .about-home-modern .about-gif { justify-self: center !important; }
+    .about-home-modern .about-text-modern { padding-left: 0 !important; }
+}
+
+@media (max-width: 480px) {
+    .about-home-modern .about-image-secondary { width: 94% !important; margin-top: -28px !important; border-radius: 12px !important; }
+    .about-home-modern .experience-badge-float .big-number { font-size: 2.4rem !important; }
+    .about-home-modern .experience-badge-float { padding: 10px 14px !important; }
+}
+
+/* Make industries carousel copywriting always visible (static), regardless of hover */
+.industries-carousel .industry-panel .panel-icon,
+.industries-carousel .industry-panel .panel-content h3,
+.industries-carousel .industry-panel .panel-description,
+.industries-carousel .industry-panel .panel-link {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+/* Ensure the panel content stays readable above the overlay */
+.industries-carousel .industry-panel .panel-content {
+    color: #fff !important;
+    pointer-events: auto; /* keep links clickable */
+}
+
+/* Keep overlay decorative but do not obscure the copy's visibility */
+.industries-carousel .panel-overlay {
+    opacity: 1 !important;
 }

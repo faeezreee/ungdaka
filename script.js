@@ -3988,13 +3988,17 @@ class RollingDrumAnimation {
         this.drumWithLogo.classList.remove('hidden');
         this.drumWithoutLogo.classList.add('hidden');
         
+        // Compute drum size dynamically so the animation matches CSS sizes
+        const drumRect = this.drumWrapper?.getBoundingClientRect();
+        const drumSize = (drumRect && drumRect.height) ? Math.round(drumRect.height) : 400;
+
         // Set initial position above the section (like it's coming from underneath the previous section)
-        this.position = -400; // Start 400px above the section (updated size)
-        this.targetPosition = -400;
-        
+        this.position = -drumSize; // Start above the section
+        this.targetPosition = -drumSize;
+
         // Set initial transform
         if (this.drumWrapper) {
-            this.drumWrapper.style.transform = `translateX(-50%) translateY(-400px)`;
+            this.drumWrapper.style.transform = `translateX(-50%) translateY(-${drumSize}px)`;
         }
         
         // Add scroll event listener
@@ -4035,9 +4039,9 @@ class RollingDrumAnimation {
             const progress = Math.max(0, Math.min(1, currentScrollProgress));
             
             // Move drum from above the section to below the section
-            // Start position: -400px (completely above section)
-            // End position: sectionHeight + 400px (completely below section)
-            const drumSize = 400; // Updated to match new drum size
+            // Compute the drum size dynamically (matches CSS drum-wrapper dimensions)
+            const drumRect = this.drumWrapper?.getBoundingClientRect();
+            const drumSize = (drumRect && drumRect.height) ? Math.round(drumRect.height) : 400;
             const startPos = -drumSize; // Start above the section
             const endPos = sectionHeight + drumSize; // End below the section
             const totalTravelDistance = endPos - startPos;
@@ -4056,10 +4060,14 @@ class RollingDrumAnimation {
             }
         } else if (currentScrollY < startTriggerPoint) {
             // Before start trigger - keep drum above the section
-            this.targetPosition = -400; // Completely above section (updated size)
+            const drumRect = this.drumWrapper?.getBoundingClientRect();
+            const drumSize = (drumRect && drumRect.height) ? Math.round(drumRect.height) : 400;
+            this.targetPosition = -drumSize; // Completely above section
         } else if (currentScrollY > endTriggerPoint) {
             // After end trigger - keep drum below the section
-            this.targetPosition = sectionHeight + 400; // Completely below section (updated size)
+            const drumRect = this.drumWrapper?.getBoundingClientRect();
+            const drumSize = (drumRect && drumRect.height) ? Math.round(drumRect.height) : 400;
+            this.targetPosition = sectionHeight + drumSize; // Completely below section
         }
         
         this.lastScrollY = currentScrollY;
