@@ -79,18 +79,44 @@
             align-items: center;
             justify-content: center;
             pointer-events: auto;
-            z-index: 4;
+            z-index: 9999; /* ensure overlay is above controls and floating buttons */
+            -webkit-tap-highlight-color: transparent;
         }
         .hero-play-overlay.is-visible { display: flex; }
         .hero-play-overlay .btn-play {
-            background: rgba(0,0,0,0.5);
-            border: 2px solid rgba(255,255,255,0.12);
+            background: rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.14);
             color: white;
-            padding: 12px 18px;
-            border-radius: 8px;
+            padding: 14px 20px;
+            min-width: 96px;
+            height: 48px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
             font-size: 18px;
             cursor: pointer;
+            box-shadow: 0 8px 26px rgba(2,6,23,0.45);
+            touch-action: manipulation;
         }
+        /* Hero on-screen debug box (visible when debugging) */
+        #hero-debug {
+            position: fixed;
+            left: 12px;
+            bottom: 12px;
+            max-width: 320px;
+            max-height: 180px;
+            overflow: auto;
+            background: rgba(0,0,0,0.65);
+            color: #fff;
+            font-size: 12px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            z-index: 10000;
+            display: none; /* hidden by default; shown when logs appear */
+        }
+        #hero-debug.visible { display: block; }
+        #hero-debug .line { margin-bottom:6px; opacity:0.95 }
     </style>
     
 
@@ -366,13 +392,15 @@
         </div>
         <div class="hero-background">
             <div class="hero-overlay"></div>
-            <video class="hero-bg-image" autoplay muted loop playsinline webkit-playsinline poster="public/AI Images/shelf.jpg">
+            <video class="hero-bg-image" autoplay muted loop playsinline webkit-playsinline preload="metadata" fetchpriority="high" poster="public/AI Images/shelf.jpg">
                 <source src="public/oil2.mp4" type="video/mp4">
             </video>
             <!-- Play overlay: appears on mobile when autoplay is blocked -->
             <div class="hero-play-overlay" id="heroPlayOverlay" aria-hidden="true">
                 <button class="btn-play" id="heroPlayButton" aria-label="Play background video">Play</button>
             </div>
+            <!-- On-screen debug panel for playback diagnostics -->
+            <div id="hero-debug" aria-hidden="true"></div>
         </div>
         
         <div class="container">
@@ -732,6 +760,63 @@
             }
         }
     </style>
+    <!-- Network-aware preload: only preload heavy hero videos when network conditions allow -->
+    <script>
+        // DOM-ready, network-aware hero preloads: only preload the current + next hero assets when network allows
+        (function(){
+            document.addEventListener('DOMContentLoaded', function(){
+                try{
+                    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                    var saveData = (conn && conn.saveData) || false;
+                    var effective = (conn && conn.effectiveType) || '4g';
+                    // Avoid preloading heavy videos on Save-Data or very slow networks
+                    if (saveData) return;
+                    if (effective === '2g' || effective === 'slow-2g') return;
+
+                    // Try to use the slides exposed by the hero script. If not available, fall back to the static hero source.
+                    var heroSlides = window.__HERO_SLIDES || [];
+                    var toPreload = [];
+                    // current hero (existing DOM video source)
+                    var currentSource = document.querySelector('.hero-bg-image source')?.src;
+                    if (currentSource) toPreload.push(currentSource);
+
+                    // prefer to use slides list (exposed by hero script) to find next slide
+                    if (heroSlides && heroSlides.length > 1) {
+                        var next = heroSlides[1];
+                        if (next && next.src) toPreload.push(next.src);
+                    } else {
+                        // conservative fallback: preload one additional known hero asset if present
+                        toPreload.push('public/drums shelf.mp4');
+                    }
+
+                    // Deduplicate and add preload links
+                    toPreload = toPreload.filter(Boolean).reduce(function(acc, v){ if(acc.indexOf(v) === -1) acc.push(v); return acc; }, []);
+                    toPreload.forEach(function(href){
+                        try{
+                            var l = document.createElement('link');
+                            l.rel = 'preload';
+                            l.as = 'video';
+                            l.href = href;
+                            l.type = 'video/mp4';
+                            l.crossOrigin = 'anonymous';
+                            // hint that these are important hero assets
+                            l.setAttribute('importance','high');
+                            document.head.appendChild(l);
+                        }catch(e){}
+                    });
+
+                    // preload poster image used by initial hero
+                    try{
+                        var poster = document.querySelector('.hero-bg-image')?.getAttribute('poster');
+                        if (poster) {
+                            var p = document.createElement('link');
+                            p.rel = 'preload'; p.as = 'image'; p.href = poster; document.head.appendChild(p);
+                        }
+                    }catch(e){}
+                }catch(e){}
+            });
+        })();
+    </script>
 
     
 
@@ -919,6 +1004,11 @@
         (function(){
             const heroBg = document.querySelector('.hero-modern .hero-background');
             let currentImg = document.querySelector('.hero-modern .hero-bg-image');
+            // network status helper: used to choose preload strategy and fetchpriority
+            var __conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            var __saveData = (__conn && __conn.saveData) || false;
+            var __effective = (__conn && __conn.effectiveType) || '4g';
+            var __isFastNetwork = !__saveData && __effective === '4g';
             const titleEl = document.querySelector('.hero-title-modern');
             const subtitleEl = document.querySelector('.hero-subtitle-modern');
             if(!heroBg || !currentImg || !titleEl || !subtitleEl) return;
@@ -974,6 +1064,9 @@
                 }
             ];
 
+            // expose slides to global scope for network-aware preloads and testing helpers
+            try { window.__HERO_SLIDES = slides; } catch(e) {}
+
             // Preload images for smooth transitions (skip video sources)
             slides.forEach(s => {
                 if (typeof s.src === 'string' && s.src.toLowerCase().endsWith('.mp4')) return;
@@ -995,10 +1088,16 @@
                     // start hidden
                     currentImg.style.opacity = '0';
                     const showInit = function(){
+                        // attach diagnostics for initial video
+                        try {
+                            currentImg.addEventListener('error', function(ev){ console.debug('[hero] initial video error', currentImg.error); });
+                            currentImg.addEventListener('stalled', function(){ console.debug('[hero] initial video stalled'); });
+                        } catch(e){}
                         // use attemptPlay to gracefully handle autoplay restrictions on mobile
                         attemptPlay(currentImg).then(()=>{
                             setTimeout(()=>{ currentImg.style.opacity = '1'; }, 80);
-                        }).catch(()=>{
+                        }).catch((err)=>{
+                            console.debug('[hero] attemptPlay rejected for initial video', err);
                             // show play overlay so user can manually start playback
                             showPlayOverlay();
                         });
@@ -1032,11 +1131,15 @@
                     // Attributes to satisfy autoplay policies and improve reliability
                     nextEl.muted = true;
                     nextEl.playsInline = true;
+                    // Only hint fetchpriority on fast networks to avoid wasting bandwidth on slow connections
+                    try{ if (window && window.__isFastNetwork === undefined) window.__isFastNetwork = __isFastNetwork; }catch(e){}
+                    try{ if (typeof __isFastNetwork !== 'undefined' && __isFastNetwork) nextEl.setAttribute('fetchpriority', 'high'); }catch(e){}
                     // set attribute for iOS Safari
                     try { nextEl.setAttribute('webkit-playsinline', ''); } catch(e){}
                     // do not loop: when the video ends we want to advance the hero
                     nextEl.loop = false;
-                    nextEl.preload = 'auto';
+                    // preload less aggressively on slow networks
+                    try { nextEl.preload = (typeof __isFastNetwork !== 'undefined' && __isFastNetwork) ? 'auto' : 'metadata'; } catch(e){ nextEl.preload = 'metadata'; }
                     nextEl.autoplay = false; // we'll start playback once it can
                     // set poster if provided
                     if (next.poster) nextEl.poster = next.poster;
@@ -1046,10 +1149,17 @@
                     nextEl.appendChild(srcEl);
                     // When enough data is available, ensure playback starts and fade in
                     const showVideo = function(){
+                        // attach diagnostics for this video element
+                        try {
+                            nextEl.addEventListener('error', function(ev){ console.debug('[hero] video error', next.src, nextEl.error); });
+                            nextEl.addEventListener('stalled', function(){ console.debug('[hero] video stalled', next.src); });
+                            nextEl.addEventListener('suspend', function(){ console.debug('[hero] video suspend', next.src); });
+                        } catch(e){}
                         attemptPlay(nextEl).then(()=>{
                             // small timeout to ensure frames are ready
                             setTimeout(()=>{ nextEl.style.opacity = '1'; }, 80);
-                        }).catch(()=>{
+                        }).catch((err)=>{
+                            console.debug('[hero] attemptPlay failed for nextEl', err);
                             showPlayOverlay();
                         });
                         nextEl.removeEventListener('canplay', showVideo);
@@ -1139,10 +1249,14 @@
                 if (isVideo) {
                     nextEl = document.createElement('video');
                     nextEl.className = 'hero-bg-image is-next';
-                    nextEl.muted = true; nextEl.playsInline = true; try { nextEl.setAttribute('webkit-playsinline', ''); } catch(e){}; nextEl.loop = false; nextEl.preload = 'auto'; nextEl.autoplay = false;
+                    nextEl.muted = true; nextEl.playsInline = true; try { nextEl.setAttribute('webkit-playsinline', ''); } catch(e){}; try{ if (typeof __isFastNetwork !== 'undefined' && __isFastNetwork) nextEl.setAttribute('fetchpriority', 'high'); }catch(e){}; nextEl.loop = false; try { nextEl.preload = (typeof __isFastNetwork !== 'undefined' && __isFastNetwork) ? 'auto' : 'metadata'; } catch(e){ nextEl.preload = 'metadata'; } nextEl.autoplay = false;
                     if (next.poster) nextEl.poster = next.poster;
                     const srcEl = document.createElement('source'); srcEl.src = next.src; srcEl.type = 'video/mp4'; nextEl.appendChild(srcEl);
-                    nextEl.addEventListener('canplay', function onCanPlay(){ attemptPlay(nextEl).catch(()=>{ showPlayOverlay(); }); nextEl.removeEventListener('canplay', onCanPlay); });
+                    nextEl.addEventListener('canplay', function onCanPlay(){
+                        try { nextEl.addEventListener('error', function(ev){ console.debug('[hero] prevSlide video error', next.src, nextEl.error); }); } catch(e){}
+                        attemptPlay(nextEl).catch((err)=>{ console.debug('[hero] prevSlide attemptPlay failed', err); showPlayOverlay(); });
+                        nextEl.removeEventListener('canplay', onCanPlay);
+                    });
                 } else { nextEl = document.createElement('img'); nextEl.className = 'hero-bg-image is-next'; nextEl.alt = 'Hero background'; nextEl.src = next.src; }
                 heroBg.appendChild(nextEl);
 
@@ -1205,16 +1319,26 @@
             function attemptPlay(el){
                 return new Promise((resolve, reject) => {
                     if (!el || typeof el.play !== 'function') return reject(new Error('not-playable'));
-                    // Try to play; some browsers return a promise
                     try{
+                        console.debug('[hero] attempting play on', el);
                         const p = el.play();
                         if (p && typeof p.then === 'function') {
-                            p.then(()=>{ hidePlayOverlay(); resolve(); }).catch((err)=>{ reject(err); });
+                            p.then(()=>{ console.debug('[hero] play() resolved'); hidePlayOverlay(); resolve(); }).catch((err)=>{
+                                console.debug('[hero] play() rejected', err);
+                                // show overlay so user can manually start
+                                showPlayOverlay();
+                                reject(err);
+                            });
                         } else {
                             // play() didn't return a promise — assume it started
+                            console.debug('[hero] play() returned no promise');
                             hidePlayOverlay(); resolve();
                         }
-                    }catch(err){ reject(err); }
+                    }catch(err){
+                        console.debug('[hero] play() threw', err);
+                        showPlayOverlay();
+                        reject(err);
+                    }
                 });
             }
             heroPlayButton?.addEventListener('click', ()=>{
@@ -1468,6 +1592,46 @@
     <script src="script.js"></script>
     <script src="product-animations.js"></script>
     
-    
+    <!-- Performance helpers: lazy-load non-critical images and provide test hook -->
+    <script>
+        (function(){
+            try{
+                var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                var saveData = (conn && conn.saveData) || false;
+                var effective = (conn && conn.effectiveType) || '4g';
+                // If user opted into Save-Data or network is very slow, avoid eager loads
+                var avoidEager = saveData || effective === '2g' || effective === 'slow-2g';
+
+                // Lazy-load images outside hero and logos carousel
+                document.addEventListener('DOMContentLoaded', function(){
+                    var imgs = Array.prototype.slice.call(document.getElementsByTagName('img'));
+                    imgs.forEach(function(img){
+                        // skip hero images and logos (they are important)
+                        if (img.classList.contains('hero-bg-image')) return;
+                        if (img.closest && img.closest('.logos-track')) return;
+                        // if already has loading attribute, skip
+                        if (img.hasAttribute('loading')) return;
+                        img.setAttribute('loading', 'lazy');
+                    });
+                    // If network is good, ensure hero poster is loaded quickly
+                    if (!avoidEager) {
+                        var heroPoster = document.querySelector('.hero-bg-image[poster]');
+                        if (heroPoster && heroPoster.getAttribute('poster')) {
+                            var link = document.createElement('link');
+                            link.rel = 'preload'; link.as = 'image'; link.href = heroPoster.getAttribute('poster');
+                            document.head.appendChild(link);
+                        }
+                    }
+                });
+
+                // Expose a debug helper to force-add preload links (for testing via console)
+                window.__heroPreloadForce = function(){
+                    var l = document.createElement('link');
+                    l.rel = 'preload'; l.as = 'video'; l.href = 'public/oil2.mp4'; document.head.appendChild(l);
+                    console.debug('[hero] forced preload added');
+                };
+            }catch(e){ console.debug('[perf-helper] error', e); }
+        })();
+    </script>
 </body>
 </html>
