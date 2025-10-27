@@ -3069,7 +3069,9 @@ class CarouselController {
         this.totalSlides = this.slides.length;
         this.autoSlideInterval = null;
         this.isMobile = window.innerWidth <= 768;
-        this.autoSlideDelay = this.isMobile ? 2000 : 5000; // 2s for mobile, 5s for desktop
+    // Faster carousel: shorten auto-slide delay for snappier UX
+    // 1.5s for mobile, 3s for desktop
+    this.autoSlideDelay = this.isMobile ? 1500 : 3000; // ms
         
         this.init();
     }
@@ -3088,7 +3090,8 @@ class CarouselController {
             this.isMobile = window.innerWidth <= 768;
             
             if (wasMobile !== this.isMobile) {
-                this.autoSlideDelay = this.isMobile ? 2000 : 5000;
+                // keep same faster delays when switching modes
+                this.autoSlideDelay = this.isMobile ? 1500 : 3000;
                 this.currentSlide = 0; // Reset to first slide when switching modes
                 
                 // Reset all styles and classes when switching modes

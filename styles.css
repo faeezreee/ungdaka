@@ -7291,9 +7291,10 @@ a.duplicate-image-title:hover {
 .industries-carousel .industry-panel:focus-within .panel-overlay,
 .industries-carousel .industry-panel:active .panel-overlay {
     /* fade overlay on hover/focus/active to reveal image */
-    opacity: 0;
-    pointer-events: none;
-    background: linear-gradient(to bottom, rgba(26,54,93,0.0) 0%, rgba(26,54,93,0.0) 100%);
+    /* keep overlay visible at all times (user requested) */
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    background: linear-gradient(to bottom, rgba(26,54,93,0.35) 0%, rgba(26,54,93,0.75) 100%) !important;
 }
 
 /* Force mobile-friendly stacking/positioning for About images with high specificity
