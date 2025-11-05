@@ -3437,9 +3437,21 @@ class UngdakaApp {
                 window.particleSystem = this.controllers.particles;
             }
 
-            // Wait briefly for an injected header (if present) so NavigationController can bind to the real nav
+            // Wait briefly for an injected header (if present) so NavigationController can bind to the real nav.
+            // Use a race: either the navbar exists, or the injection signals completion via 'sharedHeaderInjected'.
             try {
-                await waitForElement('#navbar', 1000);
+                await Promise.race([
+                    waitForElement('#navbar', 1000),
+                    new Promise(resolve => {
+                        const onInjected = () => {
+                            try { document.removeEventListener('sharedHeaderInjected', onInjected); } catch (e) {}
+                            resolve(document.querySelector('#navbar'));
+                        };
+                        document.addEventListener('sharedHeaderInjected', onInjected, { once: true });
+                        // Fallback timeout in case the event never fires
+                        setTimeout(() => resolve(document.querySelector('#navbar')), 1000);
+                    })
+                ]);
             } catch (e) { /* ignore */ }
 
             this.controllers.navigation = new NavigationController();
@@ -4025,8 +4037,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Insert at top of body if no existing nav
                 document.body.insertBefore(newNav.cloneNode(true), document.body.firstChild);
             }
+
+            // Notify other scripts that the shared header injection attempt finished
+            try { document.dispatchEvent(new CustomEvent('sharedHeaderInjected')); } catch (e) { /* ignore */ }
         } catch (e) {
             // ignore fetch/insertion errors
+            try { document.dispatchEvent(new CustomEvent('sharedHeaderInjected')); } catch (e2) { /* ignore */ }
         }
     })();
 });
