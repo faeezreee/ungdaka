@@ -2783,9 +2783,24 @@ class LiquidAnimation {
     }
 }
 
-// Initialize liquid animation
+// Initialize liquid animation only if canvas exists
 document.addEventListener('DOMContentLoaded', () => {
-    new LiquidAnimation();
+    try {
+        const canvas = document.getElementById('liquidCanvas');
+        if (canvas) {
+            try {
+                new LiquidAnimation();
+            } catch (err) {
+                console.error('LiquidAnimation initialization failed:', err);
+            }
+        } else {
+            // Canvas not present on this page (not an error) — skip initialization
+            // Helpful debug when diagnosing why animation isn't present on some pages
+            // console.debug('[LiquidAnimation] skipping init; #liquidCanvas not found');
+        }
+    } catch (err) {
+        console.error('Error checking for liquid canvas:', err);
+    }
 });
 
 // ===== LOADING SCREEN CONTROLLER =====
@@ -3382,7 +3397,37 @@ class UngdakaApp {
         }
     }
 
-    initializeControllers() {
+    async initializeControllers() {
+        // Helper: wait for an element to exist in the DOM (useful when header is injected at runtime)
+        const waitForElement = (selector, timeout = 1200) => {
+            return new Promise((resolve) => {
+                const el = document.querySelector(selector);
+                if (el) return resolve(el);
+
+                let resolved = false;
+                const mo = new MutationObserver(() => {
+                    const found = document.querySelector(selector);
+                    if (found) {
+                        if (!resolved) {
+                            resolved = true;
+                            mo.disconnect();
+                            resolve(found);
+                        }
+                    }
+                });
+                mo.observe(document.documentElement || document.body, { childList: true, subtree: true });
+
+                // Fallback timeout: resolve with null after timeout
+                setTimeout(() => {
+                    if (!resolved) {
+                        resolved = true;
+                        try { mo.disconnect(); } catch (e) {}
+                        resolve(null);
+                    }
+                }, timeout);
+            });
+        };
+
         try {
             this.controllers.loading = new LoadingController();
 
@@ -3391,6 +3436,11 @@ class UngdakaApp {
                 this.controllers.particles = new ParticleSystem(particlesCanvas);
                 window.particleSystem = this.controllers.particles;
             }
+
+            // Wait briefly for an injected header (if present) so NavigationController can bind to the real nav
+            try {
+                await waitForElement('#navbar', 1000);
+            } catch (e) { /* ignore */ }
 
             this.controllers.navigation = new NavigationController();
             this.controllers.animation = new AnimationController();
