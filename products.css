@@ -447,7 +447,7 @@
     }
 }
 
-/* ===== Maintenance & Repair: 4 columns with chips ===== */
+/* ===== Maintenance Chemicals: 4 columns with chips ===== */
 .tab-panel#maintenance .products-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);

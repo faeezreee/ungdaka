@@ -21,9 +21,9 @@
     <!-- Enhanced Styles for Industry Pages -->
     <style>
         .industry-overview-enhanced {
-            /* Tiled SVG hero background with overlay; white text */
+            /* Tiled SVG hero background with overlay; white text (stamp theme) */
             background-image: url('public/top-bg.svg');
-            background-color: #4b5563; /* slate/gray tone for quarries */
+            background-color: #274e78; /* match stamping page hero blue */
             background-repeat: repeat;
             background-size: 200px 200px;
             position: relative;
@@ -55,7 +55,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #6b7280, #4b5563);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             color: white;
             padding: 8px 16px;
             border-radius: 25px;
@@ -91,7 +91,7 @@
         .stat-number {
             font-size: 2rem;
             font-weight: 700;
-            color: #fbbf24;
+            color: #ff6b6b; /* use stamping's contrast accent */
             margin-bottom: 5px;
         }
         
@@ -161,7 +161,7 @@
         .feature-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #6b7280, #4b5563);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -198,7 +198,7 @@
 
         .products-grid-enhanced {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 30px;
             max-width: 1200px;
             margin: 0 auto;
@@ -247,20 +247,28 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(135deg, #6b7280, #4b5563);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
         }
         
         .section-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #6b7280, #4b5563);
-            color: white;
+            background: linear-gradient(135deg, #ffd600, #ffe066);
+            color: #222; /* match stamping: darker text on badge */
             padding: 8px 16px;
             border-radius: 25px;
             font-size: 14px;
             font-weight: 600;
             margin-bottom: 20px;
+        }
+
+        /* Make hero badge text + icon black for stamping-style video heroes on this page */
+        .hero-modern .industry-badge {
+            color: #111 !important;
+        }
+        .hero-modern .industry-badge i {
+            color: #111 !important;
         }
         
         .section-header-enhanced h2 {
@@ -311,7 +319,7 @@
         }
         
         .btn-cta-primary {
-            background: linear-gradient(135deg, #6b7280, #4b5563);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             color: white;
             border: none;
             padding: 16px 32px;
@@ -328,13 +336,13 @@
         
         .btn-cta-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(107, 114, 128, 0.4);
+            box-shadow: 0 15px 30px rgba(255, 214, 0, 0.4);
         }
         
         .btn-cta-secondary {
             background: transparent;
-            color: #6b7280;
-            border: 2px solid #6b7280;
+            color: #ffd600;
+            border: 2px solid #ffd600;
             padding: 14px 32px;
             border-radius: 12px;
             font-size: 1.1rem;
@@ -348,7 +356,7 @@
         }
         
         .btn-cta-secondary:hover {
-            background: #6b7280;
+            background: #ffd600;
             color: white;
             transform: translateY(-3px);
         }
@@ -381,25 +389,26 @@
             }
         }
         
-            /* ===== Quarries Products Grid: enforce 4 columns + compact images + app chips ===== */
+            /* ===== Quarries Products Grid: compact layout to match other industry pages ===== */
+            /* Desktop: 3 columns; fall back to 2 and 1 at smaller widths */
             .products-section-enhanced .products-grid-enhanced {
-                grid-template-columns: repeat(4, 1fr) !important;
+                grid-template-columns: repeat(3, 1fr) !important;
                 gap: 24px !important;
             }
-            @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(3, 1fr) !important; } }
+            @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
             @media (max-width: 980px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
             @media (max-width: 640px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr !important; gap: 18px !important; } }
 
-            /* Compact image container to match other industry pages */
+            /* Compact image container to match stamping/machining/automotive pages */
             .products-section-enhanced .product-image,
-            .products-section-enhanced .product-image-container { height: 360px !important; padding: 22px !important; }
+            .products-section-enhanced .product-image-container { height: 300px !important; padding: 20px !important; }
             .products-section-enhanced .product-image img,
-            .products-section-enhanced .product-image-container img { width: 100%; height: 100%; object-fit: contain; display: block; }
-            @media (max-width: 1280px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 320px !important; padding: 20px !important; } }
-            @media (max-width: 980px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 300px !important; padding: 18px !important; } }
-            @media (max-width: 640px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 260px !important; padding: 16px !important; } }
+            .products-section-enhanced .product-image-container img { width: 100%; height: 100%; object-fit: contain; display: block; max-height: 260px !important; }
+            @media (max-width: 1280px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 280px !important; padding: 18px !important; } }
+            @media (max-width: 980px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 260px !important; padding: 16px !important; } }
+            @media (max-width: 640px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 220px !important; padding: 12px !important; } }
 
-            /* Hide verbose blocks; show concise Applications chips via JS */
+            /* Hide verbose blocks so cards become concise; show Applications chips via JS if available */
             .products-section-enhanced .product-card .product-features,
             .products-section-enhanced .product-card .product-features-enhanced { display: none !important; }
             .products-section-enhanced .product-card .product-info > p,
@@ -408,13 +417,13 @@
             .products-section-enhanced .product-card .product-info h3,
             .products-section-enhanced .product-card .product-content h3 { margin-bottom: 8px !important; }
             .products-section-enhanced .product-card .product-info,
-            .products-section-enhanced .product-card .product-content { padding-top: 18px !important; }
+            .products-section-enhanced .product-card .product-content { padding-top: 14px !important; }
 
             /* Applications label + chips styling (scoped to this page) */
-            .products-section-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: #4b5563; margin-top: 8px; }
+            .products-section-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: #000000; margin-top: 8px; }
             .products-section-enhanced .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-            .products-section-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: #f3f4f6; color: #374151; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
-            .products-section-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: #6b7280; }
+            .products-section-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: rgba(0,0,0,0.08); color: #000000; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+            .products-section-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: #000000; }
         .products-grid-enhanced {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -423,7 +432,13 @@
         /* Category selector styles for Quarries (grey theme) */
         .product-category-bar { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin: 16px 0 24px; }
         .product-category-bar .category-btn { background: transparent; border: 1px solid #e5e7eb; padding: 8px 14px; margin: 0 6px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #0f172a; }
-        .product-category-bar .category-btn.active { background: linear-gradient(135deg, #6b7280, #4b5563); color:#fff; border-color: transparent; }
+        .product-category-bar .category-btn.active {
+            background: #ffd600;
+            color: #222;
+            border-color: transparent;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            font-weight: 700;
+        }
         /* Responsive grid fallbacks */
         @media (max-width: 1200px) { .products-grid-enhanced, .products-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 640px) { .products-grid-enhanced, .products-grid { grid-template-columns: 1fr; } }
@@ -443,8 +458,8 @@
         
         .product-image-container, .product-image {
             position: relative;
-            height: 480px;
-            padding: 32px;
+            height: 360px;
+            padding: 22px;
             overflow: hidden;
             box-sizing: border-box;
         }
@@ -459,8 +474,8 @@
         /* Strong override for quarries product visuals (use only on this page) */
         .products-grid .product-card .product-image,
         .products-grid .product-card .product-image-container {
-            height: 480px !important;
-            padding: 32px !important;
+            height: 360px !important;
+            padding: 22px !important;
             box-sizing: border-box !important;
         }
 
@@ -472,10 +487,20 @@
             display: block !important;
             margin: 0 auto !important;
         }
+
+        /* Match stamping breakpoints: desktop 360, laptop 320, tablet 300, mobile 260 */
+        @media (max-width: 1280px){
+            .products-grid .product-card .product-image,
+            .products-grid .product-card .product-image-container { height: 320px !important; padding: 20px !important; }
+        }
+        @media (max-width: 980px){
+            .products-grid .product-card .product-image,
+            .products-grid .product-card .product-image-container { height: 300px !important; padding: 18px !important; }
+        }
         @media (max-width: 640px){
             .product-image-container, .product-image,
             .products-grid .product-card .product-image,
-            .products-grid .product-card .product-image-container { height: 360px !important; padding: 20px !important; }
+            .products-grid .product-card .product-image-container { height: 260px !important; padding: 16px !important; }
         }
         
         .product-badge {
@@ -484,7 +509,7 @@
             right: 15px;
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #6b7280, #4b5563);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -534,7 +559,7 @@
             align-items: center;
             gap: 5px;
             background: #f3f4f6;
-            color: #4b5563;
+            color: #ffd600;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -554,7 +579,7 @@
         .application-icon {
             width: 35px;
             height: 35px;
-            background: linear-gradient(135deg, #6b7280, #4b5563);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -577,7 +602,7 @@
         
         .btn-product-primary {
             flex: 1;
-            background: linear-gradient(135deg, #6b7280, #4b5563);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             color: white;
             border: none;
             padding: 12px 20px;
@@ -594,8 +619,8 @@
         .btn-product-secondary {
             flex: 1;
             background: transparent;
-            color: #6b7280;
-            border: 2px solid #6b7280;
+            color: #ffd600;
+            border: 2px solid #ffd600;
             padding: 10px 20px;
             border-radius: 8px;
             font-weight: 500;
@@ -604,7 +629,7 @@
         }
         
         .btn-product-secondary:hover {
-            background: #6b7280;
+            background: #ffd600;
             color: white;
         }
         
@@ -645,7 +670,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(135deg, #6b7280, #4b5563);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
         }
         
         .spec-item-enhanced:hover {
@@ -656,7 +681,7 @@
         .spec-icon {
             width: 80px;
             height: 80px;
-            background: linear-gradient(135deg, #6b7280, #4b5563);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -664,7 +689,7 @@
             margin: 0 auto 25px;
             color: white;
             font-size: 2rem;
-            box-shadow: 0 10px 20px rgba(107, 114, 128, 0.3);
+            box-shadow: 0 10px 20px rgba(255, 214, 0, 0.3);
         }
         
         .spec-item-enhanced h3 {
@@ -713,7 +738,7 @@
         }
         
         .btn-cta-primary {
-            background: linear-gradient(135deg, #6b7280, #4b5563);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             color: white;
             border: none;
             padding: 16px 32px;
@@ -735,8 +760,8 @@
         
         .btn-cta-secondary {
             background: transparent;
-            color: #6b7280;
-            border: 2px solid #6b7280;
+            color: #ffd600;
+            border: 2px solid #ffd600;
             padding: 14px 32px;
             border-radius: 12px;
             font-size: 1.1rem;
@@ -750,7 +775,7 @@
         }
         
         .btn-cta-secondary:hover {
-            background: #6b7280;
+            background: #ffd600;
             color: white;
             transform: translateY(-3px);
         }
@@ -793,7 +818,7 @@
                 
                 <!-- Products Dropdown -->
                 <div class="nav-dropdown">
-                    <a href="products.html" class="nav-link dropdown-toggle">
+                    <a href="products.html#aerosol" class="nav-link dropdown-toggle">
                         Our Products
                         <i class="fas fa-chevron-down dropdown-icon"></i>
                     </a>
@@ -822,7 +847,7 @@
                                 <a href="products/giga-os-oil-skimmer.html">GIGA OS Oil Skimmer</a>
                                 <a href="products/anti-rust-series.html">Anti-Rust Series</a>
                                 <a href="products/moly-lube-advanced-lubricant.html">Moly Lube</a>
-                                <a href="products.html" class="view-all">View All Products →</a>
+                                <a href="products.html#aerosol" class="view-all">View All Products →</a>
                             </div>
                         </div>
                     </div>
@@ -882,74 +907,22 @@
 
     <!-- Page Header removed to streamline layout -->
 
-    <!-- Industry Overview -->
-    <section class="industry-overview-enhanced">
+    <!-- Replaced Industry Overview with stamping-style video hero -->
+    <section class="hero-modern products-hero industry-hero-compact">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <!-- poster: use the existing quarries image if available -->
+            <video class="hero-bg-image" autoplay muted loop playsinline preload="metadata" poster="public/Industries%20Images/quarries%20industries.jpg">
+                <source src="public/quarries.mp4" type="video/mp4">
+            </video>
+        </div>
         <div class="container">
-            <div class="industry-hero">
-                <div class="industry-hero-content">
-                    <div class="industry-badge">
-                        <i class="fas fa-mountain"></i>
-                        <span>Quarries & Mining</span>
-                    </div>
-                    <h2>Rugged Solutions for Quarry & Mining Operations</h2>
-                    <p>Our specialized products are designed to withstand the harsh conditions of quarry and mining operations. From heavy machinery lubrication to dust suppression, we provide solutions that ensure maximum equipment performance and minimal downtime.</p>
-                    
-                    <div class="industry-stats">
-                        <div class="stat-item">
-                            <div class="stat-number">24/7</div>
-                            <div class="stat-label">Operation</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">Heavy</div>
-                            <div class="stat-label">Duty</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">0</div>
-                            <div class="stat-label">Downtime</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="industry-hero-image">
-                    <img src="public/Industries Images/quarries industries.jpg" alt="Quarry operations with heavy machinery">
-                    <div class="image-overlay">
-                        <div class="overlay-content">
-                            <i class="fas fa-cog"></i>
-                            <h4>Heavy Duty</h4>
-                            <p>Built for extreme conditions</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="industry-features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-thermometer-half"></i>
-                    </div>
-                    <h3>Extreme Weather Resistance</h3>
-                    <p>Designed to perform in the harshest environmental conditions</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-weight-hanging"></i>
-                    </div>
-                    <h3>Heavy Load Capacity</h3>
-                    <p>Built to handle the most demanding quarry and mining applications</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Dust & Contamination Protection</h3>
-                    <p>Advanced protection against abrasive particles and contaminants</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-clock"></i>
-                    </div>
-                    <h3>Extended Service Intervals</h3>
-                    <p>Longer maintenance cycles for reduced operational costs</p>
-                </div>
+            <div class="hero-content-modern">
+                <div class="industry-badge"><i class="fas fa-mountain"></i> Quarries & Mining</div>
+                <h1 class="hero-title-modern">Solutions for Quarry & Mining Operations
+                    <span class="hero-highlight">Heavy‑duty & Reliable</span>
+                </h1>
+                <p class="hero-subtitle-modern">Maintenance products, lubricants and cleaners built for heavy equipment and harsh environments.</p>
             </div>
         </div>
     </section>
@@ -1072,7 +1045,7 @@
                 
                 <div class="product-card" data-category="aerosol-products">
                     <div class="product-image">
-                        <img src="public/TYGRIS MOLY DRY FILM SPRAY.jpg" alt="TYGRIS MOLY DRY FILM SPRAY">
+                        <img src="public/tygris moly.png" alt="TYGRIS MOLY DRY FILM SPRAY">
                     </div>
                     <div class="product-info">
                         <h3>TYGRIS MOLY DRY FILM SPRAY</h3>
@@ -1152,7 +1125,7 @@
                 <p>Our technical team can help you select the right products for your specific quarry and mining requirements.</p>
                 <div class="cta-buttons">
                     <a href="contact.html" class="btn btn-primary">Contact Our Experts</a>
-                    <a href="products.html" class="btn btn-outline">View All Products</a>
+                    <a href="products.html#aerosol" class="btn btn-outline">View All Products</a>
                 </div>
             </div>
         </div>
@@ -1174,7 +1147,7 @@
                     <ul class="footer-list">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
-                        <li><a href="products.html">Our Products</a></li>
+                        <li><a href="products.html#aerosol">Our Products</a></li>
                         <li><a href="industries.html">Industries</a></li>
                         <li><a href="contact.html">Contact Us</a></li>
                     </ul>
@@ -1183,12 +1156,12 @@
                 <div class="footer-col">
                     <h4 class="footer-heading">Products</h4>
                     <ul class="footer-list">
-                        <li><a href="products.html">Aerosol Products</a></li>
-                        <li><a href="products.html">Industrial Lubricants</a></li>
-                        <li><a href="products.html">Industrial Grease</a></li>
-                        <li><a href="products.html">Maintenance & Repair</a></li>
-                        <li><a href="products.html">Metal Working</a></li>
-                        <li><a href="products.html">Food-Safe Products</a></li>
+                        <li><a href="products.html#aerosol">Aerosol Products</a></li>
+                        <li><a href="products.html#aerosol">Industrial Lubricants</a></li>
+                        <li><a href="products.html#aerosol">Industrial Grease</a></li>
+                        <li><a href="products.html#aerosol">Maintenance Chemicals</a></li>
+                        <li><a href="products.html#aerosol">Metal Working</a></li>
+                        <li><a href="products.html#aerosol">Food-Safe Products</a></li>
                     </ul>
                 </div>
 
@@ -1233,7 +1206,7 @@
                     categoryMap: [
                         ['aerosol-products', 'Aerosol Products'],
                         ['industrial-lubricants', 'Industrial Lubricants'],
-                        ['maintenance-repair', 'Maintenance & Repair']
+                        ['maintenance-repair', 'Maintenance Chemicals']
                     ],
                     // Disable promotion so grouped same-photo cards stay pinned to the top
                     moveLubeGuardHref: '',

@@ -16,17 +16,532 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="products.css">
-    <link rel="stylesheet" href="product-animations.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- JavaScript -->
-    <script src="product-animations.js" defer></script>
+    <!-- product-animations.css/js removed to prevent oil-mask animation from loading on listing pages -->
     <style>
-        /* Page override: normalize product image sizing to compact standard */
-        .products-grid .product-image { height: 480px !important; padding: 32px !important; box-sizing: border-box; overflow: hidden; display: flex; align-items: center; justify-content: center; background: white; }
-        .products-grid .product-image img { max-height: 100% !important; width: 100% !important; object-fit: contain !important; }
-        @media (max-width: 640px){ .products-grid .product-image { height: 360px !important; padding: 20px !important; } }
+    /* Page override: set product card image container sizing and normalize image sizing */
+    /* Override inline heights with !important so cards follow this page layout */
+    .products-grid .product-image { height: 1000px !important; padding: 20px !important; box-sizing: border-box; overflow: hidden; display: flex; align-items: center; justify-content: center; background: white; }
+    /* Metalworking cards: remove padding and fill image */
+    .products-grid .product-card.metalworking .product-image {
+    padding: 0 !important;
+    height: 420px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: white !important;
+    }
+    .products-grid .product-card.metalworking .product-image img {
+    width: 100% !important;
+    height: 420px !important;
+    object-fit: cover !important;
+    max-height: 420px !important;
+    max-width: 100% !important;
+    display: block !important;
+    }
+    .products-grid .product-image img { max-height: 960px !important; width: auto !important; object-fit: contain !important; }
+    /* Metalworking cards: fill image to max capacity */
+    .products-grid .product-card.metalworking .product-image img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        max-height: none !important;
+        max-width: none !important;
+    }
+        @media (max-width: 640px){ .products-grid .product-image { height: 420px !important; padding: 20px !important; } }
+
+        /* --- Product Category Pills (match industry page) --- */
+        .product-category-bar {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 16px 0 24px;
+        }
+        .product-category-bar .category-btn {
+            background: transparent;
+            border: 1px solid #e5e7eb;
+            padding: 8px 14px;
+            margin: 0 6px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #0f172a;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+        .product-category-bar .category-btn.active {
+            background: #ffd600;
+            color: #1a2952;
+            font-weight: 700;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(255,214,0,0.18);
+        }
+        .product-category-bar .category-btn:hover:not(.active) {
+            background: #f1f5f9;
+            color: #1a2952;
+        }
+        @media (max-width: 640px) {
+            .product-category-bar {
+                gap: 6px;
+                margin: 12px 0 18px;
+            }
+            .product-category-bar .category-btn {
+                padding: 8px 10px;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Product card: image left, content right (list-style on right) */
+        .product-card {
+            display: flex;
+            align-items: flex-start; /* align content to top so info (title/chips) stays next to image */
+            gap: 10px;
+            /* tighter padding and smaller gaps for compact listing */
+            padding: 8px 12px;
+            margin: 6px 0;
+            /* unified card background for both image and info */
+            background: #ffffff;
+            border: 1px solid #eef2f6;
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 3px 8px rgba(8,15,28,0.04);
+        }
+          /* make image and info share appropriately balanced width (image larger for a bolder visual)
+              and override inline sizing so cards look consistent */
+          .product-card .product-image { flex: 0 0 42% !important; height: auto !important; padding: 12px 16px !important; display: flex; align-items: center; justify-content: center; background: transparent; }
+    .product-card .product-image img { max-width: 360px !important; width: auto !important; max-height: 360px !important; object-fit: contain !important; margin: 0 auto; display: block; }
+        .product-card .product-info { flex: 1 1 64%; padding: 6px 12px; background: transparent; border-radius: 6px; }
+        .product-card .product-info h3 { margin-top: 0; }
+        .product-card .product-info h3 { margin: 0 0 6px; font-size: 1.05rem; display: flex; align-items: center; }
+    /* remove leading chevron from product titles */
+    .product-card .product-info h3::before { content: none; margin-right: 0; }
+        .product-card .product-info p { margin: 0; color: #475569; }
+        @media (max-width: 900px){
+            .product-card{ flex-direction: column; align-items: stretch; padding: 8px; margin: 6px 0; }
+            .product-card .product-image{ width: 100%; flex: none; padding: 6px 0 !important; }
+            /* keep responsive images smaller on narrow screens but larger than before */
+            .product-card .product-image img{ max-height: 420px !important; max-width: 520px !important; margin: 0 auto; }
+            .product-card .product-info { background: transparent; padding: 8px; }
+        }
+        /* Bucket artwork sizing (reduced) */
+        .product-card .product-image img[src*="bucket.png"] {
+            max-height: 360px !important;
+            max-width: 360px !important;
+            width: auto !important;
+        }
+        @media (max-width: 900px){
+            .product-card .product-image img[src*="bucket.png"] { max-height: 260px !important; max-width: 260px !important; }
+        }
+        /* Drum & pail artwork sizing (reduced) */
+        .product-card .product-image img[src*="drum and pail"] {
+            max-height: 360px !important;
+            max-width: 360px !important;
+            width: auto !important;
+        }
+        @media (max-width: 900px){
+            .product-card .product-image img[src*="drum and pail"] { max-height: 260px !important; max-width: 260px !important; }
+        }
+        /* Superscrub artwork sizing (reduced) */
+        .product-card .product-image img[src*="superscrub.png"] {
+            max-height: 360px !important;
+            max-width: 360px !important;
+            width: auto !important;
+        }
+        @media (max-width: 900px){
+            .product-card .product-image img[src*="superscrub.png"] { max-height: 260px !important; max-width: 260px !important; }
+        }
+        /* Tame generic container artwork (only adjust Container.png) - reduce size to fit layout */
+        .product-card .product-image img[src*="Container.png"] {
+            max-height: 420px !important;
+            max-width: 420px !important;
+            width: auto !important;
+        }
+        @media (max-width: 900px){
+            .product-card .product-image img[src*="Container.png"] { max-height: 320px !important; max-width: 320px !important; }
+        }
+        /* Force products grid to a single column (one product per row) */
+        .products-grid {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 6px !important;
+        }
+        /* (Removed metalworking-specific single-column override so tab-panel rules apply uniformly) */
+        /* --- Tab panels: two-column grid with stacked card layout (image on top, info below) --- */
+        .tab-panel .products-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+        }
+        @media (max-width: 900px) {
+            .tab-panel .products-grid { grid-template-columns: 1fr !important; }
+        }
+        .tab-panel .product-card { display: flex !important; flex-direction: column !important; align-items: stretch !important; }
+        .tab-panel .product-card .product-image { flex: none !important; width: 100% !important; height: 320px !important; padding: 20px !important; box-sizing: border-box !important; display: flex !important; align-items: center; justify-content: center; background: transparent !important; }
+        .tab-panel .product-card .product-image img { max-width: 100% !important; max-height: 100% !important; width: auto !important; object-fit: contain !important; margin: 0 auto; display: block; }
+        .tab-panel .product-card .product-info { width: 100% !important; padding: 12px 14px !important; box-sizing: border-box !important; }
+        /* hide long descriptions for tab listings; keep title and application chips visible */
+        .tab-panel .product-card .product-info p { display: none !important; }
+    /* Ensure Applications title and chips remain visible inside tab listings */
+    .tab-panel .product-card .product-apps-title { display: block !important; }
+    .tab-panel .product-card .product-apps { display: flex !important; flex-wrap: wrap !important; gap: 8px !important; margin-top: 8px !important; }
+        
+    /* product application bullet list styling (use chip/pill UI used elsewhere) */
+    .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; padding: 0; list-style: none; }
+    .product-apps .app-chip { display: inline-flex; align-items: center; padding: 6px 12px; border-radius: 16px; background: #eef2f7; color: var(--primary-color); font-size: 0.9rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+    .product-apps .app-chip::before { content: '\2022'; margin-right: 8px; color: var(--secondary-color); font-size: 0.9rem; }
+    /* Force product info content to stack from the top so title and chips remain together */
+    .product-card .product-info { display: flex !important; flex-direction: column !important; justify-content: flex-start !important; align-items: flex-start !important; }
+    .product-apps-title { font-weight: 700; margin-top: 6px; margin-bottom: 6px; color: #000000; }
+    /* Products hero: cross-fade carousel and prev/next controls (used for lubricants) */
+    .hero-carousel-container { position: absolute; inset: 0; overflow: hidden; }
+    .products-hero-carousel { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 600ms cubic-bezier(.2,.9,.2,1); }
+    .products-hero-carousel.is-visible { opacity: 1; z-index: 1; }
+    .hero-carousel-controls { position: absolute; inset: 0; pointer-events: none; z-index: 12; }
+    .hero-carousel-controls .control-inner { position: absolute; top: 50%; transform: translateY(-50%); width: 100%; display:flex; align-items:center; justify-content:space-between; padding: 0 12px; box-sizing: border-box; }
+    .hero-carousel-controls .btn { pointer-events: auto; background: rgba(0,0,0,0.48); color:#fff; border-radius: 999px; padding:10px 12px; cursor:pointer; border:0; box-shadow: 0 2px 8px rgba(0,0,0,0.36); font-size:16px; }
+    .hero-carousel-controls .btn:focus { outline: 2px solid #fff; outline-offset: 2px; }
+
+    /* Strong enforcement: force two-column product grids on desktop across all tabs
+       This overrides other styles that may set 3-4 columns in external CSS. */
+    @media (min-width: 901px) {
+        .tab-panel .products-grid,
+        .products-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+        }
+    }
+    @media (max-width: 900px) {
+        .tab-panel .products-grid,
+        .products-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+    /* Stronger override for Metal Working: match the ID-specific selector used in products.css
+       and set 2 columns. This is placed after products.css so it wins on source-order ties. */
+    .tab-panel#metalworking .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+    @media (max-width: 900px) {
+        .tab-panel#metalworking .products-grid { grid-template-columns: 1fr !important; }
+    }
+    /* Metal Working: enlarge product image container and force images to fill using cover */
+    .tab-panel#metalworking .product-card .product-image {
+        height: 520px !important;
+        padding: 12px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+    }
+    .tab-panel#metalworking .product-card .product-image img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        max-width: none !important;
+        max-height: none !important;
+        display: block !important;
+    }
+    /* Smooth transitions for hero media and product cards */
+    .products-hero .hero-background .hero-bg-image,
+    .products-hero .hero-background video.hero-bg-image,
+    .products-hero .hero-background img.hero-bg-image {
+        transition: opacity 900ms cubic-bezier(.2,.9,.2,1), transform 700ms cubic-bezier(.2,.9,.2,1);
+        will-change: opacity, transform;
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    .products-hero .hero-background .hero-bg-image.is-current,
+    .products-hero .hero-background .hero-bg-image.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Product card entrance animation when panels switch */
+    .tab-panel .product-card {
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 360ms cubic-bezier(.2,.9,.2,1), transform 360ms cubic-bezier(.2,.9,.2,1);
+    }
+    .tab-panel .product-card.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* --- Compact layout for Aerosol tab ---
+       Reduce large white spaces produced by inline heights and padding
+       Make product cards denser on wide screens while remaining responsive
+    */
+    .tab-panel#aerosol .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 18px !important;
+    }
+    @media (max-width: 1200px) {
+        .tab-panel#aerosol .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 900px) {
+        .tab-panel#aerosol .products-grid { grid-template-columns: 1fr !important; }
+    }
+
+    /* Override inline image container heights and padding for aerosol cards */
+    .tab-panel#aerosol .product-card .product-image {
+        height: 280px !important;
+        padding: 12px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+    }
+    .tab-panel#aerosol .product-card .product-image img {
+        max-height: 240px !important;
+        max-width: 100% !important;
+        width: auto !important;
+        object-fit: contain !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+
+    /* Slightly reduce spacing inside aerosol cards */
+    .tab-panel#aerosol .product-card { padding: 8px 10px !important; gap: 10px !important; }
+    .tab-panel#aerosol .product-card .product-info { padding: 8px 10px !important; }
+    .tab-panel#aerosol .product-card .product-info h3 { font-size: 1rem !important; margin-bottom: 6px !important; }
+    
+    /* --- Compact layout for Lubricants tab ---
+       Denser grid and smaller image containers to reduce vertical white space
+    */
+    .tab-panel#lubricants .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 18px !important;
+    }
+    @media (max-width: 1200px) {
+        .tab-panel#lubricants .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 900px) {
+        .tab-panel#lubricants .products-grid { grid-template-columns: 1fr !important; }
+    }
+
+    /* Override inline image container heights and padding for lubricants cards */
+    .tab-panel#lubricants .product-card .product-image {
+        height: 320px !important;
+        padding: 12px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+    }
+    .tab-panel#lubricants .product-card .product-image img {
+        max-height: 280px !important;
+        max-width: 100% !important;
+        width: auto !important;
+        object-fit: contain !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+
+    /* Slightly reduce spacing inside lubricants cards */
+    .tab-panel#lubricants .product-card { padding: 8px 10px !important; gap: 10px !important; }
+    .tab-panel#lubricants .product-card .product-info { padding: 8px 10px !important; }
+    .tab-panel#lubricants .product-card .product-info h3 { font-size: 1rem !important; margin-bottom: 6px !important; }
+
+    /* --- Compact layout for Grease tab ---
+       Denser grid and reduced image container height to limit white space
+    */
+    .tab-panel#grease .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 18px !important;
+    }
+    @media (max-width: 1200px) {
+        .tab-panel#grease .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 900px) {
+        .tab-panel#grease .products-grid { grid-template-columns: 1fr !important; }
+    }
+
+    /* Override inline image container heights and padding for grease cards */
+    .tab-panel#grease .product-card .product-image {
+        height: 300px !important;
+        padding: 12px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+    }
+    .tab-panel#grease .product-card .product-image img {
+        max-height: 260px !important;
+        max-width: 100% !important;
+        width: auto !important;
+        object-fit: contain !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+
+    /* Slightly reduce spacing inside grease cards */
+    .tab-panel#grease .product-card { padding: 8px 10px !important; gap: 10px !important; }
+    .tab-panel#grease .product-card .product-info { padding: 8px 10px !important; }
+    .tab-panel#grease .product-card .product-info h3 { font-size: 1rem !important; margin-bottom: 6px !important; }
+    /* --- Compact layout for Maintenance Chemicals tab ---
+       Denser grid and reduced image container height to reduce vertical white space
+    */
+    .tab-panel#maintenance .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 18px !important;
+    }
+    @media (max-width: 1200px) {
+        .tab-panel#maintenance .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 900px) {
+        .tab-panel#maintenance .products-grid { grid-template-columns: 1fr !important; }
+    }
+
+    /* Override inline image container heights and padding for maintenance cards */
+    .tab-panel#maintenance .product-card .product-image {
+        height: 300px !important;
+        padding: 12px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+    }
+    .tab-panel#maintenance .product-card .product-image img {
+        max-height: 260px !important;
+        max-width: 100% !important;
+        width: auto !important;
+        object-fit: contain !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+
+    /* Slightly reduce spacing inside maintenance cards */
+    .tab-panel#maintenance .product-card { padding: 8px 10px !important; gap: 10px !important; }
+    .tab-panel#maintenance .product-card .product-info { padding: 8px 10px !important; }
+    .tab-panel#maintenance .product-card .product-info h3 { font-size: 1rem !important; margin-bottom: 6px !important; }
+
+    /* --- Compact layout for Metal Working tab ---
+       Denser grid and slightly taller image container for detailed equipment shots
+    */
+    .tab-panel#metalworking .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 18px !important;
+    }
+    @media (max-width: 1200px) {
+        .tab-panel#metalworking .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 900px) {
+        .tab-panel#metalworking .products-grid { grid-template-columns: 1fr !important; }
+    }
+
+    /* Override inline image container heights and padding for metalworking cards */
+    .tab-panel#metalworking .product-card .product-image {
+        height: 340px !important;
+        padding: 12px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+    }
+    .tab-panel#metalworking .product-card .product-image img {
+        max-height: 320px !important;
+        max-width: 100% !important;
+        width: auto !important;
+        object-fit: contain !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+
+    /* Slightly reduce spacing inside metalworking cards */
+    .tab-panel#metalworking .product-card { padding: 8px 10px !important; gap: 10px !important; }
+    .tab-panel#metalworking .product-card .product-info { padding: 8px 10px !important; }
+    .tab-panel#metalworking .product-card .product-info h3 { font-size: 1rem !important; margin-bottom: 6px !important; }
+
+    /* --- Compact layout for Accessories tab ---
+       Denser grid with slightly tighter image container for tool/product shots
+    */
+    .tab-panel#accessories .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 18px !important;
+    }
+    @media (max-width: 1200px) {
+        .tab-panel#accessories .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 900px) {
+        .tab-panel#accessories .products-grid { grid-template-columns: 1fr !important; }
+    }
+
+    /* Override inline image container heights and padding for accessories cards */
+    .tab-panel#accessories .product-card .product-image {
+        height: 300px !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+    }
+    .tab-panel#accessories .product-card .product-image img {
+        max-height: 280px !important;
+        max-width: 100% !important;
+        width: auto !important;
+        object-fit: contain !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+
+    /* Slightly reduce spacing inside accessories cards */
+    .tab-panel#accessories .product-card { padding: 8px 10px !important; gap: 10px !important; }
+    .tab-panel#accessories .product-card .product-info { padding: 8px 10px !important; }
+    .tab-panel#accessories .product-card .product-info h3 { font-size: 1rem !important; margin-bottom: 6px !important; }
+
+    /* --- Compact layout for Food-Safe (foodgrade) tab ---
+       Denser grid and modest image container to fit packaging/product shots
+    */
+    .tab-panel#foodgrade .products-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 18px !important;
+    }
+    @media (max-width: 1200px) {
+        .tab-panel#foodgrade .products-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    }
+    @media (max-width: 900px) {
+        .tab-panel#foodgrade .products-grid { grid-template-columns: 1fr !important; }
+    }
+
+    /* Override inline image container heights and padding for foodgrade cards */
+    .tab-panel#foodgrade .product-card .product-image {
+        height: 300px !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: transparent !important;
+    }
+    .tab-panel#foodgrade .product-card .product-image img {
+        max-height: 280px !important;
+        max-width: 100% !important;
+        width: auto !important;
+        object-fit: contain !important;
+        margin: 0 auto !important;
+        display: block !important;
+    }
+
+    /* Slightly reduce spacing inside foodgrade cards */
+    .tab-panel#foodgrade .product-card { padding: 8px 10px !important; gap: 10px !important; }
+    .tab-panel#foodgrade .product-card .product-info { padding: 8px 10px !important; }
+    .tab-panel#foodgrade .product-card .product-info h3 { font-size: 1rem !important; margin-bottom: 6px !important; }
     </style>
     
     <!-- Open Graph Meta Tags -->
@@ -37,6 +552,23 @@
 </head>
 <body>
     <!-- Navigation -->
+    <section class="hero-modern products-hero">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <!-- Video element removed as requested -->
+        </div>
+        <div class="container">
+            <div class="hero-content-modern">
+                    <h1 class="hero-title-modern">
+                        Aerosol Sprays
+                        <span class="hero-highlight">Clean, Release, Protect</span>
+                    </h1>
+                    <p class="hero-subtitle-modern">
+                        High-performance aerosol sprays for mould release, degreasing, lubrication and protection — engineered for manufacturing and maintenance.
+                    </p>
+                </div>
+        </div>
+    </section>
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-logo">
@@ -48,7 +580,7 @@
                 
                 <!-- Products Dropdown -->
                 <div class="nav-dropdown">
-                    <a href="products.html" class="nav-link dropdown-toggle active">
+                    <a href="products.html#aerosol" class="nav-link dropdown-toggle active">
                         Our Products
                         <i class="fas fa-chevron-down dropdown-icon"></i>
                     </a>
@@ -98,7 +630,7 @@
                             <div class="dropdown-column">
                                 <div class="cat-group">
                                     <div class="cat-header">
-                                        <a class="cat-link" href="products.html#maintenance">Maintenance & Repair</a>
+                                        <a class="cat-link" href="products.html#maintenance">Maintenance Chemicals</a>
                                         <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-maintenance"><i class="fas fa-chevron-right"></i></button>
                                     </div>
                                     <div class="sub-list" id="cat-maintenance">
@@ -226,101 +758,372 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <div class="container">
-            <div class="page-header-content">
-                <h1>Our Products</h1>
-                <p>High-Quality Industrial Solutions for Every Need</p>
-                <nav class="breadcrumb">
-                    <a href="index.html">Home</a>
-                    <span>/</span>
-                    <span>Our Products</span>
-                </nav>
-            </div>
-        </div>
-    </section>
+    <!-- Page header removed as requested -->
 
     <!-- Products Section -->
     <section class="products">
-        <div class="container">
-            <div class="products-tabs">
-                <!-- Category Overview Cards -->
-                <div class="category-overview">
-                    <div class="category-grid">
-                        <div class="category-card" data-category="aerosol">
-                            <div class="category-image">
-                                <img src="public/aerosol products.png" alt="Aerosol Products">
-                            </div>
-                            <div class="category-info">
-                                <h3>Aerosol Products</h3>
-                            </div>
-                        </div>
+        <!-- Pill-sized Category Filters -->
+        <div class="product-category-bar">
+            <!-- 'All' pill removed -->
+            <button class="category-btn" data-filter="aerosol">Aerosol Products</button>
+            <button class="category-btn" data-filter="lubricants">Industrial Lubricants</button>
+            <button class="category-btn" data-filter="grease">Industrial Grease</button>
+            <button class="category-btn" data-filter="maintenance">Maintenance Chemicals</button>
+            <button class="category-btn" data-filter="metalworking">Metal Working</button>
+            <button class="category-btn" data-filter="accessories">Accessories</button>
+            <button class="category-btn" data-filter="foodgrade">Food-Safe Products</button>
+        </div>
+        <script>
+        // Products page: hero copy and pill filter logic
+        var heroSlides = {
+            aerosol: {
+                // single image source (use `src` so the code falls back to an <img> element)
+                src: 'public/aerosol spray on belt.jpg',
+                title: 'Aerosol Sprays',
+                highlight: 'Clean, Release, Protect',
+                subtitle: 'High-performance mould release, degreasers, and specialty sprays for manufacturing.'
+            },
+            lubricants: {
+                slides: [
+                    'public/industrial lubricant gear oil.mp4',
+                    'public/industrial lubricant 3.mp4'
+                ],
+                title: 'Industrial Lubricants',
+                highlight: 'Reduce Friction, Boost Uptime',
+                subtitle: 'Premium oils for engines, gears, hydraulics, and heavy-duty machinery.'
+            },
+            grease: {
+                slides: [
+                    'public/grease to slide.mp4',
+                    'public/industrial grease 2.mp4',
+                    'public/industrial grease 3.mp4'
+                ],
+                title: 'Industrial Grease',
+                highlight: 'Extreme Pressure & Temperature',
+                subtitle: 'Heavy-duty and specialty greases delivering long-lasting protection.'
+            },
+            maintenance: {
+                slides: [
+                    'public/Maintenance Chemicals.mp4',
+                    'public/maintenance cleaning 2.mp4',
+                    'public/maintenance cleaning 3.mp4'
+                ],
+                title: 'Maintenance Chemicals',
+                highlight: 'Clean, Protect, Restore',
+                subtitle: 'Degreasers, rust removers, and cleaning solutions engineered for industrial use.'
+            },
+            foodgrade: {
+                slides: [
+                    
+                    'public/food safe.mp4',
+                    'public/medical syringes.mp4',
+                    'public/water bottles on conveyor belt.mp4',
+                ],
+                title: 'Food-Safe Solutions',
+                highlight: 'NSF & HACCP Compliant',
+                subtitle: 'Safe lubricants and sprays designed for food processing environments.'
+            },
+            metalworking: {
+                slides: [
+                    'public/progressive stamping die.mp4',
+                    'public/edm closeup.mp4',
+                    'public/metal working 2.mp4',
+                    'public/metal working 3.mp4'
+                ],
+                title: 'Engineering Fluids',
+                highlight: 'Precision & Performance',
+                subtitle: 'Cutting fluids, coolants and specialty oils for advanced manufacturing.'
+            },
+            accessories: {
+                slides: [
+                    'public/handheld refractometer.mp4',
+                    'public/accessories 2.mp4',
+                    'public/accessories 3 .mp4'
+                ],
+                title: 'Accessories & Tools',
+                highlight: 'Support & Optimize',
+                subtitle: 'Tools and accessories to support maintenance, measurement and process control.'
+            }
+        };
 
-                        <div class="category-card" data-category="lubricants">
-                            <div class="category-image">
-                                <img src="public/drum and pail.png" alt="Industrial Lubricants">
-                            </div>
-                            <div class="category-info">
-                                <h3>Industrial Lubricants</h3>
-                            </div>
-                        </div>
+        // Attempt to play a media element and resolve/reject based on the browser's autoplay policy
+        function attemptPlay(el){
+            return new Promise(function(resolve, reject){
+                if(!el || typeof el.play !== 'function') return reject(new Error('not-playable'));
+                try{
+                    var p = el.play();
+                    if(p && typeof p.then === 'function'){
+                        p.then(function(){ resolve(); }).catch(function(err){ reject(err); });
+                    } else {
+                        // play() returned undefined — assume started
+                        resolve();
+                    }
+                }catch(err){ reject(err); }
+            });
+        }
 
-                        <div class="category-card" data-category="grease">
-                            <div class="category-image">
-                                <img src="public/metal-bearings with grease.png" alt="Industrial Grease">
-                            </div>
-                            <div class="category-info">
-                                <h3>Industrial Grease</h3>
-                            </div>
-                        </div>
+        function setHeroSlide(filter){
+            try{
+                var key = (filter||'aerosol').toLowerCase();
+                var slide = heroSlides[key] || heroSlides['aerosol'];
+                var heroBg = document.querySelector('.products-hero .hero-background');
+                var currentImg = heroBg ? heroBg.querySelector('.hero-bg-image') : null;
+                var titleEl = document.querySelector('.products-hero .hero-title-modern');
+                var subtitleEl = document.querySelector('.products-hero .hero-subtitle-modern');
+                if (slide && heroBg) {
+                    // Clear lubricants carousel timer when switching away
+                    try {
+                        if (window.__productsLubricantsCarouselTimer && key !== 'lubricants') {
+                            clearInterval(window.__productsLubricantsCarouselTimer);
+                            window.__productsLubricantsCarouselTimer = null;
+                        }
+                    } catch (e) {}
 
-                        <div class="category-card" data-category="maintenance">
-                            <div class="category-image">
-                                <img src="public/Container.png" alt="Maintenance & Repair">
-                            </div>
-                            <div class="category-info">
-                                <h3>Maintenance & Repair</h3>
-                            </div>
-                        </div>
+                    // If this slide has a slides array, treat it as a small carousel (double-video cross-fade with prev/next)
+                    if (slide.slides && Array.isArray(slide.slides) && slide.slides.length) {
+                        var slidesArr = slide.slides;
+                        var len = slidesArr.length;
 
-                        <div class="category-card" data-category="metalworking">
-                            <div class="category-image">
-                                <img src="public/Neat Cutting Oils.png" alt="Metal Working">
-                            </div>
-                            <div class="category-info">
-                                <h3>Metal Working</h3>
-                            </div>
-                        </div>
+                        // ensure container for carousel videos
+                        var carouselContainer = heroBg.querySelector('.hero-carousel-container');
+                        if (!carouselContainer) {
+                            carouselContainer = document.createElement('div');
+                            carouselContainer.className = 'hero-carousel-container';
+                            heroBg.appendChild(carouselContainer);
+                        }
 
-                        <div class="category-card" data-category="accessories">
-                            <div class="category-image">
-                                <img src="public/Handheld Refractometer (USA & Singapore).png" alt="Accessories">
-                            </div>
-                            <div class="category-info">
-                                <h3>Accessories</h3>
-                            </div>
-                        </div>
+                        // remove any non-carousel hero-bg-image if present
+                        if (currentImg && currentImg.parentNode) {
+                            try { currentImg.parentNode.removeChild(currentImg); } catch (e) {}
+                        }
 
-                        <div class="category-card" data-category="foodgrade">
-                            <div class="category-image">
-                                <img src="public/drum and pail.png" alt="Food-Safe Products">
-                            </div>
-                            <div class="category-info">
-                                <h3>Food-Safe Products</h3>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Back to Categories Button -->
-                <div class="back-to-categories hidden">
-                    <button class="back-btn">
-                        <i class="fas fa-arrow-left"></i> Back to All Categories
-                    </button>
-                </div>
-                
-                <div class="tab-content">
+                        // create two video elements for cross-fade if not present
+                        var vidA = carouselContainer.querySelector('video[data-role="a"]');
+                        var vidB = carouselContainer.querySelector('video[data-role="b"]');
+                        function makeVideo(role){
+                            var v = document.createElement('video');
+                            v.setAttribute('playsinline',''); v.setAttribute('webkit-playsinline','');
+                            v.muted = true; v.preload = 'metadata'; v.playsInline = true; v.className = 'products-hero-carousel';
+                            v.setAttribute('data-role', role);
+                            var s = document.createElement('source'); s.type = 'video/mp4'; v.appendChild(s);
+                            return v;
+                        }
+                        if (!vidA) { vidA = makeVideo('a'); carouselContainer.appendChild(vidA); }
+                        if (!vidB) { vidB = makeVideo('b'); carouselContainer.appendChild(vidB); }
+
+                        var vids = [vidA, vidB];
+                        var activeIndex = 0; // which slide index is currently visible
+                        var visibleVidIdx = 0; // 0 -> vidA visible, 1 -> vidB visible
+
+                        function setSource(videoEl, src){
+                            var s = videoEl.querySelector('source');
+                            if(!s) { s = document.createElement('source'); s.type = 'video/mp4'; videoEl.appendChild(s); }
+                            s.src = src;
+                            try { videoEl.load(); } catch(e){}
+                        }
+
+                        // initialize both videos to avoid a blank at start: load current and next
+                        activeIndex = 0;
+                        setSource(vids[0], slidesArr[activeIndex]);
+                        // ensure visible class on first video after it canplay
+                        vids[0].addEventListener('canplay', function onceA(){ vids[0].classList.add('is-visible'); vids[0].removeEventListener('canplay', onceA); try{ vids[0].play().catch(function(){}); }catch(e){} });
+                        // preload next into inactive
+                        var nextIdx = (activeIndex + 1) % len;
+                        setSource(vids[1], slidesArr[nextIdx]);
+
+                        // Transition helper: switch to index 'toIndex'
+                        function transitionTo(toIndex){
+                            if(toIndex === activeIndex) return;
+                            var inactiveVidIdx = (visibleVidIdx === 0) ? 1 : 0;
+                            var inactiveVid = vids[inactiveVidIdx];
+                            var activeVid = vids[visibleVidIdx];
+                            // load requested src into inactive
+                            setSource(inactiveVid, slidesArr[toIndex]);
+                            // when ready, fade inactive in then pause previous
+                            var onCan = function(){
+                                // start play attempt (muted) then cross-fade
+                                try{ inactiveVid.play().catch(function(){}); }catch(e){}
+                                inactiveVid.classList.add('is-visible');
+                                // after transition remove visible from previous and pause it
+                                setTimeout(function(){
+                                    try{ activeVid.classList.remove('is-visible'); activeVid.pause(); }catch(e){}
+                                }, 650);
+                                inactiveVid.removeEventListener('canplay', onCan);
+                                visibleVidIdx = inactiveVidIdx;
+                                activeIndex = toIndex;
+                            };
+                            inactiveVid.addEventListener('canplay', onCan);
+                        }
+
+                        // Controls: prev / next buttons
+                        var controlsWrap = heroBg.querySelector('.hero-carousel-controls');
+                        if (!controlsWrap) {
+                            controlsWrap = document.createElement('div');
+                            controlsWrap.className = 'hero-carousel-controls';
+                            var inner = document.createElement('div'); inner.className = 'control-inner';
+                            var btnPrev = document.createElement('button'); btnPrev.className = 'btn prev'; btnPrev.setAttribute('aria-label','Previous slide'); btnPrev.textContent = '\u2039';
+                            var btnNext = document.createElement('button'); btnNext.className = 'btn next'; btnNext.setAttribute('aria-label','Next slide'); btnNext.textContent = '\u203A';
+                            btnPrev.addEventListener('click', function(e){ e.preventDefault(); var to = (activeIndex - 1 + len) % len; transitionTo(to); resetTimer(); });
+                            btnNext.addEventListener('click', function(e){ e.preventDefault(); var to = (activeIndex + 1) % len; transitionTo(to); resetTimer(); });
+                            // keyboard support
+                            [btnPrev, btnNext].forEach(function(b){ b.tabIndex = 0; b.addEventListener('keydown', function(ev){ if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); b.click(); } }); });
+                            inner.appendChild(btnPrev); inner.appendChild(btnNext);
+                            controlsWrap.appendChild(inner);
+                            heroBg.appendChild(controlsWrap);
+                        }
+
+                        // Update copy
+                        if (titleEl) titleEl.innerHTML = slide.title + '<span class="hero-highlight">' + slide.highlight + '</span>';
+                        if (subtitleEl) subtitleEl.textContent = slide.subtitle;
+
+                        // Timer logic for automatic cycling
+                        try { if (window.__productsLubricantsCarouselTimer) clearInterval(window.__productsLubricantsCarouselTimer); } catch (e) {}
+                        function nextSlide(){ var to = (activeIndex + 1) % len; transitionTo(to); }
+                        function resetTimer(){ try{ if(window.__productsLubricantsCarouselTimer) clearInterval(window.__productsLubricantsCarouselTimer); window.__productsLubricantsCarouselTimer = setInterval(nextSlide, 7000); }catch(e){} }
+                        // start cycle
+                        window.__productsLubricantsCarouselTimer = setInterval(nextSlide, 7000);
+                        // try autopay first video (muted) but we won't show a play button per request
+                        try{ vids[0].play().catch(function(){}); }catch(e){}
+
+                    } else {
+                        // fallback: single source behaviour (existing behaviour)
+                        // create a new media element for single-source hero slides
+                        var isVideo = (typeof slide.src === 'string' && slide.src.toLowerCase().endsWith('.mp4'));
+                        if (isVideo) {
+                            var newVid = document.createElement('video');
+                            newVid.className = 'hero-bg-image';
+                            newVid.autoplay = true;
+                            newVid.muted = true;
+                            newVid.loop = true;
+                            newVid.playsInline = true;
+                            newVid.preload = 'metadata';
+                            newVid.poster = 'public/AI Images/products-hero-poster.jpg';
+                            var srcEl = document.createElement('source');
+                            // if slide.src exists use it, otherwise keep existing
+                            srcEl.src = slide.src || (currentImg && currentImg.querySelector && currentImg.querySelector('source')?.src) || '';
+                            srcEl.type = 'video/mp4';
+                            newVid.appendChild(srcEl);
+                            // if there's an existing hero-bg-image replace it, otherwise append
+                            if (currentImg && currentImg.parentNode) {
+                                heroBg.replaceChild(newVid, currentImg);
+                            } else {
+                                heroBg.appendChild(newVid);
+                            }
+                            // attempt to start playback (muted) to satisfy autoplay policies
+                            try { newVid.play().catch(function(){}); } catch(e) {}
+                        } else {
+                            var newImg = document.createElement('img');
+                            newImg.className = 'hero-bg-image';
+                            newImg.alt = slide.title || 'Hero background';
+                            newImg.src = slide.src || (currentImg && currentImg.querySelector && currentImg.querySelector('img')?.src) || '';
+                            // ensure styling matches video hero images (object-fit handled by CSS)
+                            if (currentImg && currentImg.parentNode) {
+                                heroBg.replaceChild(newImg, currentImg);
+                            } else {
+                                heroBg.appendChild(newImg);
+                            }
+                            // Make image visible after it has loaded (CSS starts images at opacity:0)
+                            function showImg(){ try{ newImg.classList.add('is-visible'); }catch(e){} }
+                            if (newImg.complete) {
+                                showImg();
+                            } else {
+                                newImg.addEventListener('load', showImg);
+                            }
+                        }
+                        if (titleEl) titleEl.innerHTML = slide.title + '<span class="hero-highlight">' + slide.highlight + '</span>';
+                        if (subtitleEl) subtitleEl.textContent = slide.subtitle;
+                    }
+                }
+            }catch(e){ console.warn('setHeroSlide error', e); }
+        }
+
+        // Products page: pill filter logic (fix hash navigation and tab-panel display)
+        document.addEventListener('DOMContentLoaded', function(){
+            var pills = document.querySelectorAll('.product-category-bar .category-btn');
+            var tabContent = document.querySelector('.tab-content');
+            var panels = tabContent ? tabContent.querySelectorAll('.tab-panel') : [];
+            function showPanel(filter, updateHash){
+                if(tabContent) tabContent.style.display = '';
+                // update hero to match selected filter
+                setHeroSlide(filter);
+                if(updateHash){
+                    if(filter && filter !== 'all') {
+                        window.location.hash = '#' + filter;
+                    } else {
+                        window.location.hash = '';
+                    }
+                }
+                // helper to animate product cards when panels change
+                function setPanelCardVisibility(panel, visible){
+                    if(!panel) return;
+                    var cards = panel.querySelectorAll('.product-card');
+                    cards.forEach(function(card){
+                        if(visible){
+                            card.classList.remove('is-visible');
+                            // small timeout to ensure transition from initial state
+                            setTimeout(function(){ card.classList.add('is-visible'); }, 20);
+                        } else {
+                            card.classList.remove('is-visible');
+                        }
+                    });
+                }
+
+                if(filter==='all') {
+                    panels.forEach(function(panel){ panel.style.display = ''; setPanelCardVisibility(panel, true); });
+                } else {
+                    panels.forEach(function(panel){
+                        var pid = (panel.id||'').trim().toLowerCase();
+                        var fid = (filter||'').trim().toLowerCase();
+                        var show = (pid===fid);
+                        panel.style.display = show ? '' : 'none';
+                        setPanelCardVisibility(panel, show);
+                    });
+                }
+                pills.forEach(function(p){
+                    var pf = p.getAttribute('data-filter');
+                    if((pf||'').trim().toLowerCase() === (filter||'').trim().toLowerCase()){
+                        p.classList.add('active');
+                    }else{
+                        p.classList.remove('active');
+                    }
+                });
+            }
+            pills.forEach(function(pill){
+                pill.addEventListener('click', function(){
+                    var filter = pill.getAttribute('data-filter');
+                    if(filter && filter !== 'all') {
+                        window.location.hash = '#' + filter;
+                    } else {
+                        window.location.hash = '';
+                    }
+                    // reload the page so the browser URL + hash is persisted and the page refreshes
+                    window.location.reload();
+                });
+            });
+            function handleHash(){
+                var hash = window.location.hash.replace(/^#/, '').trim().toLowerCase();
+                setTimeout(function(){
+                    if(hash === '' || hash === 'all'){
+                        // Default to 'aerosol' if no hash or 'all'
+                        window.location.hash = '#aerosol';
+                        showPanel('aerosol', true);
+                        window.scrollTo(0,0);
+                    } else if(hash && document.getElementById(hash)){
+                        showPanel(hash, false);
+                        window.scrollTo(0,0);
+                    }else{
+                        showPanel('aerosol', false);
+                        window.scrollTo(0,0);
+                    }
+                }, 0);
+            }
+            // On load, check hash
+            handleHash();
+            // Listen for hashchange (if user navigates back/forward)
+            window.addEventListener('hashchange', handleHash);
+        });
+        </script>
+        <div class="tab-content">
                     <!-- Aerosol Products Tab -->
                     <div class="tab-panel" id="aerosol">
                         <div class="products-grid">
@@ -585,186 +1388,173 @@
                     <!-- Industrial Lubricants Tab -->
                     <div class="tab-panel" id="lubricants">
                         <div class="products-grid">
-                            <a href="products/hydraulic-awx-series.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Hydraulic AWX Series Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Hydraulic AWX Series</h3>
-                                    <p>High-quality hydraulic oils available in ISO grades 10, 32, 46, 68, and 100. Provides superior performance and protection for industrial hydraulic systems.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Multi-Grade</span>
-                                        <span class="feature-tag">High Performance</span>
-                                        <span class="feature-tag">Industrial</span>
-                                    </div>
+                                        <div class="product-apps">
+                                                <span class="app-chip">Hydraulic systems</span>
+                                                <span class="app-chip">Pump protection</span>
+                                                <span class="app-chip">Mobile &amp; stationary</span>
+                                        </div>
                                 </div>
-                            </a>
+                            </div>
 
-                            <a href="products/industrial-gear-series.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Industrial Gear Series Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Industrial Gear Series</h3>
-                                    <p>Premium gear oils in ISO grades 90, 220, 320, and 460. Engineered for industrial gearboxes and heavy-duty applications requiring superior wear protection.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Multi-Grade</span>
-                                        <span class="feature-tag">Heavy Duty</span>
-                                        <span class="feature-tag">Wear Protection</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Gearbox lubrication</span>
+                                        <span class="app-chip">High-load gear sets</span>
+                                        <span class="app-chip">Wear protection</span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
 
-                            <a href="products/engine-oils.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Engine Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Engine Oils</h3>
-                                    <p>High-performance engine oils designed to provide superior protection and extended service life for industrial and commercial engines.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Engine Protection</span>
-                                        <span class="feature-tag">Long Life</span>
-                                        <span class="feature-tag">Commercial Grade</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Engine protection</span>
+                                        <span class="app-chip">Extended drains</span>
+                                        <span class="app-chip">Diesel &amp; petrol engines</span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
 
-                            <a href="products/compressor-oils.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Compressor Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Compressor Oils</h3>
-                                    <p>Specialized oils formulated for both screw and piston compressors, providing optimal performance, cooling, and equipment protection.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Screw & Piston</span>
-                                        <span class="feature-tag">High Performance</span>
-                                        <span class="feature-tag">Cooling</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Screw &amp; piston compressors</span>
+                                        <span class="app-chip">Cooling &amp; protection</span>
+                                        <span class="app-chip">Improves compressor life</span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
 
-                            <a href="products/lubricating-oils.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Lubricating Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Lubricating Oils</h3>
-                                    <p>General-purpose industrial lubricating oils designed for a wide range of applications, providing reliable lubrication and wear protection.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Multi-Purpose</span>
-                                        <span class="feature-tag">Industrial</span>
-                                        <span class="feature-tag">Wear Protection</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Bearings &amp; gears</span>
+                                        <span class="app-chip">Reduces friction</span>
+                                        <span class="app-chip">Conveyors &amp; chains</span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
 
-
-                            <a href="products/slideway-oils.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Slideway Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Slideway Oils</h3>
-                                    <p>Specialized oils engineered for machine tool slideways, providing exceptional stick-slip prevention and smooth operation.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Machine Tools</span>
-                                        <span class="feature-tag">Anti-Stick-Slip</span>
-                                        <span class="feature-tag">Precision</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Slideway lubrication</span>
+                                        <span class="app-chip">Prevents stick-slip</span>
+                                        <span class="app-chip">Precision machining</span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
 
-                            <a href="products/rubber-latex-remover-chemicals.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Rubber/Latex Remover Chemicals" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Rubber / Latex Remover Chemicals</h3>
-                                    <p>Formulated removers for release agent and residue removal in rubber and latex manufacturing.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Residue Control</span>
-                                        <span class="feature-tag">Mould Safe</span>
-                                        <span class="feature-tag">Industrial</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Removes release residues</span>
+                                        <span class="app-chip">Prepares moulds</span>
+                                        <span class="app-chip">Mould-safe (when used)</span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
 
-                            <a href="products/hydrocarbon-solvents.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Hydrocarbon Solvents" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Hydrocarbon Solvents</h3>
-                                    <p>High-quality hydrocarbon solvent blends for degreasing, cleaning and formulation applications.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">High Purity</span>
-                                        <span class="feature-tag">Solvent Power</span>
-                                        <span class="feature-tag">Industrial</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Cleaning &amp; degreasing</span>
+                                        <span class="app-chip">Formulation solvent</span>
+                                        <span class="app-chip">Parts cleaning &amp; prep</span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
 
-                            <a href="products/heat-transfer-oils.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Heat Transfer Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Heat Transfer Oils</h3>
-                                    <p>High-performance thermal oils designed for efficient heat transfer in industrial heating and cooling systems, with excellent thermal stability.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Heat Transfer</span>
-                                        <span class="feature-tag">Thermal Stable</span>
-                                        <span class="feature-tag">Industrial</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">High-temp heat transfer</span>
+                                        <span class="app-chip">Thermal stability</span>
+                                        <span class="app-chip">Heaters, presses &amp; ovens</span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
 
-                            <a href="products/vacuum-pump-oils.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Vacuum Pump Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Vacuum Pump Oils</h3>
-                                    <p>Specialized vacuum pump oils formulated for optimal sealing properties and low vapor pressure, ensuring efficient vacuum pump operation.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Low Vapor</span>
-                                        <span class="feature-tag">High Vacuum</span>
-                                        <span class="feature-tag">Sealing</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Low-vapor vacuum oils</span>
+                                        <span class="app-chip">Extend pump life</span>
+                                        <span class="app-chip">Lab &amp; industrial vacuums</span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
 
-                            <a href="products/rust-preventive-oils.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Rust Preventive Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Rust Preventive Oils</h3>
-                                    <p>Oil and solvent-based rust preventive solutions designed to provide superior corrosion protection for metal surfaces during storage and transportation.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Anti-Corrosion</span>
-                                        <span class="feature-tag">Long-Term</span>
-                                        <span class="feature-tag">Multi-Metal</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Storage corrosion protection</span>
+                                        <span class="app-chip">Shipping protection</span>
+                                        <span class="app-chip">Removable protective film</span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
 
-                            <a href="products/circulating-oils.html" class="product-card">
+                            <div class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/drum and pail.png" alt="Circulating Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
                                 </div>
                                 <div class="product-info">
                                     <h3>Circulating Oils</h3>
-                                    <p>Premium circulating oils with excellent oxidation stability and wear protection for industrial circulation systems, ensuring reliable long-term performance.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Oxidation Stable</span>
-                                        <span class="feature-tag">Wear Protection</span>
-                                        <span class="feature-tag">Long Life</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Circulation &amp; heat loops</span>
+                                        <span class="app-chip">Oxidation &amp; wear protection</span>
+                                        <span class="app-chip">Long-life service</span>
                                     </div>
                                 </div>
-                            </a>
+                            </div>
                         </div>
                     </div>
                     
@@ -778,10 +1568,10 @@
                                 <div class="product-info">
                                     <h3>Heavy Duty Grease</h3>
                                     <p>Premium heavy-duty grease formulated for extreme pressure conditions, providing superior protection and extended service life in demanding industrial applications.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Heavy Duty</span>
-                                        <span class="feature-tag">Extreme Pressure</span>
-                                        <span class="feature-tag">Long Life</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Heavy duty</span>
+                                        <span class="app-chip">Extreme pressure</span>
+                                        <span class="app-chip">Long life</span>
                                     </div>
                                 </div>
                             </a>
@@ -793,10 +1583,10 @@
                                 <div class="product-info">
                                     <h3>Grease (NSF H1)</h3>
                                     <p>NSF H1 registered grease specifically designed for equipment requiring incidental food contact safety standards.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">NSF H1</span>
-                                        <span class="feature-tag">Safe</span>
-                                        <span class="feature-tag">Multi-Purpose</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">NSF H1</span>
+                                        <span class="app-chip">Food-safe</span>
+                                        <span class="app-chip">Multi-purpose</span>
                                     </div>
                                 </div>
                             </a>
@@ -808,10 +1598,10 @@
                                 <div class="product-info">
                                     <h3>Anti-Seize Compound</h3>
                                     <p>High-performance anti-seize compound that prevents galling and seizing in extreme temperature and pressure conditions, ensuring easy assembly and disassembly.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Anti-Seize</span>
-                                        <span class="feature-tag">High Temp</span>
-                                        <span class="feature-tag">Assembly</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Anti-seize</span>
+                                        <span class="app-chip">High temp</span>
+                                        <span class="app-chip">Assembly use</span>
                                     </div>
                                 </div>
                             </a>
@@ -823,10 +1613,10 @@
                                 <div class="product-info">
                                     <h3>OPPG3 Grease</h3>
                                     <p>Premium multi-purpose grease formulated with advanced additives for superior performance in various industrial applications requiring reliable lubrication.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Multi-Purpose</span>
-                                        <span class="feature-tag">Advanced</span>
-                                        <span class="feature-tag">Industrial</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Multi-purpose</span>
+                                        <span class="app-chip">Advanced additives</span>
+                                        <span class="app-chip">Industrial</span>
                                     </div>
                                 </div>
                             </a>
@@ -838,10 +1628,10 @@
                                 <div class="product-info">
                                     <h3>LIT-888 EP Grease</h3>
                                     <p>Extreme pressure lithium-based grease designed for heavy-duty applications, providing excellent wear protection and water resistance.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">EP Enhanced</span>
-                                        <span class="feature-tag">Water Resistant</span>
-                                        <span class="feature-tag">Heavy Duty</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">EP enhanced</span>
+                                        <span class="app-chip">Water resistant</span>
+                                        <span class="app-chip">Heavy duty</span>
                                     </div>
                                 </div>
                             </a>
@@ -853,10 +1643,10 @@
                                 <div class="product-info">
                                     <h3>HI-LO Grease</h3>
                                     <p>Specialized grease formulated for wide temperature range applications, providing reliable lubrication in both high and low-temperature conditions.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Wide Temp Range</span>
-                                        <span class="feature-tag">Versatile</span>
-                                        <span class="feature-tag">Reliable</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Wide temp range</span>
+                                        <span class="app-chip">Versatile</span>
+                                        <span class="app-chip">Reliable</span>
                                     </div>
                                 </div>
                             </a>
@@ -868,10 +1658,10 @@
                                 <div class="product-info">
                                     <h3>RA Grease</h3>
                                     <p>Advanced formula grease with superior adhesion properties, ideal for applications requiring strong surface adherence and long-lasting lubrication.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Adhesive</span>
-                                        <span class="feature-tag">Long-Lasting</span>
-                                        <span class="feature-tag">Protective</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Adhesive</span>
+                                        <span class="app-chip">Long-lasting</span>
+                                        <span class="app-chip">Protective</span>
                                     </div>
                                 </div>
                             </a>
@@ -883,46 +1673,20 @@
                                 <div class="product-info">
                                     <h3>AL-CX Grease</h3>
                                     <p>Complex aluminum-based grease engineered for high-temperature stability and excellent water resistance in demanding industrial environments.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">High Temp</span>
-                                        <span class="feature-tag">Water Resistant</span>
-                                        <span class="feature-tag">Complex</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">High temp</span>
+                                        <span class="app-chip">Water resistant</span>
+                                        <span class="app-chip">Complex</span>
                                     </div>
                                 </div>
                             </a>
                         </div>
-                    </div>                    <!-- Maintenance & Repair Tab -->
+                    </div>                    <!-- Maintenance Chemicals Tab -->
                     <div class="tab-panel" id="maintenance">
                         <div class="products-grid">
-                            <a href="products/cooling-tower-water-treatment.html" class="product-card">
-                                <div class="product-image" style="height: 600px; padding: 40px;">
-                                    <img src="public/Container.png" alt="Cooling Tower Chemicals" style="max-height: 100%; width: 100%; object-fit: contain;">
-                                </div>
-                                <div class="product-info">
-                                    <h3>Cooling Tower Chemicals</h3>
-                                    <p>Comprehensive chemicals to prevent scale, corrosion, and biological growth while optimizing cooling tower efficiency.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Anti-Scale</span>
-                                        <span class="feature-tag">Corrosion Control</span>
-                                        <span class="feature-tag">Biocide</span>
-                                    </div>
-                                </div>
-                            </a>
+                            <!-- Cooling Tower Chemicals card moved below (to avoid duplicate chips) -->
                             
-                            <a href="products/water-base-anti-rust-chemical.html" class="product-card">
-                                <div class="product-image" style="height: 600px; padding: 40px;">
-                                    <img src="public/Container.png" alt="Water Base Anti-Rust Chemical" style="max-height: 100%; width: 100%; object-fit: contain;">
-                                </div>
-                                <div class="product-info">
-                                    <h3>Water Base Anti-Rust Chemical</h3>
-                                    <p>Environmentally friendly water-based rust preventive solution that provides effective corrosion protection while being safe and easy to handle.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Water-Based</span>
-                                        <span class="feature-tag">Eco-Friendly</span>
-                                        <span class="feature-tag">Anti-Corrosion</span>
-                                    </div>
-                                </div>
-                            </a>
+                            <!-- Water Base Anti-Rust Chemical moved below to fix placement -->
 
                             <a href="products/rust-remover-chemical.html" class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
@@ -931,10 +1695,10 @@
                                 <div class="product-info">
                                     <h3>Rust Remover Chemical</h3>
                                     <p>Powerful rust removal solution that effectively dissolves rust while being safe on base metals, preparing surfaces for coating or further treatment.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Fast Acting</span>
-                                        <span class="feature-tag">Metal Safe</span>
-                                        <span class="feature-tag">Deep Clean</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Fast acting</span>
+                                        <span class="app-chip">Metal safe</span>
+                                        <span class="app-chip">Deep clean</span>
                                     </div>
                                 </div>
                             </a>
@@ -946,10 +1710,10 @@
                                 <div class="product-info">
                                     <h3>Industrial Paint Remover</h3>
                                     <p>Professional-grade paint stripping solution that quickly removes multiple layers of paint and coatings while protecting the underlying surface.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Heavy Duty</span>
-                                        <span class="feature-tag">Multi-Layer</span>
-                                        <span class="feature-tag">Surface Safe</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Heavy duty</span>
+                                        <span class="app-chip">Multi-layer</span>
+                                        <span class="app-chip">Surface safe</span>
                                     </div>
                                 </div>
                             </a>
@@ -961,10 +1725,10 @@
                                 <div class="product-info">
                                     <h3>Air Con Coil Cleaner</h3>
                                     <p>Specialized cleaner that removes dirt, grease, and biological growth from air conditioning coils, improving system efficiency and air quality.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Deep Clean</span>
-                                        <span class="feature-tag">Non-Corrosive</span>
-                                        <span class="feature-tag">Efficiency Boost</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Deep clean</span>
+                                        <span class="app-chip">Non-corrosive</span>
+                                        <span class="app-chip">Efficiency boost</span>
                                     </div>
                                 </div>
                             </a>
@@ -976,10 +1740,10 @@
                                 <div class="product-info">
                                     <h3>Oil Degreaser</h3>
                                     <p>Powerful water or solvent-based degreasing solution that effectively removes heavy oils, greases, and industrial contaminants from surfaces.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Heavy Duty</span>
-                                        <span class="feature-tag">Fast Acting</span>
-                                        <span class="feature-tag">Versatile</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Heavy duty</span>
+                                        <span class="app-chip">Fast acting</span>
+                                        <span class="app-chip">Versatile</span>
                                     </div>
                                 </div>
                             </a>
@@ -991,10 +1755,10 @@
                                 <div class="product-info">
                                     <h3>Waterless Hand Scrubber</h3>
                                     <p>Heavy-duty waterless hand cleaner with grit, effectively removing tough industrial soils, grease, and grime while being gentle on skin.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Waterless</span>
-                                        <span class="feature-tag">Skin Safe</span>
-                                        <span class="feature-tag">Deep Clean</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Waterless</span>
+                                        <span class="app-chip">Skin safe</span>
+                                        <span class="app-chip">Deep clean</span>
                                     </div>
                                 </div>
                             </a>
@@ -1006,10 +1770,10 @@
                                 <div class="product-info">
                                     <h3>Sanitizer (Liquid & Gel)</h3>
                                     <p>Industrial-grade sanitizing solution available in both liquid and gel forms, providing effective antimicrobial protection in workplace environments.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Dual Form</span>
-                                        <span class="feature-tag">Fast Acting</span>
-                                        <span class="feature-tag">Industrial</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Dual form</span>
+                                        <span class="app-chip">Fast acting</span>
+                                        <span class="app-chip">Industrial</span>
                                     </div>
                                 </div>
                             </a>
@@ -1021,11 +1785,43 @@
                                 <div class="product-info">
                                     <h3>Spray Booth Compound</h3>
                                     <p>Specialized coating compound that protects spray booth surfaces from overspray accumulation while maintaining optimal booth performance.</p>
-                                    <div class="product-features">
-                                        <span class="feature-tag">Protective</span>
-                                        <span class="feature-tag">Easy Clean</span>
-                                        <span class="feature-tag">Long-Lasting</span>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Protective</span>
+                                        <span class="app-chip">Easy clean</span>
+                                        <span class="app-chip">Long-lasting</span>
                                     </div>
+                                </div>
+                            </a>
+                            <!-- Insert duplicated Cooling Tower Chemicals card here (moved) -->
+                            <a href="products/cooling-tower-water-treatment.html" class="product-card">
+                                <div class="product-image" style="height: 600px; padding: 40px;">
+                                    <img src="public/Container.png" alt="Cooling Tower Chemicals" style="max-height: 100%; width: 100%; object-fit: contain;">
+                                </div>
+                                <div class="product-info">
+                                    <h3>Cooling Tower Chemicals</h3>
+                                    <div class="product-apps-title">Applications</div>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Scale control</span>
+                                        <span class="app-chip">Corrosion inhibition</span>
+                                        <span class="app-chip">Biocide treatment</span>
+                                    </div>
+                                    <p>Comprehensive chemicals to prevent scale, corrosion, and biological growth while optimizing cooling tower efficiency.</p>
+                                </div>
+                            </a>
+                            <!-- Insert moved Water Base Anti-Rust Chemical card here -->
+                            <a href="products/water-base-anti-rust-chemical.html" class="product-card">
+                                <div class="product-image" style="height: 600px; padding: 40px;">
+                                    <img src="public/Container.png" alt="Water Base Anti-Rust Chemical" style="max-height: 100%; width: 100%; object-fit: contain;">
+                                </div>
+                                <div class="product-info">
+                                    <h3>Water Base Anti-Rust Chemical</h3>
+                                    <div class="product-apps-title">Applications</div>
+                                    <div class="product-apps">
+                                        <span class="app-chip">Water-based rust prevention</span>
+                                        <span class="app-chip">In-process protection</span>
+                                        <span class="app-chip">Anti-corrosion</span>
+                                    </div>
+                                    <p>Environmentally friendly water-based rust preventive solution that provides effective corrosion protection while being safe and easy to handle.</p>
                                 </div>
                             </a>
                         </div>
@@ -1033,7 +1829,7 @@
                     
                     <!-- Metal Working Tab -->
                     <div class="tab-panel" id="metalworking">
-                        <div class="products-grid">
+                        <div class="products-grid" style="display:grid; grid-template-columns:repeat(2,1fr); gap:12px;">
                             <a href="products/neat-cutting-oils.html" class="product-card">
                                 <div class="product-image" style="height: 600px; padding: 40px;">
                                     <img src="public/Neat Cutting Oils.png" alt="Neat Cutting Oils" style="max-height: 100%; width: 100%; object-fit: contain;">
@@ -1195,11 +1991,61 @@
                                 </div>
                                 <div class="product-info">
                                     <h3>Handheld pH Reader</h3>
+                                    <div class="product-apps-title" style="display:block !important;">Applications</div>
+                                    <div class="product-apps" style="display:flex !important; flex-wrap:wrap !important; gap:8px !important; margin-top:8px !important;">
+                                        <span class="app-chip">pH monitoring</span>
+                                        <span class="app-chip">Coolants &amp; solutions</span>
+                                        <span class="app-chip">Quality control</span>
+                                    </div>
                                     <p>Professional portable pH meter for accurate measurement and monitoring of coolants, cleaning solutions, and industrial fluids.</p>
                                     <div class="product-features">
                                         <span class="feature-tag">Precise</span>
                                         <span class="feature-tag">Easy Use</span>
                                         <span class="feature-tag">Reliable</span>
+                                    </div>
+                                </div>
+                            </a>
+
+                            <!-- New) Chip Sludge Removal Machine -->
+                            <a href="products/chip-sludge-removal-machine.html" class="product-card">
+                                <div class="product-image" style="height: 600px; padding: 40px;">
+                                    <img src="public/chips remover.png" alt="Chip Sludge Removal Machine" style="max-height: 100%; width: 100%; object-fit: contain;">
+                                </div>
+                                <div class="product-info">
+                                    <h3>Chip Sludge Removal Machine</h3>
+                                    <div class="product-apps-title" style="display:block !important;">Applications</div>
+                                    <div class="product-apps" style="display:flex !important; flex-wrap:wrap !important; gap:8px !important; margin-top:8px !important;">
+                                        <span class="app-chip">CNC &amp; Machining</span>
+                                        <span class="app-chip">Coolant Recovery Systems</span>
+                                        <span class="app-chip">Machine Tool Maintenance</span>
+                                    </div>
+                                    <p>Efficient chip sludge removal system to extend coolant life, improve machine cleanliness, and reduce maintenance downtime.</p>
+                                    <div class="product-features">
+                                        <span class="feature-tag">Chip Removal</span>
+                                        <span class="feature-tag">Coolant Recovery</span>
+                                        <span class="feature-tag">Industrial Grade</span>
+                                    </div>
+                                </div>
+                            </a>
+                            
+                            <!-- New) Composite Oil-Water Separator -->
+                            <a href="products/composite-oil-water-separator.html" class="product-card">
+                                <div class="product-image" style="height: 600px; padding: 40px;">
+                                    <img src="public/oil skimmer.png" alt="Composite Oil-Water Separator" style="max-height: 100%; width: 100%; object-fit: contain;">
+                                </div>
+                                <div class="product-info">
+                                    <h3>Composite Oil-Water Separator</h3>
+                                    <div class="product-apps-title" style="display:block !important;">Applications</div>
+                                    <div class="product-apps" style="display:flex !important; flex-wrap:wrap !important; gap:8px !important; margin-top:8px !important;">
+                                        <span class="app-chip">Oil Skimming</span>
+                                        <span class="app-chip">Coolant Management</span>
+                                        <span class="app-chip">Wastewater Treatment</span>
+                                    </div>
+                                    <p>Compact, efficient separator for removing oil and floating contaminants from industrial wastewater and machine sumps.</p>
+                                    <div class="product-features">
+                                        <span class="feature-tag">Compact</span>
+                                        <span class="feature-tag">Low maintenance</span>
+                                        <span class="feature-tag">Durable composite construction</span>
                                     </div>
                                 </div>
                             </a>
@@ -1543,7 +2389,7 @@
                     <ul class="footer-list">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
-                        <li><a href="products.html">Our Products</a></li>
+                        <li><a href="products.html#aerosol">Our Products</a></li>
                         <li><a href="industries.html">Industries</a></li>
                         <li><a href="contact.html">Contact Us</a></li>
                     </ul>
@@ -1552,12 +2398,12 @@
                 <div class="footer-col">
                     <h4 class="footer-heading">Products</h4>
                     <ul class="footer-list">
-                        <li><a href="products.html">Aerosol Products</a></li>
-                        <li><a href="products.html">Industrial Lubricants</a></li>
-                        <li><a href="products.html">Industrial Grease</a></li>
-                        <li><a href="products.html">Maintenance & Repair</a></li>
-                        <li><a href="products.html">Metal Working</a></li>
-                        <li><a href="products.html">Food-Safe Products</a></li>
+                        <li><a href="products.html#aerosol">Aerosol Products</a></li>
+                        <li><a href="products.html#lubricants">Industrial Lubricants</a></li>
+                        <li><a href="products.html#grease">Industrial Grease</a></li>
+                        <li><a href="products.html#maintenance">Maintenance Chemicals</a></li>
+                        <li><a href="products.html#metalworking">Metal Working</a></li>
+                        <li><a href="products.html#foodgrade">Food-Safe Products</a></li>
                     </ul>
                 </div>
 
@@ -1642,7 +2488,7 @@
                             <option value="aerosol">Aerosol Products</option>
                             <option value="lubricants">Industrial Lubricants</option>
                             <option value="grease">Industrial Grease</option>
-                            <option value="maintenance">Maintenance & Repair</option>
+                            <option value="maintenance">Maintenance Chemicals</option>
                             <option value="metalworking">Metal Working</option>
                             <option value="foodgrade">Food-Safe Products</option>
                         </select>
@@ -1663,6 +2509,6 @@
 
     <!-- Scripts -->
     <script src="script.js"></script>
-    <script src="product-animations.js"></script>
+    <!-- product-animations.js intentionally removed from products listing to avoid initial mask animation -->
 </body>
 </html>

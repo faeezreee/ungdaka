@@ -421,25 +421,26 @@
             max-height: 100%;
         }
         /* Ensure product card images in the grid match compact sizing (4-col pattern) */
-        .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(4, 1fr) !important; gap: 24px !important; }
-        @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(3, 1fr) !important; } }
-        @media (max-width: 980px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media (max-width: 640px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr !important; gap: 18px !important; } }
-        .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 360px !important; padding: 22px !important; overflow: hidden; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
-        .products-section-enhanced .product-image img, .products-section-enhanced .product-image-container img { width: 100%; height: 100%; object-fit: contain; max-height: 100%; }
-        @media (max-width: 1280px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 320px !important; padding: 20px !important; } }
-        @media (max-width: 980px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 300px !important; padding: 18px !important; } }
-        @media (max-width: 640px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 260px !important; padding: 16px !important; } }
+    /* Compact responsive grid: 3 cols desktop → 2 cols mid → 1 col mobile */
+    .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; }
+    @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
+    @media (max-width: 980px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
+    @media (max-width: 640px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr !important; gap: 18px !important; } }
+    .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 300px !important; padding: 18px !important; overflow: hidden; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
+    .products-section-enhanced .product-image img, .products-section-enhanced .product-image-container img { max-height: 260px; width: auto; object-fit: contain; }
+    @media (max-width: 1280px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 280px !important; padding: 16px !important; } }
+    @media (max-width: 980px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 260px !important; padding: 14px !important; } }
+    @media (max-width: 640px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 220px !important; padding: 12px !important; } }
         /* Hide verbose blocks; chips styling */
         .products-section-enhanced .product-card .product-features, .products-section-enhanced .product-card .product-features-enhanced { display: none !important; }
         .products-section-enhanced .product-card .product-info > p, .products-section-enhanced .product-card .product-content > p { display: none !important; }
         .products-section-enhanced .product-card .product-application { display: none !important; }
         .products-section-enhanced .product-card .product-info h3, .products-section-enhanced .product-card .product-content h3 { margin-bottom: 8px !important; }
         .products-section-enhanced .product-card .product-info, .products-section-enhanced .product-card .product-content { padding-top: 18px !important; }
-        .products-section-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: #ca8a04; margin-top: 8px; }
+    .products-section-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: #000000; margin-top: 8px; }
         .products-section-enhanced .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-    .products-section-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: #fefce8; color: #ca8a04; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
-    .products-section-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: #eab308; }
+    .products-section-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: rgba(0,0,0,0.08); color: #000000; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+    .products-section-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: #000000; }
         
         .product-badge {
             position: absolute;
@@ -756,7 +757,7 @@
                 
                 <!-- Products Dropdown -->
                 <div class="nav-dropdown">
-                    <a href="products.html" class="nav-link dropdown-toggle">
+                    <a href="products.html#aerosol" class="nav-link dropdown-toggle">
                         Our Products
                         <i class="fas fa-chevron-down dropdown-icon"></i>
                     </a>
@@ -785,7 +786,7 @@
                                 <a href="products/giga-os-oil-skimmer.html">GIGA OS Oil Skimmer</a>
                                 <a href="products/anti-rust-series.html">Anti-Rust Series</a>
                                 <a href="products/moly-lube-advanced-lubricant.html">Moly Lube</a>
-                                <a href="products.html" class="view-all">View All Products →</a>
+                                <a href="products.html#aerosol" class="view-all">View All Products →</a>
                             </div>
                         </div>
                     </div>
@@ -845,69 +846,26 @@
 
     <!-- Page Header removed for streamlined layout -->
 
-    <!-- Industry Overview -->
-    <section class="industry-overview-enhanced">
-        <div class="container">
-            <div class="industry-hero">
-                <div class="industry-content">
-                    <div class="industry-badge">
-                        <i class="fas fa-print"></i>
-                        Printing & Paper Industry
-                    </div>
-                    <h2>Precision Solutions for Printing & Paper Manufacturing</h2>
-                    <p>Our specialized products are designed to meet the demanding requirements of printing and paper manufacturing processes. From high-speed printing presses to paper production equipment, we provide solutions that ensure optimal performance and equipment longevity.</p>
-                    <div class="industry-stats">
-                        <div class="stat-item">
-                            <div class="stat-number">99.9%</div>
-                            <div class="stat-label">Print Quality</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">24/7</div>
-                            <div class="stat-label">Operation</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">0</div>
-                            <div class="stat-label">Downtime</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="industry-hero-image">
-                    <img src="public/Industries Images/print_paper-industry.jpg" alt="Printing & Paper Industry">
-                    <div class="image-overlay">
-                        <div class="overlay-content">
-                            <i class="fas fa-print"></i>
-                            <h4>High-Speed Printing</h4>
-                            <p>Precision lubricants for continuous operation</p>
-                        </div>
-                    </div>
+    <!-- original Industry Overview removed; video hero below is now top content -->
+        <!-- Video hero (replaces previous Industry Overview) -->
+        <section class="hero-modern products-hero industry-hero-compact">
+            <div class="hero-background">
+                <div class="hero-overlay"></div>
+                <!-- use provided paper video as background -->
+                <video class="hero-bg-image" autoplay muted loop playsinline preload="metadata" poster="public/Industries%20Images/printing%20and%20paper.jpg">
+                    <source src="public/paper.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="container">
+                <div class="hero-content-modern">
+                    <div class="industry-badge"><i class="fas fa-print"></i> Printing & Paper</div>
+                    <h1 class="hero-title-modern">Solutions for Printing & Paper Manufacturing
+                        <span class="hero-highlight">High Precision • Low Downtime</span>
+                    </h1>
+                    <p class="hero-subtitle-modern">Lubricants, cleaners and maintenance chemicals for printing presses and paper machinery.</p>
                 </div>
             </div>
-            
-            <div class="industry-features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <h3>High-Speed Operation</h3>
-                    <p>Specialized lubricants for high-speed printing presses and paper machinery</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Equipment Protection</h3>
-                    <p>Advanced protection against wear and corrosion in demanding environments</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Quality Assurance</h3>
-                    <p>Consistent performance ensuring superior print quality and reliability</p>
-                </div>
-            </div>
-        </div>
-    </section>
+        </section>
 
     <!-- Products Grid -->
     <section class="products-section-enhanced">
@@ -1093,7 +1051,7 @@
                         <i class="fas fa-envelope"></i>
                         Contact Our Experts
                     </a>
-                    <a href="products.html" class="btn-cta-secondary">
+                    <a href="products.html#aerosol" class="btn-cta-secondary">
                         <i class="fas fa-box"></i>
                         View All Products
                     </a>
@@ -1118,7 +1076,7 @@
                     <ul class="footer-list">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
-                        <li><a href="products.html">Our Products</a></li>
+                        <li><a href="products.html#aerosol">Our Products</a></li>
                         <li><a href="industries.html">Industries</a></li>
                         <li><a href="contact.html">Contact Us</a></li>
                     </ul>
@@ -1127,12 +1085,12 @@
                 <div class="footer-col">
                     <h4 class="footer-heading">Products</h4>
                     <ul class="footer-list">
-                        <li><a href="products.html">Aerosol Products</a></li>
-                        <li><a href="products.html">Industrial Lubricants</a></li>
-                        <li><a href="products.html">Industrial Grease</a></li>
-                        <li><a href="products.html">Maintenance & Repair</a></li>
-                        <li><a href="products.html">Metal Working</a></li>
-                        <li><a href="products.html">Food-Safe Products</a></li>
+                        <li><a href="products.html#aerosol">Aerosol Products</a></li>
+                        <li><a href="products.html#aerosol">Industrial Lubricants</a></li>
+                        <li><a href="products.html#aerosol">Industrial Grease</a></li>
+                        <li><a href="products.html#aerosol">Maintenance Chemicals</a></li>
+                        <li><a href="products.html#aerosol">Metal Working</a></li>
+                        <li><a href="products.html#aerosol">Food-Safe Products</a></li>
                     </ul>
                 </div>
 
@@ -1177,7 +1135,7 @@
                     categoryMap: [
                         ['aerosol-products', 'Aerosol Products'],
                         ['industrial-lubricants', 'Industrial Lubricants'],
-                        ['maintenance-repair', 'Maintenance & Repair']
+                        ['maintenance-repair', 'Maintenance Chemicals']
                     ],
                     // Disable promotion so grouped same-photo cards stay pinned to top
                     moveLubeGuardHref: '',

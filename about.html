@@ -37,7 +37,7 @@
                 
                 <!-- Products Dropdown -->
                 <div class="nav-dropdown">
-                    <a href="products.html" class="nav-link dropdown-toggle">
+                    <a href="products.html#aerosol" class="nav-link dropdown-toggle">
                         Our Products
                         <i class="fas fa-chevron-down dropdown-icon"></i>
                     </a>
@@ -87,7 +87,7 @@
                             <div class="dropdown-column">
                                 <div class="cat-group">
                                     <div class="cat-header">
-                                        <a class="cat-link" href="products.html#maintenance">Maintenance & Repair</a>
+                                        <a class="cat-link" href="products.html#maintenance">Maintenance Chemicals</a>
                                         <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-maintenance"><i class="fas fa-chevron-right"></i></button>
                                     </div>
                                     <div class="sub-list" id="cat-maintenance">
@@ -140,7 +140,7 @@
                                     </div>
                                 </div>
 
-                                <a href="products.html" class="view-all" style="margin-top:10px; display:inline-block;">View All Products →</a>
+                                <a href="products.html#aerosol" class="view-all" style="margin-top:10px; display:inline-block;">View All Products →</a>
                             </div>
                         </div>
                     </div>
@@ -217,17 +217,19 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <section class="page-header">
+    <!-- Stamping-style hero (replaces previous page header) -->
+    <section class="hero-modern products-hero industry-hero-compact">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <img class="hero-bg-image" src="public/AI Images/team.png" alt="Ungdaka team" />
+        </div>
         <div class="container">
-            <div class="page-header-content">
-                <h1>About Ungdaka</h1>
-                <p>Advanced Technology Solutions to Cleanliness & Lubrications</p>
-                <nav class="breadcrumb">
-                    <a href="index.html">Home</a>
-                    <span>/</span>
-                    <span>About Us</span>
-                </nav>
+            <div class="hero-content-modern">
+                <div class="industry-badge"><i class="fas fa-users"></i> About Ungdaka</div>
+                <h1 class="hero-title-modern">
+                    <span class="hero-highlight">20+ Years of Industrial Excellence</span>
+                </h1>
+                <p class="hero-subtitle-modern">Trusted supplier of industrial lubricants, aerosols and maintenance chemicals across Malaysia and the region.</p>
             </div>
         </div>
     </section>
@@ -410,7 +412,7 @@
                     <ul class="footer-list">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
-                        <li><a href="products.html">Our Products</a></li>
+                        <li><a href="products.html#aerosol">Our Products</a></li>
                         <li><a href="industries.html">Industries</a></li>
                         <li><a href="contact.html">Contact Us</a></li>
                     </ul>
@@ -419,12 +421,12 @@
                 <div class="footer-col">
                     <h4 class="footer-heading">Products</h4>
                     <ul class="footer-list">
-                        <li><a href="products.html">Aerosol Products</a></li>
-                        <li><a href="products.html">Industrial Lubricants</a></li>
-                        <li><a href="products.html">Industrial Grease</a></li>
-                        <li><a href="products.html">Maintenance & Repair</a></li>
-                        <li><a href="products.html">Metal Working</a></li>
-                        <li><a href="products.html">Food-Safe Products</a></li>
+                        <li><a href="products.html#aerosol">Aerosol Products</a></li>
+                        <li><a href="products.html#aerosol">Industrial Lubricants</a></li>
+                        <li><a href="products.html#aerosol">Industrial Grease</a></li>
+                        <li><a href="products.html#aerosol">Maintenance Chemicals</a></li>
+                        <li><a href="products.html#aerosol">Metal Working</a></li>
+                        <li><a href="products.html#aerosol">Food-Safe Products</a></li>
                     </ul>
                 </div>
 
@@ -501,7 +503,7 @@
                             <option value="aerosol">Aerosol Products</option>
                             <option value="lubricants">Industrial Lubricants</option>
                             <option value="grease">Industrial Grease</option>
-                            <option value="maintenance">Maintenance & Repair</option>
+                            <option value="maintenance">Maintenance Chemicals</option>
                             <option value="metalworking">Metal Working</option>
                             <option value="foodgrade">Food-Safe Products</option>
                         </select>

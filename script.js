@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function(){
             }catch(e){ return ''; }
         }
 
-        const cards = panel.querySelectorAll('.products-grid .product-card');
+    const cards = panel.querySelectorAll('.products-grid .product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const href = card.getAttribute('href') || card.dataset.href || '';
             const slug = slugFromHref(href);
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function(){
             }catch(e){ return ''; }
         }
 
-        const cards = panel.querySelectorAll('.products-grid .product-card');
+    const cards = panel.querySelectorAll('.products-grid .product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const href = card.getAttribute('href') || card.dataset.href || '';
             const slug = slugFromHref(href);
@@ -313,6 +313,8 @@ document.addEventListener('DOMContentLoaded', function(){
             'handheld-ph-reader.html': ['pH monitoring', 'Coolants & solutions', 'Quality control'],
             'cnc-os-oil-skimmer.html': ['Tramp oil removal', 'Coolant life extension', 'CNC machines'],
             'giga-os-oil-skimmer.html': ['High-capacity skimming', 'Industrial sumps', 'Continuous duty']
+            , 'chip-sludge-removal-machine.html': ['CNC & Machining', 'Coolant Recovery Systems', 'Machine Tool Maintenance']
+            , 'composite-oil-water-separator.html': ['Oil Skimming', 'Coolant Management', 'Wastewater Treatment']
         };
 
         function slugFromHref(href){
@@ -323,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function(){
             }catch(e){ return ''; }
         }
 
-        const cards = panel.querySelectorAll('.products-grid .product-card');
+    const cards = panel.querySelectorAll('.products-grid .product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const href = card.getAttribute('href') || card.dataset.href || '';
             const slug = slugFromHref(href);
@@ -403,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function(){
             }catch(e){ return ''; }
         }
 
-        const cards = panel.querySelectorAll('.products-grid .product-card');
+    const cards = panel.querySelectorAll('.products-grid .product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const href = card.getAttribute('href') || card.dataset.href || '';
             const slug = slugFromHref(href);
@@ -488,7 +490,7 @@ document.addEventListener('DOMContentLoaded', function(){
             }catch(e){ return ''; }
         }
 
-        const cards = panel.querySelectorAll('.products-grid .product-card');
+    const cards = panel.querySelectorAll('.products-grid .product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const href = card.getAttribute('href') || card.dataset.href || '';
             const slug = slugFromHref(href);
@@ -617,9 +619,7 @@ document.addEventListener('DOMContentLoaded', function(){
                     const info = document.createElement('div');
                     info.className = 'product-info';
 
-                    const title = document.createElement('h3');
-                    title.textContent = `Products (${list.length})`;
-                    info.appendChild(title);
+                    // Title removed (Products count not shown in grouped info)
 
                     const listWrap = document.createElement('div');
                     listWrap.className = 'product-list';
@@ -632,55 +632,75 @@ document.addEventListener('DOMContentLoaded', function(){
                         const line = document.createElement('div');
                         line.className = 'product-line';
 
-                        const a = document.createElement('a');
-                        const h3 = card.querySelector('.product-info h3');
-                        const label = h3 ? h3.textContent.trim() : (card.getAttribute('aria-label') || 'View');
-                        const href = card.getAttribute('href') || card.dataset.href || '#';
-                        a.href = href;
-                        a.textContent = label;
-                        a.className = 'product-link';
-
-                        // Description
-                        const pd = document.createElement('p');
-                        const descEl = card.querySelector('.product-info p, .product-content p');
-                        const descText = descEl ? descEl.textContent.trim() : '';
-                        pd.className = 'product-desc';
-                        pd.textContent = descText;
-                        // create toggle only if description exists
-                        if (descText) {
-                            const btn = document.createElement('button');
-                            btn.type = 'button';
-                            btn.className = 'product-toggle';
-                            btn.title = 'Show description';
-                            btn.setAttribute('aria-expanded', 'false');
-                            const descId = 'desc-' + Math.random().toString(36).slice(2, 9);
-                            pd.id = descId;
-                            btn.setAttribute('aria-controls', descId);
-                            // icon span (font awesome friendly, falls back to +)
-                            const ic = document.createElement('span');
-                            ic.className = 'toggle-icon';
-                            ic.setAttribute('aria-hidden', 'true');
-                            btn.appendChild(ic);
-                            btn.addEventListener('click', (e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                const isOpen = item.classList.toggle('open');
-                                btn.setAttribute('aria-expanded', String(isOpen));
-                                btn.title = isOpen ? 'Hide description' : 'Show description';
-                            });
-                            line.appendChild(btn);
+                        // Create product title element (h3) with a link or span inside — keep the title as heading like Lube Guard
+                        const srcH3 = card.querySelector('.product-info h3');
+                        const label = srcH3 ? srcH3.textContent.trim() : (card.getAttribute('aria-label') || 'View');
+                        const href = card.getAttribute('href') || card.dataset.href || '';
+                        const titleEl = document.createElement('h3');
+                        titleEl.className = 'product-index-title';
+                        // Render title as a non-clickable element (span) to match Lube Guard UI
+                        const innerLabel = document.createElement('span');
+                        innerLabel.className = 'product-link';
+                        // preserve original href as a data attribute in case it's needed elsewhere
+                        if (href && href !== '#') {
+                            innerLabel.dataset.href = href;
                         }
+                        innerLabel.textContent = label;
+                        titleEl.appendChild(innerLabel);
 
-                        line.appendChild(a);
+                        // Description removed: do not include product description or toggle in the index
+
+                        line.appendChild(titleEl);
                         item.appendChild(line);
-                        if (descText) {
-                            item.appendChild(pd);
-                            const cta = document.createElement('a');
-                            cta.href = href;
-                            cta.className = 'product-cta';
-                            cta.textContent = 'View details';
-                            item.appendChild(cta);
-                        }
+
+                        // Try to insert up to 3 application chips under the index item.
+                        // Prefer existing rendered chips (.product-apps .app-chip) cloned from the source card.
+                        (function insertIndexChipsFromCard(srcCard, targetItem){
+                            try{
+                                // Look for already-rendered chips inside the card
+                                const existingChips = srcCard.querySelectorAll('.product-apps .app-chip');
+                                let apps = [];
+                                if (existingChips && existingChips.length) {
+                                    existingChips.forEach((c,i)=>{ if(i<3) apps.push(c.textContent.trim()); });
+                                } else {
+                                    // Fallback: parse "Application:" text blocks
+                                    const appEl = srcCard.querySelector('.product-application, .product-application-enhanced');
+                                    if (appEl) {
+                                        const txt = appEl.textContent || '';
+                                        const parts = txt.split(/application\s*:/i);
+                                        if (parts[1]) {
+                                            apps = parts[1].split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);
+                                        }
+                                    }
+                                }
+
+                                if (apps.length) {
+                                    const titleEl = document.createElement('span');
+                                    titleEl.className = 'product-apps-title';
+                                    titleEl.textContent = 'Applications';
+
+                                    const wrap = document.createElement('div');
+                                    wrap.className = 'product-apps';
+                                    apps.forEach(txt => {
+                                        const chip = document.createElement('span');
+                                        chip.className = 'app-chip';
+                                        chip.textContent = txt;
+                                        wrap.appendChild(chip);
+                                    });
+                                    // Insert title then chips before the description paragraph if present, otherwise append
+                                    const pdEl = targetItem.querySelector('.product-desc');
+                                    if (pdEl) {
+                                        pdEl.parentNode.insertBefore(titleEl, pdEl);
+                                        pdEl.parentNode.insertBefore(wrap, pdEl);
+                                    } else {
+                                        targetItem.appendChild(titleEl);
+                                        targetItem.appendChild(wrap);
+                                    }
+                                }
+                            }catch(e){ /* ignore */ }
+                        })(card, item);
+
+                        // Descriptions and CTAs removed per design — index now shows only title and application chips
                         listWrap.appendChild(item);
                     });
 
@@ -832,7 +852,7 @@ document.addEventListener('DOMContentLoaded', function(){
             }catch(e){ return ''; }
         }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info');
             if(!info) return;
@@ -898,7 +918,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-content, .product-info');
             if(!info) return;
@@ -962,7 +982,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info, .product-content');
             if(!info) return;
@@ -1026,7 +1046,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info, .product-content');
             if(!info) return;
@@ -1078,7 +1098,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info, .product-content');
             if(!info) return;
@@ -1131,7 +1151,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info, .product-content');
             if(!info) return;
@@ -1184,7 +1204,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info, .product-content');
             if(!info) return;
@@ -1239,7 +1259,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info, .product-content');
             if(!info) return;
@@ -1286,7 +1306,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info, .product-content');
             if(!info) return;
@@ -1366,7 +1386,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info, .product-content');
             if(!info) return;
@@ -1414,7 +1434,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info, .product-content');
             if(!info) return;
@@ -1463,7 +1483,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info, .product-content');
             if(!info) return;
@@ -1510,7 +1530,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
         function slugFromHref(href){ try{ const url = href.split('?')[0].split('#')[0]; const parts = url.split('/'); return parts[parts.length-1].toLowerCase(); }catch(e){ return ''; } }
 
-        const cards = grid.querySelectorAll('.product-card');
+    const cards = grid.querySelectorAll('.product-card:not(.product-card-grouped)');
         cards.forEach(card => {
             const info = card.querySelector('.product-info, .product-content');
             if(!info) return;
@@ -1585,7 +1605,7 @@ window.initProductCategoryFilter = function initProductCategoryFilter(options = 
                 ['aerosol-products','Aerosol Products'],
                 ['industrial-lubricants','Industrial Lubricants'],
                 ['industrial-grease','Industrial Grease'],
-                ['maintenance-repair','Maintenance & Repair'],
+                ['maintenance-repair','Maintenance Chemicals'],
                 ['metal-working','Metal Working'],
                 ['accessories','Accessories'],
                 ['food-grade-products','Food-Safe Products']
@@ -2869,7 +2889,7 @@ class ScrollAnimations {
         });
 
         // Add staggered animations to grid items
-        const gridItems = document.querySelectorAll('.services-grid .service-card, .products-grid .product-card, .trust-grid .trust-item');
+    const gridItems = document.querySelectorAll('.services-grid .service-card, .products-grid .product-card:not(.product-card-grouped), .trust-grid .trust-item');
         gridItems.forEach((item, index) => {
             item.classList.add('animate-scale-in', `animate-delay-${(index % 6) + 1}`);
             this.animatedElements.push(item);
@@ -3403,6 +3423,56 @@ class UngdakaApp {
 // ===== INITIALIZE APPLICATION =====
 const app = new UngdakaApp();
 
+// Ensure any hash matching a product category always forces the products panel to show.
+(function enforceProductHashHandler(){
+    // Normalizer maps common variants to canonical panel IDs
+    function normalizeCategory(name){
+        if(!name) return '';
+        var s = String(name).toLowerCase().trim();
+        var map = [
+            [/aero|aerosol/, 'aerosol'],
+            [/lubricat|industrial-?lubricant|lubricants?/, 'lubricants'],
+            [/grease/, 'grease'],
+            [/maintain|maintenance/, 'maintenance'],
+            [/metal|metal-?working/, 'metalworking'],
+            [/accessor|accessories/, 'accessories'],
+            [/food|food-?grade|foodsafe|food-?safe|foodgrade/, 'foodgrade']
+        ];
+        for(var i=0;i<map.length;i++){ if(map[i][0].test(s)) return map[i][1]; }
+        return s.replace(/[^a-z0-9]/g,'');
+    }
+
+    function applyHashToTabs(){
+        try{
+            var raw = (window.location.hash || '').replace(/^#/,'').trim().toLowerCase();
+            if(!raw) return;
+            var cat = normalizeCategory(raw);
+            // If product tabs controller is present, force it to show the tab
+            var tabs = window.app && window.app.controllers && window.app.controllers.productTabs;
+            if(tabs){
+                try{
+                    // Hide overview if present
+                    if(typeof tabs.hideCategoryOverview === 'function') tabs.hideCategoryOverview();
+                    if(typeof tabs.showBackButton === 'function') tabs.showBackButton();
+                    if(typeof tabs.switchTab === 'function') tabs.switchTab(cat);
+                }catch(e){ /* ignore individual errors */ }
+            }
+            // Also ensure the pill buttons reflect state (if present on page)
+            try{
+                var pills = document.querySelectorAll('.product-category-bar .category-btn');
+                if(pills && pills.length){
+                    pills.forEach(function(p){ p.classList.toggle('active', (p.getAttribute('data-filter')||'').toLowerCase() === cat); });
+                }
+            }catch(e){}
+        }catch(e){ /* swallow */ }
+    }
+
+    // Run on load (after app init) and on every hashchange
+    window.addEventListener('hashchange', applyHashToTabs);
+    // Small delay to ensure controllers initialized
+    setTimeout(applyHashToTabs, 300);
+})();
+
 // ===== GLOBAL ERROR HANDLING =====
 window.addEventListener('error', (e) => {
     console.error('Global error:', e.error);
@@ -3417,7 +3487,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const navMenu = document.getElementById('nav-menu');
                 if (!navMenu) return;
 
-                const hasProductsDropdown = !!navMenu.querySelector('.nav-dropdown .dropdown-toggle[href$="products.html"], .nav-dropdown .dropdown-toggle[href*="products.html?"]');
+                const hasProductsDropdown = !!navMenu.querySelector('.nav-dropdown .dropdown-toggle[href$="products.html"], .nav-dropdown .dropdown-toggle[href*="products.html?"], .nav-dropdown .dropdown-toggle[href*="products.html#"]');
                 const hasIndustriesDropdown = !!navMenu.querySelector('.nav-dropdown .dropdown-toggle[href$="industries.html"], .nav-dropdown .dropdown-toggle[href*="industries.html?"]');
 
                 // Determine base path for links based on page depth
@@ -3434,7 +3504,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!hasProductsDropdown) {
                     const productsHTML = `
                         <div class="nav-dropdown">
-                            <a href="${base}products.html" class="nav-link dropdown-toggle${location.pathname.endsWith('products.html') ? ' active' : ''}">
+                            <a href="${base}products.html#aerosol" class="nav-link dropdown-toggle${location.pathname.endsWith('products.html') ? ' active' : ''}">
                                 Our Products
                                 <i class="fas fa-chevron-down dropdown-icon"></i>
                             </a>
@@ -3484,7 +3554,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <div class="dropdown-column">
                                         <div class="cat-group">
                                             <div class="cat-header">
-                                                <a class="cat-link" href="${base}products.html#maintenance">Maintenance & Repair</a>
+                                                <a class="cat-link" href="${base}products.html#maintenance">Maintenance Chemicals</a>
                                                 <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-maintenance"><i class="fas fa-chevron-right"></i></button>
                                             </div>
                                             <div class="sub-list" id="cat-maintenance">
@@ -3536,7 +3606,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                                 <a class="sub-link view-all" href="${base}products.html#foodgrade">View all →</a>
                                             </div>
                                         </div>
-                                        <a href="${base}products.html" class="view-all" style="margin-top:10px; display:inline-block;">View All Products →</a>
+                                        <a href="${base}products.html#aerosol" class="view-all" style="margin-top:10px; display:inline-block;">View All Products →</a>
                                     </div>
                                 </div>
                             </div>
@@ -3729,7 +3799,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="dropdown-column">
                             <div class="cat-group">
                                 <div class="cat-header">
-                                    <a class="cat-link" href="products.html#maintenance">Maintenance & Repair</a>
+                                    <a class="cat-link" href="products.html#maintenance">Maintenance Chemicals</a>
                                     <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-maintenance"><i class="fas fa-chevron-right"></i></button>
                                 </div>
                                 <div class="sub-list" id="cat-maintenance">
@@ -3852,6 +3922,195 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {
         // ignore
     }
+});
+
+// Inject shared header from includes/header.html into pages (tries several relative paths)
+// This centralizes the header at runtime so all pages render the same markup without editing each HTML file.
+document.addEventListener('DOMContentLoaded', () => {
+    (async function injectSharedHeader(){
+        try {
+            const candidates = ['includes/header.html','./includes/header.html','../includes/header.html','/includes/header.html'];
+            let html = null;
+            for (const p of candidates) {
+                try {
+                    const res = await fetch(p, { cache: 'no-store' });
+                    if (res && res.ok) { html = await res.text(); break; }
+                } catch (err) {
+                    // try next path
+                }
+            }
+            if (!html) return;
+
+            const tmp = document.createElement('div');
+            tmp.innerHTML = html.trim();
+            const newNav = tmp.querySelector('nav#navbar') || tmp.querySelector('nav');
+            if (!newNav) return;
+
+            // If we're already on the products page, normalize any injected
+            // product-category links from forms like "products.html#cat" or
+            // "./products.html#cat" to plain fragment links "#cat". This
+            // ensures native hash navigation (and the page's existing
+            // hashchange handlers) run reliably when clicking the header
+            // while on products.html.
+            try {
+                var isProductsPagePath = /\/?products(?:\.html)?(?:$|[?#])/i.test(window.location.pathname);
+                if (isProductsPagePath) {
+                    newNav.querySelectorAll('a[href]').forEach(function(a){
+                        try {
+                            var h = a.getAttribute('href') || '';
+                            var m = h.match(/(?:\.\/|(?:\.\.\/)|\/)?(?:products(?:\.html)?)#(.+)$/i);
+                            if (m && m[1]) {
+                                a.setAttribute('href', '#' + m[1]);
+                            }
+                        } catch (e) { /* ignore per defensive insertion */ }
+                    });
+                }
+            } catch (e) { /* ignore */ }
+
+            const oldNav = document.querySelector('nav#navbar');
+            if (oldNav) {
+                // Replace old nav with cloned imported node
+                oldNav.replaceWith(newNav.cloneNode(true));
+            } else {
+                // Insert at top of body if no existing nav
+                document.body.insertBefore(newNav.cloneNode(true), document.body.firstChild);
+            }
+        } catch (e) {
+            // ignore fetch/insertion errors
+        }
+    })();
+});
+
+// Remove duplicate "Our Products" entries in the header (keep the first one)
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const navMenu = document.getElementById('nav-menu');
+        if (!navMenu) return;
+
+        // Find dropdown blocks and plain links that represent "Our Products"
+        const productDropdowns = Array.from(navMenu.querySelectorAll('.nav-dropdown'))
+            .filter(dd => {
+                const toggle = dd.querySelector('.dropdown-toggle');
+                return toggle && /\bOur Products\b/i.test(toggle.textContent || '');
+            });
+
+        // If there are multiple dropdowns, remove all but the first one
+        if (productDropdowns.length > 1) {
+            productDropdowns.slice(1).forEach(dd => dd.remove());
+        }
+
+        // Also handle direct nav links (non-dropdown) with the exact text "Our Products"
+        const productLinks = Array.from(navMenu.querySelectorAll('a.nav-link'))
+            .filter(a => /^\s*Our Products\s*$/i.test(a.textContent || ''));
+        if (productLinks.length > 1) {
+            // Keep the first occurrence and remove subsequent ones
+            productLinks.slice(1).forEach(a => {
+                // If the link is inside a nav-dropdown we already handled, skip
+                const parentDropdown = a.closest('.nav-dropdown');
+                if (parentDropdown && navMenu.contains(parentDropdown)) return;
+                a.remove();
+            });
+        }
+    } catch (e) {
+        // swallow any minor errors
+    }
+});
+
+// When on the products page, clicking a header dropdown category that links to
+// "products.html#category" should show the category panel without a full reload.
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        // Only activate when the products tab content exists on the page
+        const isProductsPage = !!document.querySelector('.tab-content');
+        if (!isProductsPage) return;
+
+        // Delegate clicks on category links inside nav menus
+        document.addEventListener('click', (e) => {
+            const a = e.target.closest && e.target.closest('a');
+            if (!a) return;
+            const href = (a.getAttribute('href') || '').trim();
+            if (!href || href.indexOf('#') === -1) return;
+
+            try {
+                // Parse the href relative to current location to accept absolute or relative URLs
+                const parsed = new URL(href, window.location.href);
+                let targetHash = (parsed.hash || '').replace(/^#/, '');
+                if (!targetHash) return;
+
+                // Normalize category names (support many href variants like "industrial-lubricants", "lubricants", "industrial-lubricants#", "food-grade", etc.)
+                function normalizeCategory(name){
+                    if(!name) return name;
+                    const s = name.toLowerCase().trim();
+                    const map = [
+                        [/aero|aerosol/, 'aerosol'],
+                        [/lubricat|industrial-?lubricant|lubricants?/, 'lubricants'],
+                        [/grease/, 'grease'],
+                        [/maintain|maintenance/, 'maintenance'],
+                        [/metal|metal-?working/, 'metalworking'],
+                        [/accessor|accessories/, 'accessories'],
+                        [/food|food-?grade|foodsafe|food-?safe|foodgrade/, 'foodgrade']
+                    ];
+                    for(const [re, id] of map){ if(re.test(s)) return id; }
+                    // fallback: strip non-alphanum and return
+                    return s.replace(/[^a-z0-9]/g,'');
+                }
+
+                targetHash = normalizeCategory(targetHash);
+
+                // Only handle when either the current page or the link target is the products page
+                const currentIsProducts = /\/?products(?:\.html)?(?:$|[?#])/i.test(window.location.pathname);
+                const targetIsProducts = /\/?products(?:\.html)?(?:$|[?#])/i.test(parsed.pathname);
+                if (!currentIsProducts && !targetIsProducts) return;
+
+                // Prevent default navigation and trigger hash-driven UI
+                e.preventDefault();
+                if (window.location.hash.replace('#', '') !== targetHash) {
+                    window.location.hash = '#' + targetHash;
+                } else {
+                    // Force handlers when clicking same hash
+                    window.dispatchEvent(new HashChangeEvent('hashchange'));
+                }
+
+                // Defensive fallback: if the product tabs controller exists, call it directly
+                // This ensures the panel shows even if the normal hashchange path is missed
+                try {
+                    const tabs = window.app && window.app.controllers && window.app.controllers.productTabs;
+                    if (tabs) {
+                        if (typeof tabs.initFromHash === 'function') {
+                            tabs.initFromHash();
+                        } else if (typeof tabs.switchTab === 'function') {
+                            tabs.switchTab(targetHash);
+                        }
+                    }
+                } catch (e) { /* ignore fallback errors */ }
+
+                // Close any open nav dropdowns for a cleaner UX
+                document.querySelectorAll('.nav-dropdown').forEach(dd => dd.classList.remove('active'));
+            } catch (err) {
+                // If URL parsing fails, fall back to regex match for simple fragments
+                const frag = href.match(/^#(.+)$/);
+                if (!frag || !frag[1]) return;
+                const targetHashRaw = frag[1];
+                const targetHash = (function(v){
+                    try{ return (function(n){
+                        const s = n.toLowerCase().trim();
+                        return s.replace(/[^a-z0-9]/g,'');
+                    })(v);}catch(e){return v;}
+                })(targetHashRaw);
+                try {
+                    e.preventDefault();
+                    if (window.location.hash.replace('#', '') !== targetHash) {
+                        window.location.hash = '#' + targetHash;
+                    } else {
+                        window.dispatchEvent(new HashChangeEvent('hashchange'));
+                    }
+                    // fallback controller call
+                    try{ const tabs = window.app && window.app.controllers && window.app.controllers.productTabs; if(tabs && typeof tabs.switchTab === 'function') tabs.switchTab(targetHash);}catch(e){}
+                    document.querySelectorAll('.nav-dropdown').forEach(dd => dd.classList.remove('active'));
+                } catch (e2) { /* ignore */ }
+            }
+        });
+    } catch (e) { /* ignore */ }
 });
 
 // Bearing Animation
@@ -4132,6 +4391,51 @@ class RollingDrumAnimation {
 // Initialize drum animation when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new RollingDrumAnimation();
+});
+
+// ===== NEUTRALIZE LINKS TO REMOVED PRODUCT PAGES =====
+// Remove hyperlink behavior for any anchor that points to products/ so pages don't navigate to deleted product detail pages.
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        // Select anchors that start with products/ or ../products/ or ./products/
+        const sel = ['a[href^="products/" ]', 'a[href^="./products/" ]', 'a[href^="../products/" ]'].join(',');
+        const anchors = Array.from(document.querySelectorAll(sel));
+
+        anchors.forEach(a => {
+            // Remove href so it's no longer clickable
+            a.removeAttribute('href');
+            // Mark as disabled for assistive tech
+            a.setAttribute('aria-disabled', 'true');
+            // Make it clear visually (styles may override; class gives author control)
+            a.classList.add('no-link');
+            // Prevent any remaining navigation handlers
+            a.addEventListener('click', (e) => { e.preventDefault(); });
+            // Ensure cursor indicates non-clickable
+            try { a.style.cursor = 'default'; } catch (e) { /* ignore */ }
+        });
+
+        // Some product cards used data-href or dataset.href — remove those to avoid JS-driven navigation
+        document.querySelectorAll('[data-href]').forEach(el => {
+            const dh = el.getAttribute('data-href') || el.dataset.href;
+            if (dh && /(^|\/)products\//.test(dh)) {
+                el.removeAttribute('data-href');
+                try { delete el.dataset.href; } catch(e) {}
+                el.classList.add('no-link');
+            }
+        });
+
+        // Small helper: expose a function to restore links if needed for debugging
+        window.__restoreProductLinks = function(){
+            anchors.forEach(a => {
+                // cannot restore original hrefs here once removed; this helper simply removes the disabling behavior
+                a.removeAttribute('aria-disabled');
+                a.classList.remove('no-link');
+                a.style.cursor = '';
+            });
+            document.querySelectorAll('[data-href]').forEach(el => { el.classList.remove('no-link'); });
+            console.info('[debug] product link disabling removed (original href values are not restored).');
+        };
+    } catch (err) { console.error('Error neutralizing product links', err); }
 });
 
 window.addEventListener('unhandledrejection', (e) => {

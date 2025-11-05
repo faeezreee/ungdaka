@@ -21,7 +21,7 @@
     <!-- Enhanced Styles for Industry Pages -->
     <style>
         .industry-overview-enhanced {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            background: linear-gradient(135deg, #fff7ed 0%, #fff2d1 100%); /* warm yellow background */
             padding: 80px 0;
         }
         
@@ -37,8 +37,8 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
+            background: linear-gradient(135deg, #ffd600, #ffe066);
+            color: #222;
             padding: 8px 16px;
             border-radius: 25px;
             font-size: 14px;
@@ -73,8 +73,8 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
+            background: linear-gradient(135deg, #ffd600, #ffe066);
+            color: #222;
             padding: 8px 16px;
             border-radius: 25px;
             font-size: 14px;
@@ -109,7 +109,7 @@
         .stat-number {
             font-size: 2rem;
             font-weight: 700;
-            color: #10b981;
+            color: #ffd600;
             margin-bottom: 5px;
         }
         
@@ -178,13 +178,13 @@
         .feature-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            color: white;
+            color: #222;
             font-size: 1.5rem;
         }
         
@@ -237,7 +237,7 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
         }
         
         .feature-card {
@@ -256,13 +256,13 @@
         .feature-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            color: white;
+            color: #222;
             font-size: 1.5rem;
         }
         
@@ -292,8 +292,8 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
+            background: linear-gradient(135deg, #ffd600, #ffe066);
+            color: #222;
             padding: 8px 16px;
             border-radius: 25px;
             font-size: 14px;
@@ -337,8 +337,8 @@
         /* Featured-style product image sizing (match home featured product appearance) */
         .products-grid .product-card .product-image {
             position: relative;
-            height: 600px;
-            padding: 40px;
+            height: 360px; /* reduced from 600px */
+            padding: 24px;
             box-sizing: border-box;
             overflow: hidden;
             display: flex;
@@ -347,7 +347,7 @@
         }
 
         .products-grid .product-card .product-image img {
-            max-height: 520px;
+            max-height: 300px; /* reduced from 520px */
             object-fit: contain;
             width: auto;
             display: block;
@@ -360,12 +360,12 @@
             right: 15px;
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #222;
             font-size: 1.2rem;
         }
         
@@ -409,8 +409,8 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            background: #f0fdf4;
-            color: #059669;
+            background: #fff7ed;
+            color: #ffd600;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -430,12 +430,12 @@
         .application-icon {
             width: 35px;
             height: 35px;
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #222;
             font-size: 1rem;
             flex-shrink: 0;
         }
@@ -453,8 +453,8 @@
         
         .btn-product-primary {
             flex: 1;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
+            background: linear-gradient(135deg, #ffd600, #ffe066);
+            color: #222;
             border: none;
             padding: 12px 20px;
             border-radius: 8px;
@@ -470,8 +470,8 @@
         .btn-product-secondary {
             flex: 1;
             background: transparent;
-            color: #10b981;
-            border: 2px solid #10b981;
+            color: #ffd600;
+            border: 2px solid #ffd600;
             padding: 10px 20px;
             border-radius: 8px;
             font-weight: 500;
@@ -480,26 +480,26 @@
         }
         
         .btn-product-secondary:hover {
-            background: #10b981;
+            background: #ffd600;
             color: white;
         }
     /* Technical specs + CTA styles (match other pages, green palette) */
-    .technical-specs-enhanced { padding: 80px 0; background: linear-gradient(135deg, #f8fafc, #eafaf1); }
+    .technical-specs-enhanced { padding: 80px 0; background: linear-gradient(135deg, #fffaf4, #fff6e6); }
     .technical-specs-enhanced h2 { text-align: center; font-size: 2.2rem; color: #0f172a; margin-bottom: 24px; }
     .specs-grid-enhanced { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
     .spec-item-enhanced { background: white; padding: 40px 30px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; overflow: hidden; }
-    .spec-item-enhanced::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(135deg, #10b981, #059669); }
+    .spec-item-enhanced::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(135deg, #ffd600, #ffe066); }
     .spec-item-enhanced:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
     .spec-item-enhanced h3 { font-size: 1.4rem; font-weight: 600; color: #1e293b; margin-bottom: 15px; }
     .spec-item-enhanced p { color: #64748b; line-height: 1.6; font-size: 1rem; }
-    .spec-icon { width: 80px; height: 80px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display:flex; align-items:center; justify-content:center; margin: 0 auto 25px; color: white; font-size: 2rem; box-shadow: 0 10px 20px rgba(16,185,129,0.3); }
+    .spec-icon { width: 80px; height: 80px; background: linear-gradient(135deg, #ffd600, #ffe066); border-radius: 50%; display:flex; align-items:center; justify-content:center; margin: 0 auto 25px; color: #222; font-size: 2rem; box-shadow: 0 10px 20px rgba(255,214,0,0.3); }
     .cta-section-enhanced { padding: 80px 0; background: #fff; text-align:center; }
     .cta-section-enhanced .cta-content { max-width:980px; margin:0 auto; }
     .cta-section-enhanced .cta-content h2 { margin:0 0 18px 0; font-size:2.2rem; }
     .cta-section-enhanced .cta-content p { margin:0 0 26px 0; color:#64748b; }
     .cta-buttons { display:inline-flex; gap:18px; }
-        .btn-cta-primary { background: linear-gradient(135deg, #10b981, #059669); color: #fff; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; gap: 10px; align-items: center; }
-        .btn-cta-secondary { background: transparent; color: #10b981; border: 2px solid #10b981; padding: 10px 18px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; gap: 10px; align-items: center; }
+    .btn-cta-primary { background: linear-gradient(135deg, #ffd600, #ffe066); color: #222; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; gap: 10px; align-items: center; }
+    .btn-cta-secondary { background: transparent; color: #ffd600; border: 2px solid #ffd600; padding: 10px 18px; border-radius: 10px; font-weight: 700; text-decoration: none; display: inline-flex; gap: 10px; align-items: center; }
         
         .cta-section-enhanced {
             padding: 80px 0;
@@ -534,8 +534,8 @@
         }
         
         .btn-cta-primary {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
+            background: linear-gradient(135deg, #ffd600, #ffe066);
+            color: #222;
             border: none;
             padding: 16px 32px;
             border-radius: 12px;
@@ -551,13 +551,13 @@
         
         .btn-cta-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(16,185,129,0.4);
+            box-shadow: 0 15px 30px rgba(255,214,0,0.4);
         }
         
         .btn-cta-secondary {
             background: transparent;
-            color: #10b981;
-            border: 2px solid #10b981;
+            color: #ffd600;
+            border: 2px solid #ffd600;
             padding: 14px 32px;
             border-radius: 12px;
             font-size: 1.1rem;
@@ -571,7 +571,7 @@
         }
         
         .btn-cta-secondary:hover {
-            background: #10b981;
+            background: #ffd600;
             color: white;
             transform: translateY(-3px);
         }
@@ -612,6 +612,15 @@
             }
             .cta-section-enhanced .cta-content { flex-direction:column; align-items:flex-start; }
         }
+
+        /* Force recommended products to 2 columns on desktop for this page */
+        .products-section-enhanced .products-grid-enhanced {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 24px !important;
+        }
+        @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 980px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
+
     </style>
 </head>
 <body>
@@ -627,7 +636,7 @@
                 
                 <!-- Products Dropdown -->
                 <div class="nav-dropdown">
-                    <a href="products.html" class="nav-link dropdown-toggle">
+                    <a href="products.html#aerosol" class="nav-link dropdown-toggle">
                         Our Products
                         <i class="fas fa-chevron-down dropdown-icon"></i>
                     </a>
@@ -656,7 +665,7 @@
                                 <a href="products/giga-os-oil-skimmer.html">GIGA OS Oil Skimmer</a>
                                 <a href="products/anti-rust-series.html">Anti-Rust Series</a>
                                 <a href="products/moly-lube-advanced-lubricant.html">Moly Lube</a>
-                                <a href="products.html" class="view-all">View All Products →</a>
+                                <a href="products.html#aerosol" class="view-all">View All Products →</a>
                             </div>
                         </div>
                     </div>
@@ -714,95 +723,28 @@
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <div class="container">
-            <div class="page-header-content">
-                <div class="breadcrumb">
-                    <a href="index.html">Home</a>
-                    <i class="fas fa-chevron-right"></i>
-                    <a href="industries.html">Industries</a>
-                    <i class="fas fa-chevron-right"></i>
-                    <span>Food, Beverage & Pharmaceutical Products</span>
-                </div>
-                <h1>Food, Beverage & Pharmaceutical Industry Products</h1>
-                <p>NSF H1 approved lubricants and HACCP compliant solutions for food processing equipment</p>
-            </div>
-        </div>
-    </section>
+    
 
-    <!-- Industry Overview -->
-    <section class="industry-overview-enhanced">
+    <!-- Video hero (replaces previous Industry Overview) -->
+    <section class="hero-modern products-hero industry-hero-compact">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <!-- poster: reuse existing food/beverage poster; video source uses the requested asset -->
+            <video class="hero-bg-image" autoplay muted loop playsinline preload="metadata" poster="public/Industries%20Images/food%20%20%26%20beverage.jpg">
+                <source src="public/food safe closeup.mp4" type="video/mp4">
+            </video>
+        </div>
         <div class="container">
-            <div class="industry-hero">
-                <div class="industry-hero-content">
-                    <div class="industry-badge">
-                        <i class="fas fa-utensils"></i>
-                        <span>Food & Beverage</span>
-                    </div>
-                    <h2>Food-Safe Solutions for Critical Industries</h2>
-                    <p>Our specialized NSF H1 products are designed to meet the stringent requirements of food, beverage, and pharmaceutical manufacturing. All products are NSF H1 compliant and meet HACCP standards for safe incidental food contact.</p>
-                    
-                    <div class="industry-stats">
-                        <div class="stat-item">
-                            <div class="stat-number">NSF H1</div>
-                            <div class="stat-label">Approved</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">100%</div>
-                            <div class="stat-label">Food Safe</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">0</div>
-                            <div class="stat-label">Contamination Risk</div>
-                        </div>
-                        </div>
-                        </div>
-                <div class="industry-hero-image">
-                    <!-- Use URI-encoded filename to avoid issues with spaces and ampersand -->
-                    <img src="public/Industries%20Images/food%20%20%26%20beverage.jpg" alt="Food processing facility" loading="lazy">
-                    <div class="image-overlay">
-                        <div class="overlay-content">
-                            <i class="fas fa-shield-alt"></i>
-                            <h4>NSF Approved</h4>
-                            <p>Certified NSF H1 solutions</p>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-            
-            <div class="industry-features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-certificate"></i>
-                    </div>
-                    <h3>NSF Approved Formulations</h3>
-                    <p>All products meet NSF H1 standards for food-contact applications</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-clipboard-check"></i>
-                    </div>
-                    <h3>HACCP Compliant</h3>
-                    <p>Meeting all Hazard Analysis Critical Control Point requirements</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <h3>Food Safe Ingredients</h3>
-                    <p>Safe for incidental food contact in processing environments</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-ban"></i>
-                    </div>
-                    <h3>Zero Contamination Risk</h3>
-                    <p>Non-contaminating formulations for food safety</p>
-                </div>
+            <div class="hero-content-modern">
+                <div class="industry-badge"><i class="fas fa-utensils"></i> Food, Beverage & Pharmaceutical</div>
+                <h1 class="hero-title-modern">NSF H1 & HACCP Compliant Solutions
+                    <span class="hero-highlight">Food-Safe • High Purity</span>
+                </h1>
+                <p class="hero-subtitle-modern">NSF H1 lubricants, HACCP-compliant cleaners and processing-grade solutions for safe food and pharmaceutical production.</p>
             </div>
         </div>
     </section>
+    
 
     <!-- Products Grid -->
     <section class="products-section-enhanced">
@@ -810,9 +752,8 @@
             <div class="section-header-enhanced">
                 <div class="section-badge">
                     <i class="fas fa-utensils"></i>
-                    <span>Our Products</span>
+                    <span>Recommended Products for Food, Beverage & Pharmaceutical Industry</span>
                 </div>
-                <h2>Recommended Products for Food, Beverage & Pharmaceutical Industry</h2>
                 <p>Professional-grade solutions for your food processing needs</p>
             </div>
             
@@ -1151,7 +1092,7 @@
                 <p>Our technical team can help you select the right products for your specific food, beverage, or pharmaceutical manufacturing requirements.</p>
                 <div class="cta-buttons">
                     <a href="contact.html" class="btn-cta-primary"><i class="fas fa-envelope"></i> Contact Our Experts</a>
-                    <a href="products.html" class="btn-cta-secondary"><i class="fas fa-box"></i> View All Products</a>
+                    <a href="products.html#aerosol" class="btn-cta-secondary"><i class="fas fa-box"></i> View All Products</a>
                 </div>
             </div>
         </div>
@@ -1173,7 +1114,7 @@
                     <ul class="footer-list">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
-                        <li><a href="products.html">Our Products</a></li>
+                        <li><a href="products.html#aerosol">Our Products</a></li>
                         <li><a href="industries.html">Industries</a></li>
                         <li><a href="contact.html">Contact Us</a></li>
                     </ul>
@@ -1182,12 +1123,12 @@
                 <div class="footer-col">
                     <h4 class="footer-heading">Products</h4>
                     <ul class="footer-list">
-                        <li><a href="products.html">Aerosol Products</a></li>
-                        <li><a href="products.html">Industrial Lubricants</a></li>
-                        <li><a href="products.html">Industrial Grease</a></li>
-                        <li><a href="products.html">Maintenance & Repair</a></li>
-                        <li><a href="products.html">Metal Working</a></li>
-                        <li><a href="products.html">Food-Safe Products</a></li>
+                        <li><a href="products.html#aerosol">Aerosol Products</a></li>
+                        <li><a href="products.html#aerosol">Industrial Lubricants</a></li>
+                        <li><a href="products.html#aerosol">Industrial Grease</a></li>
+                        <li><a href="products.html#aerosol">Maintenance Chemicals</a></li>
+                        <li><a href="products.html#aerosol">Metal Working</a></li>
+                        <li><a href="products.html#aerosol">Food-Safe Products</a></li>
                     </ul>
                 </div>
 
@@ -1225,36 +1166,40 @@
     <!-- Scripts -->
     <script src="script.js"></script>
     <script>
-        // Enforce 4-column grid, compact images, hide verbose blocks and add Applications chips styling
+        // Enforce compact 3-column grid, smaller image containers, hide verbose blocks and add application chips
         (function(){
             const style = document.createElement('style');
             style.textContent = `
-            /* 4-column responsive grid */
-            .products-section-enhanced .products-grid-enhanced{grid-template-columns:repeat(4,1fr)!important;gap:24px!important}
-            @media (max-width:1280px){.products-section-enhanced .products-grid-enhanced{grid-template-columns:repeat(3,1fr)!important}}
-            @media (max-width:980px){.products-section-enhanced .products-grid-enhanced{grid-template-columns:repeat(2,1fr)!important}}
-            @media (max-width:640px){.products-section-enhanced .products-grid-enhanced{grid-template-columns:1fr!important;gap:18px!important}}
-            /* Compact images */
-            .products-section-enhanced .product-image,.products-section-enhanced .product-image-container{height:360px!important;padding:22px!important}
-            .products-section-enhanced .product-image img,.products-section-enhanced .product-image-container img{width:100%;height:100%;object-fit:contain;display:block}
-            @media (max-width:1280px){.products-section-enhanced .product-image,.products-section-enhanced .product-image-container{height:320px!important;padding:20px!important}}
-            @media (max-width:980px){.products-section-enhanced .product-image,.products-section-enhanced .product-image-container{height:300px!important;padding:18px!important}}
-            @media (max-width:640px){.products-section-enhanced .product-image,.products-section-enhanced .product-image-container{height:260px!important;padding:16px!important}}
+            /* Compact responsive grid: 3 cols desktop → 2 cols mid → 1 col mobile */
+            .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(3, 1fr) !important; gap: 20px !important; }
+            @media (max-width: 1280px) { .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
+            @media (max-width: 980px) { .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
+            @media (max-width: 640px) { .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr !important; gap: 18px !important; } }
+
+            /* Compact image container (reduced further per request) */
+            .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 240px !important; padding: 14px !important; box-sizing: border-box; display:flex; align-items:center; justify-content:center; }
+            .products-section-enhanced .product-image img, .products-section-enhanced .product-image-container img { max-height: 200px; width: auto; object-fit: contain; display: block; }
+            @media (max-width: 1280px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 220px !important; padding: 12px !important; } }
+            @media (max-width: 980px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 200px !important; padding: 10px !important; } }
+            @media (max-width: 640px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 180px !important; padding: 8px !important; } }
+
             /* Hide verbose blocks; concise chips */
-            .products-section-enhanced .product-card .product-features,.products-section-enhanced .product-card .product-features-enhanced{display:none!important}
-            .products-section-enhanced .product-card .product-info>p,.products-section-enhanced .product-card .product-content>p{display:none!important}
-            .products-section-enhanced .product-card .product-application{display:none!important}
-            .products-section-enhanced .product-card .product-info h3,.products-section-enhanced .product-card .product-content h3{margin-bottom:8px!important}
-            .products-section-enhanced .product-card .product-info,.products-section-enhanced .product-card .product-content{padding-top:18px!important}
+            .products-section-enhanced .product-card .product-features, .products-section-enhanced .product-card .product-features-enhanced { display: none !important; }
+            .products-section-enhanced .product-card .product-info > p, .products-section-enhanced .product-card .product-content > p { display: none !important; }
+            .products-section-enhanced .product-card .product-application { display: none !important; }
+            .products-section-enhanced .product-card .product-info h3, .products-section-enhanced .product-card .product-content h3 { margin-bottom: 8px !important; }
+            .products-section-enhanced .product-card .product-info, .products-section-enhanced .product-card .product-content { padding-top: 12px !important; }
+
             /* Chips styling */
-            .products-section-enhanced .product-apps-title{display:block;font-size:.85rem;font-weight:700;color:#059669;margin-top:8px}
-            .products-section-enhanced .product-apps{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
-            .products-section-enhanced .product-apps .app-chip{display:inline-flex;align-items:center;padding:5px 9px;border-radius:16px;background:#ecfdf5;color:#047857;font-size:.8rem;font-weight:600;border:1px solid rgba(0,0,0,.05);box-shadow:0 1px 2px rgba(0,0,0,.04);white-space:nowrap}
-            .products-section-enhanced .product-apps .app-chip::before{content:'\\2022';margin-right:6px;color:#10b981}
-            /* Category bar (green theme) */
-            .product-category-bar{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:16px 0 24px}
-            .product-category-bar .category-btn{background:transparent;border:1px solid #e5e7eb;padding:8px 14px;margin:0 6px;border-radius:8px;font-weight:600;cursor:pointer;color:#0f172a}
-            .product-category-bar .category-btn.active{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border-color:transparent}
+            .products-section-enhanced .product-apps-title { display: block; font-size: .85rem; font-weight: 700; color: #000000; margin-top: 8px; }
+            .products-section-enhanced .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+            .products-section-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: rgba(0,0,0,0.06); color: #000000; font-size: .8rem; font-weight: 600; border: 1px solid rgba(0,0,0,.04); box-shadow: 0 1px 2px rgba(0,0,0,.03); white-space: nowrap; }
+            .products-section-enhanced .product-apps .app-chip::before { content: '\\2022'; margin-right: 6px; color: #000000; }
+
+            /* Category bar */
+            .product-category-bar { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin: 16px 0 24px; }
+            .product-category-bar .category-btn { background: transparent; border: 1px solid #e5e7eb; padding: 8px 14px; margin: 0 6px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #0f172a; }
+            .product-category-bar .category-btn.active { background: linear-gradient(135deg, #ffd600, #ffe066); color:#222; border-color: transparent; }
             `;
             document.head.appendChild(style);
         })();
@@ -1267,7 +1212,7 @@
                         ['aerosol-products', 'Aerosol Products'],
                         ['industrial-lubricants', 'Industrial Lubricants'],
                         ['industrial-grease', 'Industrial Grease'],
-                        ['maintenance-repair', 'Maintenance & Repair']
+                        ['maintenance-repair', 'Maintenance Chemicals']
                     ],
                     moveLubeGuardHref: '',
                     orderAllByCategory: true

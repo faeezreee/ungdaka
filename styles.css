@@ -3667,7 +3667,7 @@ section {
 .product-card .product-info h3 {
     font-size: var(--font-size-lg);
     font-weight: 700;
-    color: var(--gray-900);
+    color: #000; /* force black titles for product cards */
     margin-bottom: var(--spacing-sm);
     line-height: 1.3;
 }
@@ -3691,12 +3691,12 @@ section {
 .product-card-grouped .product-link {
     display: inline-flex;
     align-items: center;
-    color: var(--primary-700, #0f766e);
+    color: #000; /* grouped list item titles should be black, not blue */
     text-decoration: none;
     font-weight: 600;
 }
 .product-card-grouped .product-link:hover {
-    text-decoration: underline;
+    text-decoration: none; /* avoid underline on hover for non-link appearance */
 }
 
 /* Enhanced formatting for grouped product list with descriptions */
@@ -3799,12 +3799,14 @@ section {
     line-height: 1.5;
 }
 
-/* Make grouped duplicate-image cards take the full row for readability */
+/* Allow grouped duplicate-image cards to participate in the normal grid flow
+   instead of forcing them to span the full row. This makes grouped cards
+   behave like other product cards and follow the grid columns. */
 .products-grid .product-card-grouped,
 .products-grid-enhanced .product-card-grouped,
 .related-products-grid .product-card-grouped,
 .related-products-container .product-card-grouped {
-    grid-column: 1 / -1;
+    grid-column: auto; /* allow normal placement within the grid */
 }
 
 .product-card:hover::before {
@@ -7373,3 +7375,264 @@ a.duplicate-image-title:hover {
 .industries-carousel .panel-overlay {
     opacity: 1 !important;
 }
+
+/* ======================================================================
+   Disable animations/transitions/transforms for product cards & variants
+   This ensures product listing cards are completely static: no entrance,
+   hover, or image-scale animations. Very high specificity and !important
+   ensure these rules override existing styles and runtime classes.
+   ====================================================================== */
+.product-card,
+.product-card *,
+.product-card-enhanced,
+.product-card-enhanced *,
+.product-card-featured,
+.product-card-featured *,
+.hero-product-card,
+.hero-product-card *,
+.product-card-grouped,
+.product-card-grouped * {
+    animation: none !important;
+    transition: none !important;
+    transition-duration: 0s !important;
+    transform: none !important;
+    will-change: auto !important;
+}
+
+/* Disable any animate-* or hover-* classes applied to product cards or variants */
+.product-card[class*="animate-"],
+.product-card[class*="hover-"],
+.product-card-enhanced[class*="animate-"],
+.product-card-enhanced[class*="hover-"],
+.product-card-featured[class*="animate-"],
+.product-card-featured[class*="hover-"],
+.hero-product-card[class*="animate-"],
+.hero-product-card[class*="hover-"] {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+}
+
+/* Ensure hover/focus/active effects don't lift or scale product cards */
+.product-card:hover,
+.product-card:focus,
+.product-card:active,
+.product-card-enhanced:hover,
+.product-card-enhanced:focus,
+.product-card-enhanced:active,
+.product-card-featured:hover,
+.product-card-featured:focus,
+.product-card-featured:active,
+.hero-product-card:hover,
+.hero-product-card:focus,
+.hero-product-card:active,
+.product-card-grouped:hover,
+.product-card-grouped:focus,
+.product-card-grouped:active,
+.product-card.hover-float,
+.product-card-enhanced.hover-float {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Additional overrides to remove border/outline/::before hover highlights */
+a.product-card,
+a.product-card:hover,
+a.product-card:focus,
+a.product-card:active,
+a.product-card:focus-visible,
+a.product-card-featured,
+a.product-card-featured:hover,
+a.product-card-featured:focus {
+    border-color: var(--gray-200) !important;
+    box-shadow: none !important;
+    transform: none !important;
+    outline: none !important;
+    -webkit-box-shadow: none !important;
+}
+
+/* Neutralize the decorative top-bar or highlight pseudo-element that scales on hover */
+.product-card::before,
+.product-card:hover::before,
+.product-card-featured::before,
+.product-card-featured:hover::before,
+a.product-card::before,
+a.product-card-featured::before {
+    transform: none !important;
+    opacity: 0 !important;
+    background: transparent !important;
+    transition: none !important;
+}
+
+/* Remove any focus rings applied by browsers */
+a.product-card:focus,
+a.product-card:focus-visible,
+a.product-card-featured:focus,
+a.product-card-featured:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Provide a visual hook if you want to style disabled cards (optional) */
+.product-card.no-link,
+.product-card-enhanced.no-link {
+    cursor: default !important;
+}
+
+/* ======================================================================
+   Disable oil-mask and related pseudo-element animations
+   This targets the ::before/::after overlays, mask images and droplet
+   elements that product-animations.css creates. It is safe and reversible.
+   ====================================================================== */
+.product-card .product-image::before,
+.product-card .product-image::after,
+.product-card .product-image::before *,
+.product-card .product-image::after *,
+.product-card .product-image .oil-droplet,
+.product-card .product-image .oil-droplet *,
+.product-card .category-image::before,
+.product-card .category-image::after,
+.product-image::before,
+.product-image::after,
+.category-card .category-image::before,
+.category-card .category-image::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    clip-path: none !important;
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+    -webkit-mask-size: none !important;
+    mask-size: none !important;
+    -webkit-mask-position: none !important;
+    mask-position: none !important;
+    background: transparent !important;
+    opacity: 0 !important; /* hide the pseudo overlays */
+    pointer-events: none !important;
+}
+
+/* Hide oil droplets used by the mask animation */
+.product-image .oil-droplet,
+.product-card .oil-droplet,
+.category-card .oil-droplet {
+    display: none !important;
+    animation: none !important;
+}
+
+/* Ensure the real product image is visible immediately (no reveal animation) */
+.product-image img,
+.product-card .product-image img,
+.category-card .category-image img {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+}
+
+
+/* Product index chips (right-hand Products list) - match application chip styling */
+.product-index-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 16px;
+    background: #eef2f7;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    margin: 4px 0;
+    text-decoration: none;
+}
+.product-index-chip::before {
+    content: '\2022';
+    margin-right: 8px;
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+/* Tweak product-list spacing to suit chip layout */
+.product-list .product-item {
+    padding: 4px 0; /* reduced vertical padding between items */
+    border: none;
+    background: transparent;
+    margin-bottom: 2px; /* small spacing to separate items */
+}
+.product-list .product-line {
+    gap: 6px; /* tighter gap between line elements (icon/title/chips) */
+    display: flex;
+    align-items: center;
+}
+
+/* Applications title shown above chips in the sidebar index (matches Lube Guard) */
+.product-apps-title {
+    display: block;
+    margin-top: 6px;
+    margin-bottom: 4px;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 0.92rem;
+}
+
+.product-index-title {
+    margin: 4px 0; /* slightly tighter between product headings */
+}
+.product-index-title .product-link {
+    /* Make title fully black as requested, bold and non-clickable in appearance */
+    color: #000;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: default; /* indicate non-clickable */
+}
+.product-index-title .product-link:hover {
+    /* Do not show underline on hover so it doesn't look like a link */
+    text-decoration: none;
+}
+
+/* Stronger rule: force any product-list/product-card-grouped links to appear as plain black headings
+   Use a highly specific selector and !important to override other theme link colors. */
+.product-list .product-link,
+.product-card-grouped .product-item .product-link,
+.product-card-grouped .product-link {
+    color: #000 !important;
+    text-decoration: none !important;
+    cursor: default !important;
+}
+.product-list .product-link:hover,
+.product-card-grouped .product-item .product-link:hover,
+.product-card-grouped .product-link:hover {
+    text-decoration: none !important;
+}
+
+/* Right-hand index: style app chips the same as product detail chips so they match Lube Guard */
+.product-list .product-apps {
+    display: flex;
+    flex-wrap: wrap; /* allow wrap so chips show full text */
+    gap: 6px;
+    margin-top: 4px;
+}
+.product-list .product-apps .app-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 6px; /* tighter chip padding */
+    border-radius: 14px;
+    background: #eef2f7;
+    color: var(--primary-color);
+    font-size: 0.82rem; /* slightly smaller text */
+    font-weight: 600;
+    border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    white-space: normal; /* allow wrapping inside chip so full text displays */
+    word-break: break-word;
+    max-width: 100%;
+}
+.product-list .product-apps .app-chip::before {
+    content: '\2022';
+    margin-right: 6px;
+    color: var(--secondary-color);
+    font-size: 0.7rem; /* smaller bullet */
+    line-height: 1;
+}
+
+

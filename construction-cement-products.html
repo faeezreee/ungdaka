@@ -380,7 +380,7 @@
         
         .products-grid-enhanced {
             display: grid;
-            grid-template-columns: repeat(3, 1fr); /* force 3 columns on desktop */
+            grid-template-columns: repeat(2, 1fr); /* force 2 columns on desktop */
             gap: 30px;
         }
         
@@ -749,10 +749,10 @@
         /* ===== Construction & Cement Products Grid: 4 columns + compact images + app chips ===== */
         .products-section-enhanced .products-grid-enhanced {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 24px;
         }
-        @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 980px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 640px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr; gap: 18px; } }
 
@@ -773,10 +773,59 @@
         .products-section-enhanced .product-card .product-content h3 { margin-bottom: 8px !important; }
 
         /* Applications chips styling (scoped) */
-        .products-section-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: var(--primary-color); margin-top: 8px; }
+    .products-section-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: #000000; margin-top: 8px; }
         .products-section-enhanced .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-        .products-section-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: #eef2f7; color: var(--primary-color); font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
-        .products-section-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: var(--secondary-color); }
+        .products-section-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: rgba(0,0,0,0.08); color: #000000; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+        .products-section-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: #000000; }
+        
+            /* Compact Construction & Cement: denser recommended-products grid + typography match */
+            /* Typography: match Stamping page (Inter, weights + sizes) */
+            body, button, input, select, textarea {
+                font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                color: #111827;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+            h1,h2,h3,h4,h5,h6 { font-family: inherit; font-weight: 700; color: #111827; }
+            .industry-hero h2 { font-size: 2.5rem; }
+            .section-header-enhanced h2 { font-size: 2.2rem; }
+            .product-content h3, .product-info h3 { font-size: 1.15rem; }
+            p { font-size: 1.05rem; color: #6b7280; }
+
+            /* Grid density: 3 columns wide on desktop, tighter gaps */
+            .products-section-enhanced .products-grid-enhanced {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 18px !important;
+            }
+            @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
+            @media (max-width: 980px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr !important; } }
+            @media (max-width: 640px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr !important; gap: 14px !important; } }
+
+            /* Compact image container to match stamping/automotive compact styles */
+            .products-section-enhanced .product-image,
+            .products-section-enhanced .product-image-container { height: 300px !important; padding: 12px !important; }
+            @media (max-width: 1280px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 280px !important; padding: 10px !important; } }
+            @media (max-width: 980px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 260px !important; padding: 10px !important; } }
+            @media (max-width: 640px){ .products-section-enhanced .product-image, .products-section-enhanced .product-image-container { height: 220px !important; padding: 8px !important; } }
+
+            .products-section-enhanced .product-image img,
+            .products-section-enhanced .product-image-container img { max-height: 260px !important; object-fit: contain !important; }
+
+            /* Hide verbose blocks; prefer concise cards with app chips */
+            .products-section-enhanced .product-card .product-features,
+            .products-section-enhanced .product-card .product-features-enhanced { display: none !important; }
+            .products-section-enhanced .product-card .product-info > p,
+            .products-section-enhanced .product-card .product-content > p { display: none !important; }
+            .products-section-enhanced .product-card .product-application { display: none !important; }
+            .products-section-enhanced .product-card .product-info h3,
+            .products-section-enhanced .product-card .product-content h3 { margin-bottom: 8px !important; }
+            .products-section-enhanced .product-card .product-info { padding-top: 12px !important; }
+
+            /* Applications chips styling (scoped) */
+            .products-section-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: #000000; margin-top: 8px; }
+            .products-section-enhanced .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+            .products-section-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: rgba(0,0,0,0.08); color: #000000; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+            .products-section-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: #000000; }
     </style>
 </head>
 <body>
@@ -792,7 +841,7 @@
                 
                 <!-- Products Dropdown -->
                 <div class="nav-dropdown">
-                    <a href="products.html" class="nav-link dropdown-toggle">
+                    <a href="products.html#aerosol" class="nav-link dropdown-toggle">
                         Our Products
                         <i class="fas fa-chevron-down dropdown-icon"></i>
                     </a>
@@ -919,29 +968,22 @@
 
     <!-- Page Header removed per request -->
 
-    <!-- Industry Overview -->
-    <section class="industry-overview-enhanced">
+    <!-- Video hero (replaces previous Industry Overview) -->
+    <section class="hero-modern products-hero industry-hero-compact">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <!-- poster reuses the existing construction image; video source uses the requested asset -->
+            <video class="hero-bg-image" autoplay muted loop playsinline preload="metadata" poster="public/Industries%20Images/construction%20and%20cement%20industries.jpg">
+                <source src="public/cement.mp4" type="video/mp4">
+            </video>
+        </div>
         <div class="container">
-            <div class="industry-hero">
-                <div class="industry-content">
-                    <div class="industry-badge"><i class="fas fa-industry"></i> Construction & Cement</div>
-                    <h2>Heavy-Duty Solutions for Construction & Cement</h2>
-                    <p>Our specialized products are engineered to withstand the extreme conditions of construction and cement manufacturing. From concrete form release agents to heavy machinery lubricants, we provide solutions that ensure optimal performance and equipment longevity.</p>
-                    <div class="industry-stats">
-                        <div class="stat-item"><div class="stat-number">Heavy</div><div class="stat-label">Duty</div></div>
-                        <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-label">Operation</div></div>
-                        <div class="stat-item"><div class="stat-number">0</div><div class="stat-label">Downtime</div></div>
-                    </div>
-                </div>
-                <div class="industry-hero-image">
-                    <img src="public/Industries Images/construction and cement industries.jpg" alt="Construction site with heavy machinery">
-                    <div class="image-overlay"><div class="overlay-content"><i class="fas fa-hammer"></i><h4>Heavy-Duty</h4><p>Built for extreme environments</p></div></div>
-                </div>
-            </div>
-            <div class="industry-features-grid">
-                <div class="feature-card"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><h3>Heavy-Duty</h3><p>Formulated for rugged construction conditions</p></div>
-                <div class="feature-card"><div class="feature-icon"><i class="fas fa-cloud-sun-rain"></i></div><h3>Weather Resistant</h3><p>Performs in extreme heat and rain</p></div>
-                <div class="feature-card"><div class="feature-icon"><i class="fas fa-dumbbell"></i></div><h3>High Load</h3><p>Designed for high load applications</p></div>
+            <div class="hero-content-modern">
+                <div class="industry-badge"><i class="fas fa-hard-hat"></i> Construction & Cement</div>
+                <h1 class="hero-title-modern">Heavy-Duty Solutions for Construction & Cement
+                    <span class="hero-highlight">Built for Extreme Conditions</span>
+                </h1>
+                <p class="hero-subtitle-modern">From concrete form release agents to heavy machinery lubricants — products engineered for uptime and longevity.</p>
             </div>
         </div>
     </section>
@@ -1082,7 +1124,7 @@
                 <p>Our technical team can help you select the right products for your specific construction and cement manufacturing requirements.</p>
                 <div class="cta-buttons">
                     <a href="contact.html" class="btn-cta-primary"><i class="fas fa-envelope"></i> Contact Our Experts</a>
-                    <a href="products.html" class="btn-cta-secondary"><i class="fas fa-box"></i> View All Products</a>
+                    <a href="products.html#aerosol" class="btn-cta-secondary"><i class="fas fa-box"></i> View All Products</a>
                 </div>
             </div>
         </div>
@@ -1104,7 +1146,7 @@
                     <ul class="footer-list">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
-                        <li><a href="products.html">Our Products</a></li>
+                        <li><a href="products.html#aerosol">Our Products</a></li>
                         <li><a href="industries.html">Industries</a></li>
                         <li><a href="contact.html">Contact Us</a></li>
                     </ul>
@@ -1113,12 +1155,12 @@
                 <div class="footer-col">
                     <h4 class="footer-heading">Products</h4>
                     <ul class="footer-list">
-                        <li><a href="products.html">Aerosol Products</a></li>
-                        <li><a href="products.html">Industrial Lubricants</a></li>
-                        <li><a href="products.html">Industrial Grease</a></li>
-                        <li><a href="products.html">Maintenance & Repair</a></li>
-                        <li><a href="products.html">Metal Working</a></li>
-                        <li><a href="products.html">Food-Safe Products</a></li>
+                        <li><a href="products.html#aerosol">Aerosol Products</a></li>
+                        <li><a href="products.html#aerosol">Industrial Lubricants</a></li>
+                        <li><a href="products.html#aerosol">Industrial Grease</a></li>
+                        <li><a href="products.html#aerosol">Maintenance Chemicals</a></li>
+                        <li><a href="products.html#aerosol">Metal Working</a></li>
+                        <li><a href="products.html#aerosol">Food-Safe Products</a></li>
                     </ul>
                 </div>
 
@@ -1162,7 +1204,7 @@
                     ['aerosol-products', 'Aerosol Products'],
                     ['industrial-lubricants', 'Industrial Lubricants'],
                     ['industrial-grease', 'Industrial Greases'],
-                    ['maintenance-repair', 'Maintenance & Repair']
+                    ['maintenance-repair', 'Maintenance Chemicals']
                 ],
                 orderAllByCategory: true,
                 // Do not auto-promote LUBE GUARD; keep natural position or grouping

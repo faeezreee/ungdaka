@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="styles.css">
     <!-- Mobile-specific overrides (scoped with media queries) -->
     <link rel="stylesheet" href="mobile.css">
-    <link rel="stylesheet" href="product-animations.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
@@ -58,10 +57,16 @@
             transition: transform 650ms ease, opacity 300ms ease;
             opacity: 1;
         }
-        .hero-modern .hero-bg-image.is-current { transform: translateX(0%); }
-        .hero-modern .hero-bg-image.is-next { transform: translateX(100%); }
-        .hero-modern .hero-bg-image.is-exit { transform: translateX(-100%); }
-        .hero-modern .hero-bg-image.is-enter { transform: translateX(0%); }
+    .hero-modern .hero-bg-image.is-current { transform: translateX(0%); }
+    /* Incoming from the right (Next) */
+    .hero-modern .hero-bg-image.is-next { transform: translateX(100%); }
+    /* Incoming from the left (Prev) */
+    .hero-modern .hero-bg-image.is-prev { transform: translateX(-100%); }
+    /* Exiting to the left when advancing to Next */
+    .hero-modern .hero-bg-image.is-exit { transform: translateX(-100%); }
+    /* Exiting to the right when moving to Prev */
+    .hero-modern .hero-bg-image.is-exit-right { transform: translateX(100%); }
+    .hero-modern .hero-bg-image.is-enter { transform: translateX(0%); }
     .hero-modern .hero-overlay { position: absolute; inset: 0; background: linear-gradient(120deg, rgba(17,24,39,0.6), rgba(17,24,39,0.35)); z-index: 1; }
 
         /* Smooth text transitions for hero title/subtitle */
@@ -186,7 +191,7 @@
                 
                 <!-- Products Dropdown -->
                 <div class="nav-dropdown">
-                    <a href="products.html" class="nav-link dropdown-toggle">
+                    <a href="products.html#aerosol" class="nav-link dropdown-toggle">
                         Our Products
                         <i class="fas fa-chevron-down dropdown-icon"></i>
                     </a>
@@ -236,7 +241,7 @@
                             <div class="dropdown-column">
                                 <div class="cat-group">
                                     <div class="cat-header">
-                                        <a class="cat-link" href="products.html#maintenance">Maintenance & Repair</a>
+                                        <a class="cat-link" href="products.html#maintenance">Maintenance Chemicals</a>
                                         <button class="cat-toggle" type="button" aria-expanded="false" aria-controls="cat-maintenance"><i class="fas fa-chevron-right"></i></button>
                                     </div>
                                     <div class="sub-list" id="cat-maintenance">
@@ -289,7 +294,7 @@
                                     </div>
                                 </div>
 
-                                <a href="products.html" class="view-all" style="margin-top:10px; display:inline-block;">View All Products →</a>
+                                <a href="products.html#aerosol" class="view-all" style="margin-top:10px; display:inline-block;">View All Products →</a>
                             </div>
                         </div>
                     </div>
@@ -393,7 +398,7 @@
         <div class="hero-background">
             <div class="hero-overlay"></div>
             <video class="hero-bg-image" autoplay muted loop playsinline webkit-playsinline preload="metadata" fetchpriority="high" poster="public/AI Images/shelf.jpg">
-                <source src="public/oil2.mp4" type="video/mp4">
+                <source src="public/Oil Pour.mp4" type="video/mp4">
             </video>
             <!-- Play overlay: appears on mobile when autoplay is blocked -->
             <div class="hero-play-overlay" id="heroPlayOverlay" aria-hidden="true">
@@ -433,7 +438,7 @@
                     </div>
                 </div>
                 <div class="hero-actions-modern">
-                    <a href="products.html" class="btn-modern btn-primary-modern">
+                    <a href="products.html#aerosol" class="btn-modern btn-primary-modern">
                         <span>Explore Products</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
@@ -825,7 +830,7 @@
         <div class="container">
             <div class="about-content-modern">
                 <div class="about-images-modern">
-                    <img class="about-gif" src="public/man pouring oil.gif" alt="Pouring oil animation">
+                    <!-- Video animation removed as requested -->
                     <div class="about-image-main">
                         <img src="public/AI Images/2 women talking and holding spray ans.png" alt="Ungdaka product specialists discussing industrial spray solutions">
                     </div>
@@ -1015,7 +1020,7 @@
 
             const slides = [
                 {
-                    src: 'public/oil2.mp4',
+                    src: 'public/Oil Pour.mp4',
                     title: 'Advanced Technology Solutions',
                     highlight: 'To Cleanliness & Lubrications',
                     subtitle: 'Leading supplier of industrial aerosol sprays, specialty lubricants, greases & maintenance chemicals across Malaysia and Thailand'
@@ -1027,40 +1032,22 @@
                     subtitle: 'Premium lubricants engineered for reliability, delivered in high quality packaging that protects and impresses.'
                 },
                 {
-                    src: 'public/plastic injection.mp4',
-                    title: 'Plastic Injection Moulding',
-                    highlight: 'Precision Mould Release & Lubrication',
-                    subtitle: 'Specialized lubricants and mould release agents designed for high-speed plastic injection processes.'
-                },
-                {
-                    src: 'public/Stamping Machine.mp4',
-                    title: 'Stamping Oils',
-                    highlight: 'Reduce Tool Wear & Improve Release',
-                    subtitle: 'Specialized stamping oils and lubricants formulated to reduce die wear, improve release and extend tool life in metal stamping operations.'
-                },
-                {
-                    src: 'public/EDM oil.mp4',
-                    title: 'EDM Synthetic Oils',
-                    highlight: 'Precision Dielectric & Clean Cutting',
-                    subtitle: 'High-purity EDM fluids designed for wire and die-sink EDM to improve surface finish, flushing and electrode life.'
-                },
-                {
-                    src: 'public/Cutting Coolant.mp4',
-                    title: 'High-Performance Cutting Coolants',
-                    highlight: 'Extend Tool Life. Better Finish.',
-                    subtitle: 'Advanced water-soluble and neat coolants engineered for CNC machining, milling, turning, and grinding'
-                },
-                {
-                    src: 'public/factory 2.png',
+                    src: 'public/bucket closeup.mp4',
                     title: 'Reliable Industrial Lubricants',
                     highlight: 'For Every Industry',
                     subtitle: 'Boost uptime with premium oils, greases, and maintenance chemicals'
                 },
                 {
-                    src: 'public/fnb.mp4',
-                    title: 'Food-Safe Lubrication',
-                    highlight: 'NSF & HACCP Compliant',
-                    subtitle: 'Safe, high-performance solutions for food processing equipment'
+                    src: 'public/drums forklift.mp4',
+                    title: 'Providing Solutions Overseas',
+                    highlight: 'Exporting Excellence',
+                    subtitle: 'Delivering trusted lubricants, packaging and technical support to customers across the region and beyond.'
+                },
+                {
+                    src: 'public/Boxes in container.png',
+                    title: 'Secure Packaging Solutions',
+                    highlight: 'Boxes & Containers',
+                    subtitle: 'Robust packaging and careful handling to ensure products arrive safely at your site.'
                 }
             ];
 
@@ -1243,12 +1230,13 @@
                 index = (index - 1 + slides.length) % slides.length;
                 const next = slides[index];
 
-                // prepare previous similarly to nextSlide but reverse enter/exit directions
+                // prepare previous: enter from LEFT (.is-prev) and current exits to RIGHT (.is-exit-right)
                 let nextEl;
                 const isVideo = typeof next.src === 'string' && next.src.toLowerCase().endsWith('.mp4');
                 if (isVideo) {
                     nextEl = document.createElement('video');
-                    nextEl.className = 'hero-bg-image is-next';
+                    // start positioned to the left
+                    nextEl.className = 'hero-bg-image is-prev';
                     nextEl.muted = true; nextEl.playsInline = true; try { nextEl.setAttribute('webkit-playsinline', ''); } catch(e){}; try{ if (typeof __isFastNetwork !== 'undefined' && __isFastNetwork) nextEl.setAttribute('fetchpriority', 'high'); }catch(e){}; nextEl.loop = false; try { nextEl.preload = (typeof __isFastNetwork !== 'undefined' && __isFastNetwork) ? 'auto' : 'metadata'; } catch(e){ nextEl.preload = 'metadata'; } nextEl.autoplay = false;
                     if (next.poster) nextEl.poster = next.poster;
                     const srcEl = document.createElement('source'); srcEl.src = next.src; srcEl.type = 'video/mp4'; nextEl.appendChild(srcEl);
@@ -1257,7 +1245,7 @@
                         attemptPlay(nextEl).catch((err)=>{ console.debug('[hero] prevSlide attemptPlay failed', err); showPlayOverlay(); });
                         nextEl.removeEventListener('canplay', onCanPlay);
                     });
-                } else { nextEl = document.createElement('img'); nextEl.className = 'hero-bg-image is-next'; nextEl.alt = 'Hero background'; nextEl.src = next.src; }
+                } else { nextEl = document.createElement('img'); nextEl.className = 'hero-bg-image is-prev'; nextEl.alt = 'Hero background'; nextEl.src = next.src; }
                 heroBg.appendChild(nextEl);
 
                 // update text
@@ -1266,12 +1254,13 @@
 
                 try{ nextEl.offsetWidth; } catch(e){}
                 if (currentImg) {
-                    // keep the current background visible during the transition to avoid a blank frame
+                    // keep the current background visible during the CSS transition to avoid a blank frame
                     currentImg.classList.remove('is-current');
-                    currentImg.classList.add('is-exit');
+                    // exit to the right for a prev navigation
+                    currentImg.classList.add('is-exit-right');
                 }
-                // For prev we want the entering element to slide in from left — so use same classes but CSS transform handles it
-                nextEl.classList.remove('is-next'); nextEl.classList.add('is-enter');
+                // For prev: remove left-start class and promote into center
+                nextEl.classList.remove('is-prev'); nextEl.classList.add('is-enter');
 
                 const onDonePrev = () => {
                     // After transition, stop and remove the previous media safely
@@ -1289,11 +1278,13 @@
                     try{
                         if (nextEl.tagName && nextEl.tagName.toLowerCase()==='video') {
                             try { nextEl.loop = false; } catch(e){}
-                            nextEl.play().catch(()=>{});
+                            attemptPlay(nextEl).catch(()=>{ showPlayOverlay(); });
                             nextEl._onVideoEnded = function(){ try{ nextSlide(); resetTimer(); }catch(e){} };
                             nextEl.addEventListener('ended', nextEl._onVideoEnded);
                         }
                     }catch(e){}
+                    // cleanup any lingering exit classes on the new current
+                    if (nextEl.classList.contains('is-exit-right')) nextEl.classList.remove('is-exit-right');
                     currentImg = nextEl; transitioning = false; nextEl.removeEventListener('transitionend', onDonePrev);
                 };
                 nextEl.addEventListener('transitionend', onDonePrev);
@@ -1361,98 +1352,15 @@
         })();
     </script>
 
-    <!-- Rolling Drum Section (moved above comparison section) -->
-    <section class="rolling-drum-section">
-        <div class="container">
-            <div class="drum-container">
-                <!-- Visual trail to show drum path -->
-                <div class="drum-trail" id="drumTrail">
-                    <div class="trail-line"></div>
-                </div>
-                
-                <div class="drum-wrapper">
-                    <img src="public/AI Images/drum with logo.png" alt="Ungdaka Drum with Logo" class="rolling-drum" id="drumWithLogo">
-                    <img src="public/AI Images/drum without logo.png" alt="Ungdaka Drum without Logo" class="rolling-drum" id="drumWithoutLogo">
-
-                    <!-- Slogan / Fun Fact that follows the drum -->
-                    <div class="drum-slogan" id="drumSlogan" aria-hidden="true">
-                        <span class="slogan-text" id="sloganText">Fun fact: Our drums last longer than your coffee breaks ☕</span>
-                    </div>
+    <!-- Rolling Drum Section removed as requested -->
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Interactive Bearings Section -->
-    <section class="bearings-comparison" style="position:relative; overflow:hidden; background:#0f172a;">
-        <video class="bearings-bg-video" autoplay loop muted playsinline style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); min-width:100%; min-height:100%; width:auto; height:auto; object-fit:cover; display:block;">
-            <source src="public/Abstract_Golden_Oil_Flowing_Video.mp4" type="video/mp4">
-        </video>
-        <div class="bearings-overlay" aria-hidden="true" style="position:absolute; inset:0; background:linear-gradient(180deg, rgba(17,24,39,0.70), rgba(17,24,39,0.35)); pointer-events:none;"></div>
-        <div class="container" style="position:relative; z-index:1;">
-            <div class="section-header">
-                <span class="section-badge">Quick Comparison</span>
-                <p>Discover how proper lubrication extends bearing life and improves performance</p>
-            </div>
-            <div class="bearings-wrapper" style="gap: 40px;">
-                <div class="bearing-container">
-                    <h3 class="bearing-title">Without Grease</h3>
-                    <div class="bearing" id="dry-bearing">
-                        <img src="public/metal-bearings.png" alt="Bearing without grease" class="bearing-image">
-                    </div>
-                </div>
-                <div class="bearing-container">
-                    <h3 class="bearing-title">With Grease</h3>
-                    <div class="bearing" id="greased-bearing">
-                        <img src="public/metal-bearings with grease.png" alt="Bearing with grease" class="bearing-image">
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Trust Indicators within the same section -->
-            <div class="trust-grid" style="margin: 40px 0 0 0;">
-                <div class="trust-item">
-                    <i class="fas fa-certificate"></i>
-                    <span>ISO Certified</span>
-                </div>
-                <div class="trust-item">
-                    <i class="fas fa-leaf"></i>
-                    <span>Eco-Friendly</span>
-                </div>
-                <div class="trust-item">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>Quality Assured</span>
-                </div>
-                <div class="trust-item">
-                    <i class="fas fa-truck"></i>
-                    <span>Fast Delivery</span>
-                </div>
-            </div>
-        </div>
-    </section>
+    <!-- Interactive Bearings Section removed per request -->
 
-
-
-
-    <!-- Professional CTA Band -->
-    <section class="cta-band" style="background: linear-gradient(120deg, #0f172a, #1e293b); color:#fff; padding: 48px 0;">
-        <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;">
-            <div class="cta-copy" style="flex:1 1 420px;">
-                <h2 style="margin:0 0 8px; font-weight:700; font-size: clamp(1.4rem, 2.4vw, 2rem);">Ready to improve uptime and quality?</h2>
-                <p style="margin:0; color: rgba(255,255,255,0.85);">Talk to our specialists or browse our product range to get started.</p>
-            </div>
-            <div class="cta-actions" style="display:flex; gap:12px; flex-wrap:wrap;">
-                <a href="contact.html" class="btn-modern" style="background:#f59e0b; color:#111827; padding:12px 18px; border-radius:10px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
-                    <i class="fas fa-headset"></i>
-                    <span>Contact Sales</span>
-                </a>
-                <a href="products.html" class="btn-modern" style="background:transparent; color:#fff; border:2px solid rgba(255,255,255,0.6); padding:10px 16px; border-radius:10px; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
-                    <i class="fas fa-box"></i>
-                    <span>Explore Products</span>
-                </a>
-            </div>
-        </div>
-    </section>
+    <!-- CTA band removed -->
 
     <!-- Footer -->
     <footer class="footer-new">
@@ -1470,7 +1378,7 @@
                     <ul class="footer-list">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
-                        <li><a href="products.html">Our Products</a></li>
+                        <li><a href="products.html#aerosol">Our Products</a></li>
                         <li><a href="industries.html">Industries</a></li>
                         <li><a href="contact.html">Contact Us</a></li>
                     </ul>
@@ -1479,12 +1387,12 @@
                 <div class="footer-col">
                     <h4 class="footer-heading">Products</h4>
                     <ul class="footer-list">
-                        <li><a href="products.html">Aerosol Products</a></li>
-                        <li><a href="products.html">Industrial Lubricants</a></li>
-                        <li><a href="products.html">Industrial Grease</a></li>
-                        <li><a href="products.html">Maintenance & Repair</a></li>
-                        <li><a href="products.html">Metal Working</a></li>
-                        <li><a href="products.html">Food-Safe Products</a></li>
+                        <li><a href="products.html#aerosol">Aerosol Products</a></li>
+                        <li><a href="products.html#aerosol">Industrial Lubricants</a></li>
+                        <li><a href="products.html#aerosol">Industrial Grease</a></li>
+                        <li><a href="products.html#aerosol">Maintenance Chemicals</a></li>
+                        <li><a href="products.html#aerosol">Metal Working</a></li>
+                        <li><a href="products.html#aerosol">Food-Safe Products</a></li>
                     </ul>
                 </div>
 
@@ -1569,7 +1477,7 @@
                             <option value="aerosol">Aerosol Products</option>
                             <option value="lubricants">Industrial Lubricants</option>
                             <option value="grease">Industrial Grease</option>
-                            <option value="maintenance">Maintenance & Repair</option>
+                            <option value="maintenance">Maintenance Chemicals</option>
                             <option value="metalworking">Metal Working</option>
                             <option value="foodgrade">Food-Safe Products</option>
                         </select>
@@ -1590,7 +1498,7 @@
 
     <!-- Scripts -->
     <script src="script.js"></script>
-    <script src="product-animations.js"></script>
+    <!-- product-animations.css and product-animations.js removed to disable oil-mask animation on first paint -->
     
     <!-- Performance helpers: lazy-load non-critical images and provide test hook -->
     <script>
@@ -1627,7 +1535,7 @@
                 // Expose a debug helper to force-add preload links (for testing via console)
                 window.__heroPreloadForce = function(){
                     var l = document.createElement('link');
-                    l.rel = 'preload'; l.as = 'video'; l.href = 'public/oil2.mp4'; document.head.appendChild(l);
+                    l.rel = 'preload'; l.as = 'video'; l.href = 'public/Oil Pour.mp4'; document.head.appendChild(l);
                     console.debug('[hero] forced preload added');
                 };
             }catch(e){ console.debug('[perf-helper] error', e); }

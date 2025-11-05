@@ -18,7 +18,7 @@
     <!-- Enhanced Styles for Industry Pages -->
     <style>
         .industry-overview-enhanced {
-            /* tiled SVG grid background to match stamping/automotive */
+            /* tiled SVG grid background to match stamping */
             background-image: url('public/top-bg.svg');
             background-color: #274e78;
             background-repeat: repeat;
@@ -52,9 +52,8 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            /* Plastic Injection theme: orange gradient */
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
+            background: linear-gradient(135deg, #ffd600, #ffe066);
+            color: #222;
             padding: 8px 16px;
             border-radius: 25px;
             font-size: 14px;
@@ -89,7 +88,7 @@
         .stat-number {
             font-size: 2rem;
             font-weight: 700;
-            color: #f59e0b;
+            color: #ffd600;
             margin-bottom: 5px;
         }
         
@@ -111,6 +110,13 @@
             height: 400px;
             object-fit: cover;
         }
+
+        /* Hero controls: match homepage hero-controls / hero-btn styles */
+        .hero-controls { position: absolute; top: 50%; left: 0; right: 0; display:flex; justify-content:space-between; padding: 0 12px; transform: translateY(-50%); pointer-events: none; z-index: 6; }
+        .hero-btn { pointer-events: auto; background: rgba(15,23,42,0.72); border: 1px solid rgba(255,255,255,0.06); color: #fff; width:52px; height:52px; display:inline-flex; align-items:center; justify-content:center; border-radius:999px; box-shadow: 0 10px 28px rgba(2,6,23,0.45); cursor:pointer; }
+        .hero-btn i { color: #FFD24D; font-size: 18px; }
+        .hero-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.06); }
+        @media (max-width: 520px) { .hero-btn { width:44px; height:44px; } }
         
         .image-overlay {
             position: absolute;
@@ -158,13 +164,13 @@
         .feature-icon {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 20px;
-            color: white;
+            color: #222;
             font-size: 1.5rem;
         }
         
@@ -214,7 +220,7 @@
         }
         
         .btn-cta-primary {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
             color: white;
             border: none;
             padding: 16px 32px;
@@ -231,13 +237,13 @@
         
         .btn-cta-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 15px 30px rgba(239,68,68,0.4);
         }
         
         .btn-cta-secondary {
             background: transparent;
-            color: #f59e0b;
-            border: 2px solid #f59e0b;
+            color: #ef4444;
+            border: 2px solid #ef4444;
             padding: 14px 32px;
             border-radius: 12px;
             font-size: 1.1rem;
@@ -251,7 +257,7 @@
         }
         
         .btn-cta-secondary:hover {
-            background: #f59e0b;
+            background: #ef4444;
             color: white;
             transform: translateY(-3px);
         }
@@ -355,8 +361,8 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
+            background: linear-gradient(135deg, #ffd600, #ffe066);
+            color: #222;
             padding: 8px 16px;
             border-radius: 25px;
             font-size: 14px;
@@ -380,10 +386,10 @@
         
         .products-grid-enhanced {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* switch to 4 columns */
+            grid-template-columns: repeat(2, 1fr); /* changed to 2 columns */
             gap: 24px;
         }
-        @media (max-width: 1280px) { .products-grid-enhanced { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 1280px) { .products-grid-enhanced { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 980px) { .products-grid-enhanced { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 640px) { .products-grid-enhanced { grid-template-columns: 1fr; gap: 18px; } }
         
@@ -428,12 +434,12 @@
             right: 15px;
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #222;
             font-size: 1.2rem;
         }
         
@@ -477,8 +483,8 @@
             display: inline-flex;
             align-items: center;
             gap: 5px;
-            background: #fef3c7;
-            color: #d97706;
+            background: #fffde7;
+            color: #ffd600;
             padding: 6px 12px;
             border-radius: 20px;
             font-size: 0.85rem;
@@ -498,12 +504,12 @@
         .application-icon {
             width: 35px;
             height: 35px;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+            background: linear-gradient(135deg, #ffd600, #ffe066);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: #222;
             font-size: 1rem;
             flex-shrink: 0;
         }
@@ -521,8 +527,8 @@
         
         .btn-product-primary {
             flex: 1;
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
+            background: linear-gradient(135deg, #ffd600, #ffe066);
+            color: #222;
             border: none;
             padding: 12px 20px;
             border-radius: 8px;
@@ -538,8 +544,8 @@
         .btn-product-secondary {
             flex: 1;
             background: transparent;
-            color: #f59e0b;
-            border: 2px solid #f59e0b;
+            color: #ffd600;
+            border: 2px solid #ffd600;
             padding: 10px 20px;
             border-radius: 8px;
             font-weight: 500;
@@ -548,8 +554,8 @@
         }
         
         .btn-product-secondary:hover {
-            background: #f59e0b;
-            color: white;
+            background: #ffd600;
+            color: #222;
         }
         
         @media (max-width: 768px) {
@@ -578,9 +584,11 @@
         }
 
         .product-category-bar .category-btn.active {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: #fff;
+            background: #ffd600;
+            color: #222;
             border-color: transparent;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            font-weight: 700;
         }
 
         /* Reduce industry hero image size to make the card smaller like the attachment */
@@ -611,10 +619,54 @@
     .products-grid-enhanced .product-card .product-content h3 { margin-bottom: 8px !important; }
 
     /* Applications chips styling (scoped) */
-    .products-grid-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: var(--primary-color); margin-top: 8px; }
+    .products-grid-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: #000000; margin-top: 8px; }
     .products-grid-enhanced .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-    .products-grid-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: #eef2f7; color: var(--primary-color); font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
-    .products-grid-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: var(--secondary-color); }
+    .products-grid-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: rgba(0,0,0,0.08); color: #000000; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+    .products-grid-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: #000000; }
+
+        /* Compact Plastic Injection: denser recommended-products grid + typography match */
+        /* Typography: match Stamping page (Inter, weights + sizes) */
+        body, button, input, select, textarea {
+            font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            color: #111827;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        h1,h2,h3,h4,h5,h6 { font-family: inherit; font-weight: 700; color: #111827; }
+        .industry-hero h2 { font-size: 2.5rem; }
+        .section-header-enhanced h2 { font-size: 2.2rem; }
+        .product-content h3, .product-info h3 { font-size: 1.15rem; }
+        p { font-size: 1.05rem; color: #6b7280; }
+
+        /* Grid density: 3 columns wide on desktop, tighter gaps */
+        .products-section-enhanced .products-grid-enhanced {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 18px !important;
+        }
+        @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 980px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr !important; } }
+        @media (max-width: 640px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr !important; gap: 14px !important; } }
+
+        /* Compact image container to match stamping/automotive compact styles */
+        .products-section-enhanced .product-image-container { height: 300px !important; padding: 12px !important; }
+        @media (max-width: 1280px){ .products-section-enhanced .product-image-container { height: 280px !important; padding: 10px !important; } }
+        @media (max-width: 980px){ .products-section-enhanced .product-image-container { height: 260px !important; padding: 10px !important; } }
+        @media (max-width: 640px){ .products-section-enhanced .product-image-container { height: 220px !important; padding: 8px !important; } }
+
+        .products-section-enhanced .product-image-container img { max-height: 260px !important; object-fit: contain !important; }
+
+        /* Hide verbose blocks; prefer concise cards with app chips */
+        .products-section-enhanced .product-card .product-features, .products-section-enhanced .product-card .product-features-enhanced { display: none !important; }
+        .products-section-enhanced .product-card .product-info > p, .products-section-enhanced .product-card .product-content > p { display: none !important; }
+        .products-section-enhanced .product-card .product-application { display: none !important; }
+        .products-section-enhanced .product-card .product-info h3, .products-section-enhanced .product-card .product-content h3 { margin-bottom: 8px !important; }
+        .products-section-enhanced .product-card .product-info { padding-top: 12px !important; }
+
+        /* Applications chips styling (scoped) */
+        .products-section-enhanced .product-apps-title { display: block; font-size: 0.85rem; font-weight: 700; color: #000000; margin-top: 8px; }
+        .products-section-enhanced .product-apps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+        .products-section-enhanced .product-apps .app-chip { display: inline-flex; align-items: center; padding: 5px 9px; border-radius: 16px; background: rgba(0,0,0,0.08); color: #000000; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 1px 2px rgba(0,0,0,0.04); white-space: nowrap; }
+        .products-section-enhanced .product-apps .app-chip::before { content: '\2022'; margin-right: 6px; color: #000000; }
 
         </style>
 </head>
@@ -633,7 +685,7 @@
                 
                 <!-- Products Dropdown -->
                 <div class="nav-dropdown">
-                    <a href="products.html" class="nav-link dropdown-toggle">
+                    <a href="products.html#aerosol" class="nav-link dropdown-toggle">
                         Our Products
                         <i class="fas fa-chevron-down dropdown-icon"></i>
                     </a>
@@ -760,29 +812,42 @@
 
     <!-- Page header removed to simplify layout; hero follows -->
 
-    <!-- Industry Overview -->
-    <section class="industry-overview-enhanced">
-        <div class="container">
-            <div class="industry-hero">
-                <div class="industry-content">
-                    <div class="industry-badge"><i class="fas fa-cubes"></i> Plastic Injection</div>
-                    <h2>Precision Solutions for Plastic Injection Molding</h2>
-                    <p>From mould release agents to processing aids, we provide solutions that ensure optimal part quality and production efficiency.</p>
-                        <div class="industry-stats">
-                            <div class="stat-item"><div class="stat-number">+20%</div><div class="stat-label" style="color:#fff;">Cycle Efficiency</div></div>
-                            <div class="stat-item"><div class="stat-number">ISO</div><div class="stat-label" style="color:#fff;">Clean</div></div>
-                            <div class="stat-item"><div class="stat-number">0</div><div class="stat-label" style="color:#fff;">Residue</div></div>
-                        </div>
-                </div>
-                <div class="industry-hero-image">
-                    <img src="public/Industries Images/plastic injection.png" alt="Plastic injection molding machine">
-                    <div class="image-overlay"><div class="overlay-content"><i class="fas fa-industry"></i><h4>Production Grade</h4></div></div>
-                </div>
+    <!-- Video hero (replaces previous Industry Overview) -->
+    <section class="hero-modern products-hero industry-hero-compact">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <!-- primary hero video (existing) -->
+            <video class="hero-bg-image is-next" muted playsinline preload="metadata" poster="public/Industries Images/plastic injection.png" data-role="hero-slide">
+                <source src="public/Spraying_Mould_Release_Agent_Video.mp4" type="video/mp4">
+            </video>
+
+            <!-- make this video the initial/current slide (user requested second -> first) -->
+            <video class="hero-bg-image is-current" muted playsinline preload="metadata" poster="public/Industries Images/plastic injection.png" data-role="hero-slide">
+                <source src="public/plastic injection.mp4" type="video/mp4">
+            </video>
+
+            <!-- user-provided hero slide: Spraying Mould Release Agent -->
+            <video class="hero-bg-image is-next" muted playsinline preload="metadata" poster="public/Industries Images/plastic injection.png" data-role="hero-slide">
+                <source src="public/Spray_Can_Applies_Blue_Wax_Film.mp4" type="video/mp4">
+            </video>
+
+            <!-- hero controls (use same markup/classes as homepage for consistent styling) -->
+            <div class="hero-controls">
+                <button class="hero-btn hero-prev" id="heroPrev" aria-label="Previous slide">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="hero-btn hero-next" id="heroNext" aria-label="Next slide">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
-            <div class="industry-features-grid">
-                <div class="feature-card"><div class="feature-icon"><i class="fas fa-spray-can"></i></div><h3>Superior Release</h3><p>Clean release for complex parts</p></div>
-                <div class="feature-card"><div class="feature-icon"><i class="fas fa-temperature-high"></i></div><h3>High Temp Stability</h3><p>Performs at molding temperatures</p></div>
-                <div class="feature-card"><div class="feature-icon"><i class="fas fa-broom"></i></div><h3>Non-Contaminating</h3><p>Protects part quality and molds</p></div>
+        </div>
+        <div class="container">
+            <div class="hero-content-modern">
+                <div class="industry-badge"><i class="fas fa-cubes"></i> Plastic Injection</div>
+                <h1 class="hero-title-modern">Precision Solutions for Plastic Injection Molding
+                    <span class="hero-highlight">Production Grade</span>
+                </h1>
+                <p class="hero-subtitle-modern">From mould release agents to processing aids, we provide solutions that ensure optimal part quality and production efficiency.</p>
             </div>
         </div>
     </section>
@@ -1074,7 +1139,16 @@
                     <div class="product-image-container" style="position: relative; height: 600px; padding: 40px; box-sizing: border-box; background: white;">
                         <img src="public/drum and pail.png" alt="Hydraulic AWX Series" style="width:100%; height:100%; object-fit:contain; display:block;">
                     </div>
-                    <div class="product-info"><h3>Hydraulic AWX Series Oils (10,32,46,68,100)</h3><p>High-performance hydraulic oils for plastic injection molding machines</p></div>
+                    <div class="product-info">
+                        <h3>Hydraulic AWX Series Oils (10,32,46,68,100)</h3>
+                        <p>High-performance hydraulic oils for plastic injection molding machines</p>
+                        <div class="product-apps-title">Applications</div>
+                        <div class="product-apps">
+                            <span class="app-chip">Hydraulic systems</span>
+                            <span class="app-chip">Injection molding machines</span>
+                            <span class="app-chip">Presses</span>
+                        </div>
+                    </div>
                 </a>
 
                 <a href="products/cooling-tower-water-treatment.html" class="product-card" data-category="industrial-lubricants">
@@ -1088,7 +1162,16 @@
                     <div class="product-image-container" style="position: relative; height: 600px; padding: 40px; box-sizing: border-box; background: white;">
                         <img src="public/drum and pail.png" alt="Heat Transfer Oil" style="width:100%; height:100%; object-fit:contain; display:block;">
                     </div>
-                    <div class="product-info"><h3>Heat Transfer Oil</h3><p>Thermal fluid for heat transfer systems in plastic processing</p></div>
+                    <div class="product-info">
+                        <h3>Heat Transfer Oil</h3>
+                        <p>Thermal fluid for heat transfer systems in plastic processing</p>
+                        <div class="product-apps-title">Applications</div>
+                        <div class="product-apps">
+                            <span class="app-chip">Heat transfer systems</span>
+                            <span class="app-chip">Plastic processing</span>
+                            <span class="app-chip">Temperature control units</span>
+                        </div>
+                    </div>
                 </a>
 
                 <div class="product-card" data-category="industrial-lubricants">
@@ -1144,7 +1227,7 @@
 
                 
 
-                <!-- Maintenance & Repair (requested order) -->
+                <!-- Maintenance Chemicals (requested order) -->
                 <div class="product-card" data-category="maintenance-repair">
                     <div class="product-image-container" style="position: relative; height: 600px; padding: 40px; box-sizing: border-box; background: white;">
                         <img src="public/tygris copper.png" alt="TYGRIS COPPER" style="width:100%; height:100%; object-fit:contain; display:block;">
@@ -1212,7 +1295,7 @@
                     <a href="contact.html" class="btn-cta-primary" style="background: #3b82f6; color: white; padding: 16px 32px; border-radius: 12px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">
                         <i class="fas fa-envelope"></i> Contact Us
                     </a>
-                    <a href="products.html" class="btn-cta-secondary" style="background: transparent; color: #3b82f6; border: 2px solid #3b82f6; padding: 14px 32px; border-radius: 12px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">
+                    <a href="products.html#aerosol" class="btn-cta-secondary" style="background: transparent; color: #3b82f6; border: 2px solid #3b82f6; padding: 14px 32px; border-radius: 12px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 10px;">
                         <i class="fas fa-box"></i> View Products
                     </a>
                 </div>
@@ -1236,7 +1319,7 @@
                     <ul class="footer-list">
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
-                        <li><a href="products.html">Our Products</a></li>
+                        <li><a href="products.html#aerosol">Our Products</a></li>
                         <li><a href="industries.html">Industries</a></li>
                         <li><a href="contact.html">Contact Us</a></li>
                     </ul>
@@ -1245,12 +1328,12 @@
                 <div class="footer-col">
                     <h4 class="footer-heading">Products</h4>
                     <ul class="footer-list">
-                        <li><a href="products.html">Aerosol Products</a></li>
-                        <li><a href="products.html">Industrial Lubricants</a></li>
-                        <li><a href="products.html">Industrial Grease</a></li>
-                        <li><a href="products.html">Maintenance & Repair</a></li>
-                        <li><a href="products.html">Metal Working</a></li>
-                        <li><a href="products.html">Food-Safe Products</a></li>
+                        <li><a href="products.html#aerosol">Aerosol Products</a></li>
+                        <li><a href="products.html#aerosol">Industrial Lubricants</a></li>
+                        <li><a href="products.html#aerosol">Industrial Grease</a></li>
+                        <li><a href="products.html#aerosol">Maintenance Chemicals</a></li>
+                        <li><a href="products.html#aerosol">Metal Working</a></li>
+                        <li><a href="products.html#aerosol">Food-Safe Products</a></li>
                     </ul>
                 </div>
 
@@ -1295,7 +1378,7 @@
                     categoryMap: [
                         ['aerosol-products', 'Aerosol Products'],
                         ['industrial-lubricants', 'Industrial Lubricants'],
-                        ['maintenance-repair', 'Maintenance & Repair']
+                        ['maintenance-repair', 'Maintenance Chemicals']
                     ],
                     orderAllByCategory: true,
                     moveLubeGuardHref: ''
@@ -1318,6 +1401,84 @@
                 }catch(e){ /* ignore */ }
             }, 60);
         });
+    </script>
+    <script>
+        // Simple hero slide rotator for industry pages that use stacked video elements.
+        (function(){
+            document.addEventListener('DOMContentLoaded', function(){
+                try{
+                    const heroBg = document.querySelector('.hero-modern .hero-background');
+                    if(!heroBg) return;
+                    const slides = Array.from(heroBg.querySelectorAll('video[data-role="hero-slide"]'));
+                    if(!slides.length || slides.length < 2) return; // nothing to rotate
+
+                    let idx = slides.findIndex(s => s.classList.contains('is-current'));
+                    if(idx < 0) idx = 0;
+
+                    // ensure only the current is playing
+                    slides.forEach((v,i)=>{
+                        try{ v.pause(); }catch(e){}
+                        v.style.transition = 'opacity 0.9s ease';
+                        v.style.position = 'absolute';
+                        v.style.top = 0; v.style.left = 0; v.style.width = '100%'; v.style.height = '100%'; v.style.objectFit = 'cover';
+                        v.style.opacity = i === idx ? '1' : '0';
+                        v.classList.remove('is-next','is-enter','is-exit','is-current');
+                    });
+                    slides[idx].classList.add('is-current');
+                    // attempt to play current (silenced/muted so should start)
+                    try{ slides[idx].play().catch(()=>{}); }catch(e){}
+
+                    const interval = 7000; // rotate every 7s
+                    let timer = setInterval(nextSlide, interval);
+
+                    // create nav controls and wire events (support homepage-style hero-controls or legacy hero-nav)
+                    const nav = heroBg.querySelector('.hero-controls') || heroBg.querySelector('.hero-nav');
+                    if(nav){
+                        const btnPrev = nav.querySelector('.hero-prev') || nav.querySelector('.hero-nav-prev') || document.getElementById('heroPrev');
+                        const btnNext = nav.querySelector('.hero-next') || nav.querySelector('.hero-nav-next') || document.getElementById('heroNext');
+                        if(btnPrev){ btnPrev.addEventListener('click', function(e){ e.preventDefault(); clearInterval(timer); prevSlide(); timer = setInterval(nextSlide, interval); }); }
+                        if(btnNext){ btnNext.addEventListener('click', function(e){ e.preventDefault(); clearInterval(timer); nextSlide(); timer = setInterval(nextSlide, interval); }); }
+                    }
+
+                    function nextSlide(){
+                        const current = slides[idx];
+                        const nextIdx = (idx + 1) % slides.length;
+                        const next = slides[nextIdx];
+
+                        // crossfade to next
+                        try{ next.play().catch(()=>{}); }catch(e){}
+                        next.style.opacity = '1';
+                        next.classList.add('is-current');
+                        current.style.opacity = '0';
+                        current.classList.remove('is-current');
+                        // pause previous after a small delay to avoid cutting frames
+                        setTimeout(()=>{ try{ current.pause(); }catch(e){} }, 800);
+                        idx = nextIdx;
+                    }
+
+                        // exposed prevSlide for manual nav
+                        function prevSlide(){
+                            const current = slides[idx];
+                            const prevIdx = (idx - 1 + slides.length) % slides.length;
+                            const prev = slides[prevIdx];
+
+                            try{ prev.play().catch(()=>{}); }catch(e){}
+                            prev.style.opacity = '1';
+                            prev.classList.add('is-current');
+                            current.style.opacity = '0';
+                            current.classList.remove('is-current');
+                            setTimeout(()=>{ try{ current.pause(); }catch(e){} }, 200);
+                            idx = prevIdx;
+                        }
+
+                    // Pause rotation when tab hidden
+                    document.addEventListener('visibilitychange', function(){
+                        if(document.hidden) { clearInterval(timer); }
+                        else { timer = setInterval(nextSlide, interval); }
+                    });
+                }catch(e){ /* ignore */ }
+            });
+        })();
     </script>
 </body>
 </html>
