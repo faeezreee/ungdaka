@@ -4117,9 +4117,10 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const bearings = ['dry-bearing', 'greased-bearing'].map(id => {
         const element = document.getElementById(id);
+        const img = element ? element.querySelector('.bearing-image') : null;
         return {
             element,
-            img: element.querySelector('.bearing-image'),
+            img,
             angle: 0,
             velocity: 0,
             lastX: 0,
@@ -4130,6 +4131,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     bearings.forEach(bearing => {
+        // Skip if element is not present on the page
+        if (!bearing.element) return;
+
         // Allow touch/pointer interactions on mobile by disabling default touch-action
         try {
             bearing.element.style.touchAction = 'none';
@@ -4208,7 +4212,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 bearing.velocity *= bearing.friction; // Apply friction
             }
             bearing.angle += bearing.velocity;
-            bearing.img.style.transform = `rotate(${bearing.angle}rad)`;
+            if (bearing.img) {
+                bearing.img.style.transform = `rotate(${bearing.angle}rad)`;
+            }
         });
         requestAnimationFrame(animate);
     }
