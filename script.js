@@ -1913,7 +1913,8 @@ class NavigationController {
         const hasHero = document.querySelector('.hero, .hero-modern');
         
         // If no hero section or already scrolled, add scrolled class immediately
-        if (!hasHero || window.scrollY > 50) {
+        // Use a small threshold so header becomes opaque quickly when the page is scrolled a little
+        if (!hasHero || window.scrollY > 5) {
             this.navbar.classList.add('scrolled');
         }
     }
@@ -2008,7 +2009,8 @@ class NavigationController {
     handleScroll() {
         const currentScrollY = window.scrollY;
         
-        if (currentScrollY > 100) {
+        // Add scrolled class when the page is scrolled beyond a small threshold
+        if (currentScrollY > 5) {
             this.navbar.classList.add('scrolled');
         } else {
             this.navbar.classList.remove('scrolled');
