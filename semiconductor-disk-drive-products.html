@@ -215,7 +215,7 @@
         
         .products-grid-enhanced {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
         }
         /* Category selector styles (blue theme) */
@@ -581,9 +581,9 @@
             }
         }
 
-        /* ===== Semiconductor Products Grid: enforce 4 columns + compact images + app chips ===== */
+        /* ===== Semiconductor Products Grid: enforce 3 columns on large screens + compact images + app chips ===== */
         .products-section-enhanced .products-grid-enhanced {
-            grid-template-columns: repeat(2, 1fr) !important;
+            grid-template-columns: repeat(3, 1fr) !important;
             gap: 24px !important;
         }
         @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
@@ -812,74 +812,21 @@
 
     <!-- Page Header removed for streamlined layout -->
 
-    <!-- Industry Overview -->
-    <section class="industry-overview-enhanced">
+    <!-- Video hero (matches stamping page layout) -->
+    <section class="hero-modern products-hero industry-hero-compact">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <video class="hero-bg-image" autoplay muted loop playsinline preload="metadata" poster="public/Industries%20Images/semiconductor%20%26%20disk%20drive%20industries.jpg">
+                <source src="public/semiconductor.mp4" type="video/mp4">
+            </video>
+        </div>
         <div class="container">
-            <div class="industry-hero">
-                <div class="industry-hero-content">
-                    <div class="industry-badge">
-                        <i class="fas fa-microchip"></i>
-                        <span>High-Tech Manufacturing</span>
-                    </div>
-                    <h2>Precision Solutions for Semiconductor & Disk Drive Manufacturing</h2>
-                    <p>Our specialized products are designed to meet the stringent requirements of semiconductor and disk drive manufacturing. From ultra-pure cleaning solutions to precision lubricants, we provide solutions that ensure optimal performance in cleanroom environments.</p>
-                    
-                    <div class="industry-stats">
-                        <div class="stat-item">
-                            <div class="stat-number">99.9%</div>
-                            <div class="stat-label">Purity Level</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">ISO 5</div>
-                            <div class="stat-label">Cleanroom Grade</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-number">0</div>
-                            <div class="stat-label">Contamination Risk</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="industry-hero-image">
-                    <img src="public/Industries%20Images/semiconductor%20%26%20disk%20drive%20industries.jpg" alt="Semiconductor manufacturing facility">
-                    <div class="image-overlay">
-                        <div class="overlay-content">
-                            <i class="fas fa-cog"></i>
-                            <h4>Cleanroom Compatible</h4>
-                            <p>Designed for controlled environments</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="industry-features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-flask"></i>
-                    </div>
-                    <h3>Ultra-Pure Formulations</h3>
-                    <p>Meeting semiconductor industry standards for purity and performance</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Cleanroom Compatible</h3>
-                    <p>Designed for use in controlled cleanroom environments</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-ban"></i>
-                    </div>
-                    <h3>Non-Contaminating</h3>
-                    <p>Zero contamination risk for sensitive manufacturing processes</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-crosshairs"></i>
-                    </div>
-                    <h3>Precision Application</h3>
-                    <p>Exact application control for micro-level precision</p>
-                </div>
+            <div class="hero-content-modern">
+                <div class="industry-badge"><i class="fas fa-microchip"></i> Semiconductor & Disk Drive</div>
+                <h1 class="hero-title-modern">Precision Solutions for Semiconductor & Disk Drive Manufacturing
+                    <span class="hero-highlight">Cleanroom-Ready</span>
+                </h1>
+                <p class="hero-subtitle-modern">Products that meet stringent purity and contamination control requirements.</p>
             </div>
         </div>
     </section>

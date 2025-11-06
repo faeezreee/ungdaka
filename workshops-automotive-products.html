@@ -224,8 +224,8 @@
         .products-section-enhanced .product-image img { max-height: 100%; width: 100%; object-fit: contain; display:block; }
         .products-section-enhanced .product-info h3 { font-size: 1.25rem; }
     @media (max-width: 640px){ .products-section-enhanced .product-image { height: 360px !important; padding: 20px !important; } }
-    /* Enforce 4 columns + compact images + chips */
-    .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; gap: 24px !important; }
+    /* Enforce 3 columns on large screens, fallback to 2/1 on smaller viewports */
+    .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(3, 1fr) !important; gap: 24px !important; }
     @media (max-width: 1280px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
     @media (max-width: 980px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: repeat(2, 1fr) !important; } }
     @media (max-width: 640px){ .products-section-enhanced .products-grid-enhanced { grid-template-columns: 1fr !important; gap: 18px !important; } }
@@ -544,29 +544,21 @@
 
     <!-- Page Header removed for streamlined layout -->
 
-    <!-- Industry Overview -->
-    <section class="industry-overview-enhanced">
+    <!-- Video hero (matches stamping page layout) -->
+    <section class="hero-modern products-hero industry-hero-compact">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            <video class="hero-bg-image" autoplay muted loop playsinline preload="metadata" poster="public/Industries%20Images/workshop.png">
+                <source src="public/Automotive Workshops.mp4" type="video/mp4">
+            </video>
+        </div>
         <div class="container">
-            <div class="industry-hero">
-                <div class="industry-content">
-                    <div class="industry-badge"><i class="fas fa-wrench"></i> Workshops</div>
-                    <h2>Professional Solutions for Automotive Workshops</h2>
-                    <p>Our specialized products are designed for professional automotive workshops, providing reliable solutions for car, motorcycle, and bicycle maintenance. From engine lubrication to brake cleaning, we offer products that ensure optimal vehicle performance.</p>
-                    <div class="industry-stats">
-                        <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-label">Workshop Ready</div></div>
-                        <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Multi-Vehicle</div></div>
-                        <div class="stat-item"><div class="stat-number">0</div><div class="stat-label">Residue</div></div>
-                    </div>
-                </div>
-                <div class="industry-hero-image">
-                    <img src="public/Industries%20Images/workshop.png" alt="Automotive workshop with vehicles">
-                    <div class="image-overlay"><div class="overlay-content"><i class="fas fa-car"></i><h4>Workshop Grade</h4><p>Designed for professional use</p></div></div>
-                </div>
-            </div>
-            <div class="industry-features-grid">
-                <div class="feature-card"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><h3>Professional Grade</h3><p>High-quality formulations for workshop reliability</p></div>
-                <div class="feature-card"><div class="feature-icon"><i class="fas fa-motorcycle"></i></div><h3>Multi-Vehicle</h3><p>Optimized for cars, motorcycles and bicycles</p></div>
-                <div class="feature-card"><div class="feature-icon"><i class="fas fa-bolt"></i></div><h3>Easy Application</h3><p>Fast-acting results with clean finish</p></div>
+            <div class="hero-content-modern">
+                <div class="industry-badge"><i class="fas fa-wrench"></i> Automotive Workshops</div>
+                <h1 class="hero-title-modern">Professional Solutions for Automotive Workshops
+                    <span class="hero-highlight">Workshop Grade</span>
+                </h1>
+                <p class="hero-subtitle-modern">Products that keep your workshop running — lubricants, cleaners and maintenance solutions.</p>
             </div>
         </div>
     </section>

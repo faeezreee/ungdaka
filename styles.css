@@ -5351,8 +5351,9 @@ section {
         width: 100%;
         background: white;
         flex-direction: column;
-        align-items: center;
-        padding: var(--spacing-xl);
+        align-items: stretch; /* stretch links full width for better tap targets */
+        padding: var(--spacing-md); /* reduce large top/bottom whitespace on mobile */
+        gap: var(--spacing-md); /* reduce gap between items */
         box-shadow: var(--shadow-lg);
         transform: translateY(-100%);
         opacity: 0;
@@ -5372,20 +5373,25 @@ section {
     .nav-link {
         text-align: center;
         width: 100%;
+        padding: var(--spacing-sm) 0; /* compact tappable rows */
+        display: block;
     }
     
     /* Mobile Dropdown Styles */
     .nav-dropdown {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important; /* center child content horizontally */
     }
     
     .dropdown-toggle {
-        width: 100%;
-        justify-content: center;
-        text-align: center;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
     }
     
     .dropdown-menu {
@@ -5425,12 +5431,44 @@ section {
         font-size: var(--font-size-xs);
     }
 
+    /* Show actions (phone / quote) inside the mobile menu and center them */
     .nav-actions {
-        display: none;
+        display: flex !important;
+        justify-content: center !important;
+        width: 100%;
+        padding-top: var(--spacing-md);
+        gap: var(--spacing-md);
     }
 
     .nav-toggle {
         display: flex;
+    }
+
+    /* Mobile: force header/navigation text to black for good contrast */
+    .navbar .nav-link,
+    .nav-menu .nav-link,
+    .nav-link.dropdown-toggle,
+    .nav-dropdown .dropdown-toggle {
+        color: #111827 !important; /* dark text */
+        opacity: 1 !important;
+    }
+
+    /* phone and action text in mobile menu */
+    .nav-phone,
+    .nav-phone span,
+    .nav-phone i,
+    .nav-quote-btn {
+        color: #111827 !important;
+    }
+
+    /* Make phone link centered and full-width inside the mobile menu */
+    .nav-phone {
+        display: inline-flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+        padding: var(--spacing-sm) 0 !important;
+        text-align: center !important;
     }
 
     .hero {
@@ -7357,6 +7395,45 @@ a.duplicate-image-title:hover {
 }
 
 /* Make industries carousel copywriting always visible (static), regardless of hover */
+/* ===== HIDE DROPDOWNS: convert dropdowns into simple top-level links =====
+   This override hides dropdown panels and chevrons globally so the header
+   presents only the top-level "Our Products" / "Industries" links.
+   It's low-risk (CSS-only) and avoids editing many HTML files.
+*/
+.nav-dropdown .dropdown-menu,
+.nav-dropdown .dropdown-content,
+.nav-dropdown .dropdown-column,
+.nav-dropdown .cat-group,
+.nav-dropdown .sub-list,
+.nav-dropdown .cat-toggle,
+.nav-dropdown .view-all,
+.nav-dropdown .dropdown-icon {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
+}
+
+.nav-dropdown {
+    /* keep top-level link visible and inline with other nav items */
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+}
+
+.nav-link.dropdown-toggle {
+    /* ensure the top-level link remains clickable */
+    pointer-events: auto !important;
+}
+
+.nav-menu .nav-dropdown > .dropdown-toggle {
+    display: inline-block !important;
+    width: auto !important;
+    text-decoration: none !important;
+}
+
 .industries-carousel .industry-panel .panel-icon,
 .industries-carousel .industry-panel .panel-content h3,
 .industries-carousel .industry-panel .panel-description,

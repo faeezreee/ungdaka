@@ -3774,6 +3774,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         navMenu.appendChild(node);
                     }
 
+                    // Debug: log industries injection result
+                    try {
+                        console.debug('[header-inject] inserted industries dropdown, html-length=', node.innerHTML.length);
+                        const inserted = navMenu.querySelectorAll('.nav-dropdown');
+                        console.debug('[header-inject] total nav-dropdown count=', inserted.length);
+                    } catch (e) { /* ignore */ }
+
                     // Bind mobile toggle behavior to the injected dropdown
                     try {
                         const toggle = node.querySelector('.dropdown-toggle');
@@ -3937,6 +3944,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const menus = document.querySelectorAll('.nav-dropdown .dropdown-menu');
         if(!menus.length) return;
         menus.forEach(menu => {
+            try {
+                console.debug('[header-debug] dropdown-menu found, html-length=', menu.innerHTML.length);
+                const groupsCount = menu.querySelectorAll('.cat-group').length;
+                console.debug('[header-debug] cat-group count=', groupsCount);
+            } catch (e) { /* ignore */ }
             const groups = menu.querySelectorAll('.cat-group');
             groups.forEach(group => {
                 const btn = group.querySelector('.cat-toggle');

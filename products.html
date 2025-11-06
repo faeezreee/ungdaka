@@ -777,8 +777,10 @@
         // Products page: hero copy and pill filter logic
         var heroSlides = {
             aerosol: {
-                // single image source (use `src` so the code falls back to an <img> element)
-                src: 'public/aerosol spray on belt.jpg',
+                // use a single-video slides array so the hero displays the conveyor belt video
+                slides: [
+                    'public/Conveyor_Belt_Video_with_Aerosol_Sprays.mp4'
+                ],
                 title: 'Aerosol Sprays',
                 highlight: 'Clean, Release, Protect',
                 subtitle: 'High-performance mould release, degreasers, and specialty sprays for manufacturing.'
@@ -914,6 +916,20 @@
                         var vids = [vidA, vidB];
                         var activeIndex = 0; // which slide index is currently visible
                         var visibleVidIdx = 0; // 0 -> vidA visible, 1 -> vidB visible
+
+                        // If there's only one slide in the carousel, enable looping/replay
+                        // so the single video will replay when it ends. Also attach an
+                        // 'ended' handler as a fallback for environments that ignore loop.
+                        if (len === 1) {
+                            vids.forEach(function(v){
+                                try{
+                                    v.loop = true;
+                                    v.addEventListener('ended', function(){
+                                        try{ v.currentTime = 0; v.play().catch(function(){}); }catch(e){}
+                                    });
+                                }catch(e){}
+                            });
+                        }
 
                         function setSource(videoEl, src){
                             var s = videoEl.querySelector('source');
