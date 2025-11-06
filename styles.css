@@ -661,36 +661,40 @@ body {
     left: 0;
     right: 0;
     z-index: var(--z-fixed);
-    background: transparent; /* Transparent header by default */
-    backdrop-filter: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    /* Always show a slightly transparent white header */
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(16, 24, 39, 0.04);
     transition: all var(--transition-normal);
     padding: var(--spacing-lg) 0;
     box-shadow: none;
 }
 
 .navbar.scrolled {
+    /* Slightly more opaque when scrolled to emphasize elevation */
     background: rgba(255, 255, 255, 0.98);
     box-shadow: var(--shadow-lg);
     padding: var(--spacing-sm) 0;
 }
 
-/* Light-on-dark nav when not scrolled */
-.navbar:not(.scrolled) .nav-link { color: #e5e7eb; }
-.navbar:not(.scrolled) .nav-link:hover,
-.navbar:not(.scrolled) .nav-link.active { color: #ffffff; }
-.navbar:not(.scrolled) .nav-phone { color: #e5e7eb; }
-.navbar:not(.scrolled) .nav-phone i { color: #e5e7eb; }
-.navbar:not(.scrolled) .nav-quote-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.35);
+/* Default nav colors for a light header */
+.navbar .nav-link { color: var(--gray-700); }
+.navbar .nav-link:hover,
+.navbar .nav-link.active { color: var(--primary-color); }
+.navbar .nav-phone { color: var(--primary-color); }
+.navbar .nav-phone i { color: var(--secondary-color); }
+.navbar .nav-quote-btn {
+    /* Keep the quote button prominent */
+    background: var(--primary-color);
+    color: white;
+    border: 1px solid var(--primary-color);
 }
 
 /* Keep toggle button dark on mobile at all times */
 @media (min-width: 769px) {
+    /* Ensure the mobile toggle bars remain dark on light header */
     .navbar:not(.scrolled) .nav-toggle span { 
-        background: #ffffff; 
+        background: #1e293b; 
     }
 }
 
