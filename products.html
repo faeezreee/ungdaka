@@ -543,6 +543,17 @@
     .tab-panel#foodgrade .product-card .product-info { padding: 8px 10px !important; }
     .tab-panel#foodgrade .product-card .product-info h3 { font-size: 1rem !important; margin-bottom: 6px !important; }
     </style>
+    <!-- Mobile: hide hero carousel prev/next controls (arrows) to prevent clutter on small screens -->
+    <style>
+    @media (max-width: 900px){
+        .hero-carousel-controls,
+        .hero-carousel-controls .btn {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+    }
+    </style>
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Industrial Products | Ungdaka (M) Sdn Bhd">
