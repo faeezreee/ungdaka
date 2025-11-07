@@ -662,7 +662,8 @@ body {
     right: 0;
     z-index: var(--z-fixed);
     /* Always show a slightly transparent white header */
-    background: rgba(255, 255, 255, 0.92);
+    /* Made slightly more transparent per request */
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(6px);
     border-bottom: 1px solid rgba(16, 24, 39, 0.04);
     transition: all var(--transition-normal);
@@ -672,7 +673,8 @@ body {
 
 .navbar.scrolled {
     /* Slightly more opaque when scrolled to emphasize elevation */
-    background: rgba(255, 255, 255, 0.98);
+    /* Keep scrolled header more solid than the default state */
+    background: rgba(255, 255, 255, 0.5);
     box-shadow: var(--shadow-lg);
     padding: var(--spacing-sm) 0;
 }
